@@ -1,0 +1,454 @@
+\documentclass{shortart}
+
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{todonotes}
+\usepackage{tikz-cd}
+\usepackage{enumitem}
+\usepackage[mathscr]{euscript}
+\usepackage[titletoc]{appendix}
+
+\title{The \'Etale Fundamental Group}
+\author{Dexter Chua}
+
+\newtheorem*{prop}{Proposition}
+\newtheorem*{thm}{Theorem}
+\newtheorem*{lemma}{Lemma}
+\newtheorem*{cor}{Corollary}
+\newtheorem*{claim}{Claim}
+
+\theoremstyle{definition}
+\newtheorem*{defi}{Definition}
+\newtheorem*{eg}{Example}
+
+\renewcommand\P{\mathbb{P}}
+\newcommand\A{\mathbb{A}}
+\newcommand\C{\mathbb{C}}
+\newcommand\op{\mathrm{op}}
+\newcommand\FEt[1]{\mathscr{FE}t_{#1}}
+\newcommand\Sets{\mathrm{Sets}}
+\DeclareMathOperator\Gal{Gal}
+\DeclareMathOperator\Spec{Spec}
+\DeclareMathOperator\Aut{Aut}
+\DeclareMathOperator\coker{coker}
+\DeclareMathOperator\QCoh{QCoh}
+\DeclareMathOperator\Hom{Hom}
+\DeclareMathOperator*\colim{colim}
+\newcommand*{\Cdot}{{\raisebox{-0.25ex}{\scalebox{1.5}{$\cdot$}}}}
+
+\begin{document}
+\section{Introduction}
+The fundamental theorem of Galois theory says
+\begin{thm}[Galois theory]
+  Let $k$ be a field and $G = \Gal(\bar{k}/k)$ be the absolute Galois group\footnote{The notation $\bar{k}$ will always mean the \emph{separable} closure of $k$}. Then there is a contravariant equivalence of categories between
+  \begin{itemize}
+    \item the category of finite separable extensions of $k$; and
+    \item the category of finite sets with a continuous transitive action of $G$.\fakeqed
+  \end{itemize}
+\end{thm}
+The second category is also isomorphic to the category of open subgroups of $G$ by sending the subgroup $H \leq G$ to $G/H$, which is how Galois theory is often stated.
+
+There is a very similar theorem in algebraic topology.
+\begin{thm}[Covering space theory]
+  Let $X$ be a path connected, locally path connected and semi-locally simply connected topological space. Then there is an equivalence of categories between
+  \begin{itemize}
+    \item the category of finite connected covering spaces of $X$; and
+    \item the category of finite sets with a transitive action of $\pi_1(X, x)$, for any base point $x \in X$.\fakeqed
+  \end{itemize}
+\end{thm}
+There are some superficial differences between these two isomorphisms. In Galois theory, we have a contravariant equivalence of categories, instead of a usual equivalence, but this is easily explained by the fact that we really should apply $\Spec$ to all our fields, thereby reversing the arrow.
+
+On the other hand, in covering space theory, we have to pick a basepoint of $X$ to talk about the fundamental group, and the correspondence is natural (in the English sense) only after we fix such a basepoint. The analogous situation in Galois theory is that in fact, $G$ is not canonically associated to $k$ either. Instead, we must fix an embedding of $k$ into a separably closed field, which is the same as picking a geometric point of $\Spec k$.
+
+To push the analogy further, there is a sense in which a separable field extension is a ``covering space''. By definition, a map $p: Y \to X$ is a covering space iff there is some space $X'$ and a map $f: X' \to X$ such that
+\begin{enumerate}
+  \item $f$ is surjective;
+  \item restricted to each component of $X'$, the map $f$ is the inclusion of an open subspace; and
+  \item the pullback $Y \times_X X'$ is a disjoint union of copies of $X'$, and the map $f^*p: Y \times_{X} X' \to X'$ is the map sending each copy isomorphically onto $X'$.
+\end{enumerate}
+This is just the local triviality condition phrased in a fancy way.
+
+The idea is to think of the (surjective!) morphism $\Spec \bar{k} \to \Spec k$ as an inclusion of an ``open subset'', and an extension $K/k$ is separable iff the pullback to $\Spec \bar{k}$ is a disjoint union of copies of $\Spec \bar{k}$, i.e.\ $K \otimes_k \bar{k} = \bar{k} \times \cdots \times \bar{k}$. Of course, we can also replace $\bar{k}$ by some appropriate finite Galois extension if we want to remain in the finite world.
+
+By using an appropriate generalized notion of ``open subset'', hence ``covering space'', we will generalize the notion of fundamental group to arbitrary schemes, of which Galois theory and covering space theory (of complex algebraic surfaces) are special cases.
+
+\subsection*{Notes}
+\begin{itemize}
+  \item All schemes considered will be locally Noetherian, and the base scheme will usually be assumed to be connected. There are obvious generalizations to the non-connected cases.
+  \item We will occasionally use certain technical results about fpqc descent, which are stated as necessary in the main text and proved (somewhat) in the appendix. They are not difficult to prove, but the reader is encouraged not to read the appendix, because they are boring.
+  \item There are no in-text citations. The main references are \cite{SGA1} and \cite{galois_groups_and_fundamental_groups}.
+\end{itemize}
+\section{\'Etale Morphisms}
+We wish to define the notion of a ``covering map'' for arbitrary schemes. One way to think about covering maps is that they are local homeomorphisms plus some extra conditions. The notion of \'etale morphisms is the correct analogue of local homeomorphisms for schemes. In the next section, we will strengthen this to finite \'etale covers afterwards as an analogue of finite covering spaces, and prove that finite \'etale covers are exactly the ``locally trivial'' ones in a suitable sense.
+
+We first give some examples of maps, and discuss why they should or should not be considered \'etale. Afterwards, we will write down the definition of \'etale.
+\begin{eg}
+  Let $X = \P^1$, and $f: X \to X$ the double cover given by squaring. Then this should not be \'etale, because it is ramified at $0$ and $\infty$, where there is only one geometric point in the preimage.
+  
+  Algebraically, if we localize at the point $0$, then this is represented by the map $k[x]_{(x)} \to k[x]_{(x)}$ that sends $x$ to $x^2$, and in particular sends the maximal ideal $\mathfrak{m}$ to $\mathfrak{m}^2$. Thus, as an extension of discrete valuation rings, this is ramified.
+\end{eg}
+
+\begin{eg}
+  The inclusion of a proper closed subscheme should not be \'etale, because it is not a local homeomorphism. Alternatively, because it is not flat.
+\end{eg}
+
+\begin{eg}
+  The inclusion of an open subscheme is \'etale, because it is locally a homeomorphism, but should not be a \'etale \emph{cover}.
+\end{eg}
+
+Finally, for our theory to describe Galois theory proper, we want
+\begin{eg}
+  An extension of fields $\Spec K \to \Spec k$ is an \'etale cover iff it is a finite separable extension.
+\end{eg}
+
+Based on the geometric examples, the following definition is entirely reasonable.
+\begin{defi}[\'Etale morphism]
+  A morphism is \emph{\'etale} if it is flat and unramified.
+\end{defi}
+To make sense of such a definition, I must explain what it means to be unramified.
+\begin{thm}
+  Let $f: Y \to X$ be a morphism locally of finite type, $y \in Y$ and $x = f(y)$. Then the following are equivalent:
+  \begin{enumerate}
+    \item $\mathfrak{m}_y = f^*\mathfrak{m}_x$, and $k(y)$ is a finite separable extension of $k(x)$.
+    \item $\Omega_{Y/X}$ is trivial at $y$.
+    \item The diagonal morphism $\Delta_{Y/X}: Y \to Y \times_X Y$ is an open immersion in a neighbourhood of $y$.
+  \end{enumerate}
+  If any (hence all) of these hold, we say $f$ is \emph{unramified} at $y$. We say $f$ is \emph{unramified} if it is unramified at all $y \in Y$.
+\end{thm}
+Each of these are reasonable definitions of ``unramified''.
+
+\begin{proof}\leavevmode
+  \begin{itemize}[leftmargin=2cm]
+    \item [(1) $\Leftrightarrow$ (2)] Assuming (1), we consider the diagram
+      \[
+        \begin{tikzcd}
+          \Spec k(x) \ar[d] \ar[r] & \Spec \mathcal{O}_y \ar[r] \ar[d] & Y\ar[d] \\
+          \Spec k(x) \ar[r] & \Spec \mathcal{O}_x \ar[r] & X
+        \end{tikzcd}
+      \]
+      where the left-hand square is a pull-back by (1) and the right-hand square is a localization at a point in the total space. So they both preserve the differential. So $\Omega_{Y/X}$ is trivial at $y$ iff $\Omega_{\mathcal{O}_y/\mathcal{O}_x}$ is trivial, iff $\Omega_{k(y)/k(x)}$ is trivial by Nakayama, iff $k(y)/k(x)$ is finite separable.
+
+      To prove the converse, if $\Omega_{Y/X}$ is trivial at $y$, then pulling back shows that $\mathcal{O}_y/\mathfrak{m}_x \to k(x)$ has trivial K\"ahler differentials. So it suffices to show that if $A$ is a finite local $k$-algebra, then $\Omega_{A/k} = 0$ iff $A$ is a finite separable extension of $y$ (which implies $\mathfrak{m}_y = f^* \mathfrak{m}_x$ since $A/f^*\mathfrak{m}_x$ is a field, hence $f^*\mathfrak{m}_x$ is a maximal ideal).
+     
+      By direct calculation, the result is true if $A = k[x]/f$ for some $f$, since the only interesting relation is $\mathrm{d} f = 0$. For general $A$, use that if $k \subseteq B \subseteq A$, then there is a surjection $\Omega_{A/k} \twoheadrightarrow \Omega_{B/k}$, and so taking $B$ to be the subalgebra generated by each $x \in A$, we see that every element is separable and invertible over $A$.
+
+    \item [(2) $\Leftrightarrow$ (3)] Restricted to affine patches, $\Delta_{Y/X}$ is a closed immersion, and $\Omega_{Y/X} = 0$ implies the (proper) ideal $I$ defining the image satisfies $I^2 = I$. By Nakayama, $I = 0$, so this is an open immersion as well. The converse is clear as well.\qedhere
+  \end{itemize}
+\end{proof}
+
+We also record the following immediate consequences:
+\begin{lemma}\leavevmode
+  \begin{enumerate}
+    \item Open immersions are \'etale.
+    \item Pullback of \'etale maps are \'etale.
+    \item Composition of \'etale maps are \'etale.
+    \item \'Etale morphisms satisfy fpqc descent.\fakeqed
+  \end{enumerate}
+\end{lemma}
+Recall that we say a property P of morphisms satisfies fpqc descent if whenever we have a pullback diagram
+\[
+  \begin{tikzcd}
+    Y \times_X X' \ar[d, "p'"] \ar[r, "f'"] & Y \ar[d, "p"]\\
+    X' \ar[r, "f"] & X
+  \end{tikzcd},
+\]
+if $f: X' \to X$ is fpqc (faithfully flat and quasi-compact, or \emph{fid\'element plat et quasi-compact}), then $p$ has property P iff $p'$ does.
+
+We quickly look at some examples. It is clear from definition that
+\begin{eg}
+  An \'etale cover of a field is a disjoint union of finite separable extensions.\qedhere
+\end{eg}
+
+The following two theorems, which we shall not prove, characterize \'etale morphisms over smooth varieties, especially over $\C$. They are exactly what we would expect from the case of manifolds.
+\begin{thm}
+  Let $X$ be a smooth variety over an algebraically closed field, and $f: Y \to X$. Then $f$ is \'etale iff $Y$ is a smooth variety and the derivative $\mathrm{d} f_y: T_y Y \to Y_{f(y)}X$ is an isomorphism for all $y \in Y$.\fakeqed
+\end{thm}
+\begin{thm}[Riemann existence theorem]
+  Let $X$ be a smooth variety over $\C$. Then every finite covering space $X(\C)$ has the structure of a smooth variety.\fakeqed
+\end{thm}
+
+\begin{eg}
+  The line with two origins is \'etale over $\A^1$ under the obvious projection map.
+\end{eg}
+
+Returning to general theory, recall that covering spaces satisfy the unique lifting property. The same is true for \'etale maps if we assume, of course, that our morphism is separated.
+\begin{lemma}
+  Let $f: Y \to X$ be a separated \'etale morphism. Then $\Delta: Y \to Y \times_X Y$ is an inclusion into a component.
+\end{lemma}
+
+\begin{proof}
+  It is true topologically since $\Delta$ is open (since $f$ is unramified) and closed (since $f$ is separated). It is true scheme-theoretically because $\Delta$ is locally an open immersion.
+\end{proof}
+
+\begin{cor}
+  Let $p: Y \to X$ be \'etale and separated, and $Z$ be a connected scheme over $X$. Suppose $z$ is a geometric point of $Z$ and $f_1, f_2: Z \to Y$ are morphisms such that $f_1(z) = f_2(z)$. Then $f_1 = f_2$.
+\end{cor}
+
+\begin{proof}
+  Consider the map $(f_1, f_2): Z \to Y \times_X Y$. Since the diagonal in $Y \times_X Y$ is a component, the preimage under this map is open and closed. Since it is non-empty (it contains $z$), it must be everything. So it factors through the diagonal (scheme-theoretically, since $\Delta$ is a component), hence $f_1 = f_2$.
+\end{proof}
+\newpage
+\section{\'Etale Covers}
+\begin{defi}[\'Etale cover]
+  An (finite) \'etale cover is a morphism that is finite and \'etale. We write $\FEt{X}$ for the category of \'etale covers of $X$.
+
+  A \emph{trivial cover} of $X$ is one that is a finite disjoint union of copies of $X$.
+\end{defi}
+
+\begin{lemma}
+  \'Etale covers are closed under pullback and composition, and satisfy fpqc descent.\fakeqed
+\end{lemma}
+
+\begin{lemma}
+  Affine, and in particular \'etale morphisms are separated.\fakeqed
+\end{lemma}
+
+It turns out being an \'etale cover imposes strong conditions on the map.
+\begin{lemma}
+  A finite and flat morphism $f: Y \to X$ is locally free, i.e.\ $f_* \mathcal{O}_Y$ is a locally free $\mathcal{O}_X$-module.
+\end{lemma}
+
+\begin{proof}
+  We check this on stalks. Suppose $A$ is a Noetherian local ring and $M$ is a flat $A$-module. We want to show $A$ is free. By Nakayama, there is a surjection $A^k \to M$ whose quotient by $\mathfrak{m}$ is an isomorphism. Then by the Tor long exact sequence, the quotient of the kernel by $\mathfrak{m}$ is also trivial. By Nakayama, this implies $A^k \to M$ is injective.
+\end{proof}
+
+\begin{cor}
+  For any $Y \in \FEt{X}$ and geometric point $x: \Spec \bar{k} \to X$, the pullback $x^*Y$ is finite and the cardinality does not depend on $x$. In particular, $Y \to X$ is surjective, hence faithfully flat. We call this cardinality the \emph{degree} of $x$.
+\end{cor}
+
+\begin{proof}
+  $x^*Y \to \Spec \bar{k}$ is an \'etale morphism over a separably closed field, hence a discrete number of copies of $\Spec \bar{k}$. This number is the rank of $f_* \mathcal{O}_Y$ as an $\mathcal{O}_X$-module, and is locally constant, hence constant.
+\end{proof}
+
+\begin{prop}
+  The degree is invariant under pullback, and non-empty covers have non-empty degree.
+\end{prop}
+
+In algebraic topology, a map is a covering space if it is locally trivial. The same is true for \'etale covers, if we allow ourselves to view any \'etale morphism to $X$ as an ``open set'' of $X$.
+
+\begin{lemma}
+  If $p: Y \to X$ is an \'etale cover, then there is an \'etale cover $f: X' \to X$ such that $f^* p$ is trivial.
+\end{lemma}
+
+\begin{proof}
+  If we pull back $p$ along itself, then we can split off the diagonal as a trivial component of $Y \times_X Y$. So we are done by induction on the degree.
+\end{proof}
+
+\begin{cor}
+  If we have a composition
+  \[
+    \begin{tikzcd}
+      Z \ar[r, "q"] & Y \ar[r, "p"] & X
+    \end{tikzcd}
+  \]
+  where $p$ and $p \circ q$ are \'etale covers, then so is $q$.
+\end{cor}
+
+\begin{proof}
+  By fpqc descent, we may assume that $Z$ and $Y$ are both trivial covers, in which case the proposition is clear.
+\end{proof}
+
+\section{The \'Etale Fundamental Group}
+In Galois theory and covering space theory, a lot of information can be understood by looking at automorphisms of covers. To understand these automorphisms, it is useful to look at what it does to geometric points. Fix a base point $x \in X$.
+
+\begin{defi}
+  For any $Y \in \FEt{X}$, we define $F(Y)$ to be the set of all lifts of $x$ to $Y$.
+\end{defi}
+By definition, $|F(Y)| = \deg Y$.
+
+\begin{defi}[\'Etale fundamental group]
+  Let $X$ be a scheme and $x$ a base point. The \emph{\'etale fundamental group} $\pi_1(X, x)$ is defined to be $\Aut F$, the group of all automorphisms of the functor $F: \FEt{X} \to \Sets$.
+\end{defi}
+In the case of covering theory or Galois theory, this functor $F$ is ``representable''. For Galois groups, this is represented by the separable closure $\bar{k}$, and for topological spaces, this is represented by the universal cover. Hence we can (almost) simply define the fundamental group to be the group of automorphisms of this universal object. However, $\Spec \bar{k} \to \Spec k$ is not a finite \'etale cover, and the universal cover may be an infinite cover. Nevertheless, we can produce arbitrarily good approximations to these universal covers.
+
+\begin{defi}[Pro-representable]
+  A functor $F: \mathcal{C} \to \Sets$ is \emph{pro-representable} if there is a directed/pro-system $(X_\alpha)_\alpha$ of objects in $\mathcal{C}$ such that
+  \[
+    F(Y) = \colim_\alpha \Hom_{\mathcal{C}}(X_\alpha, Y)
+  \]
+  for all $Y \in \mathcal{C}$.
+\end{defi}
+
+In this case, we have
+\[
+  \Aut(F) = \lim_\alpha \Aut(X_\alpha)^\op,
+\]
+and in particular, this is a profinite group (since each $\Aut(X_\alpha)$ acts freely on the finite set $F(X_\alpha)$). In the case of Galois theory, the functor $F$ is pro-represented by the pro-system of all Galois extensions. In covering space theory, $F$ is pro-represented by the pro-system of all normal covers. In fact,
+\begin{thm}[Fundamental Theorem of Galois Theory]\leavevmode
+  \begin{enumerate}
+    \item $F$ is always pro-representable. Hence, $\pi_1(X, x)$ is profinite, acting continuously on $F$.
+    \item $\FEt{X}$ is equivalent to the category of finite continuous $\pi_1(X, x)$-sets.
+    \item In particular, the isomorphism class of $\pi_1(X, x)$ does not depend on the choice of basepoint. Thus, we may write $\pi_1(X)$ instead.
+  \end{enumerate}
+\end{thm}
+The proof of the theorem is the content of the next section. For now, we shall amuse ourselves by computing some fundamental groups.
+
+\begin{eg}
+  Let $k$ be a field. Then $\pi_1(\Spec k) = \Gal(\bar{k}/k)$.
+\end{eg}
+
+\begin{eg}
+  Let $X$ be a projective variety over $\C$. Then $\pi_1(X)$ is the pro-completion of the topological fundamental group, by the characterization of \'etale maps and the Riemann existence theorem.
+\end{eg}
+
+\begin{eg}
+  By Riemann--Hurwitz, over any algebraically closed field of characteristic zero, any covering of $\P^1$ is trivial. So $\pi_1(\P^1) = 0$. This agrees with what topology tells us if we work over $\C$.
+\end{eg}
+
+\section{Galois Theory}
+The usual proof of the usual Fundamental Theorem of Galois Theory can pretty much be carried over to the general case if we can say the word ``Galois''. Fortunately, the word is not too difficult to utter.
+
+\begin{defi}[Galois cover]
+  A \emph{Galois cover} of $X$ is an element $Y \in \FEt{X}$ such that $\Aut(Y)$ acts transitively on $F(Y)$.
+\end{defi}
+The following proposition should be reassuring, but will not be used.
+\begin{prop}
+  Let $Y \in \FEt{X}$ be Galois. Then $Y \times_X Y$ splits as finitely many disjoint copies of $Y$, and $\Aut(Y)$ acts freely and transitively over the copies, where $\Aut(Y)$ acts as an automorphism of $\pi_1: Y \times_X Y \to Y$ by pullback.
+\end{prop}
+
+\begin{proof}
+  The diagonal map $Y \to Y \times_X Y$ gives an isomorphism between $Y$ and a component of $Y \times_X Y$. We fix a geometric point $z \in F(Y)$, and then we have a diagram
+  \[
+    \begin{tikzcd}
+      (\Spec k)^n \ar[d] \ar[r] & Y \times_X Y \ar[d, "\pi_1"] \ar[r] \ar[d] & Y \ar[d]\\
+      \Spec k \ar[r, "z"] & Y \ar[r] & X
+    \end{tikzcd}
+  \]
+  By definition of the pullback, the lifts of $z$ to $Y \times_X Y$ bijects with the lifts of $x$ to $Y$, and this preserves the action of $\Aut(Y)$. Since $\Aut(Y)$ acts freely on the lifts of $z$, it must act freely on $Y \subseteq Y \times_X Y$. So $Y \times_X Y$ splits as $n$ copies of $Y$, and there is nothing left since $Y \times_X Y \to Y$ has degree $n$.
+\end{proof}
+
+In Galois theory, we can construct Galois closures. We can do the same here.
+\begin{lemma}
+  Let $Y \in \FEt{X}$ be connected. Then there is a Galois cover $Y'$ with a map $Y' \to Y$ such that if $Z \in \FEt{X}$ is any Galois cover, then any map $Z \to Y$ factors through $Y'$.
+\end{lemma}
+In Galois theory, the Galois closure is constructed by taking the field generated by all field embeddings into the algebraic closure. The construction here is similar.
+
+\begin{proof}\leavevmode
+  Let $y_1, \ldots, y_n \in F(Y)$, which gives rise to a geometric point $y = (y_1, \ldots, y_n) \in Y^n$. Let $Y'$ be the component of $y \in Y^n$, mapping to $Y$ by first projection. This is an \'etale cover since it is a connected component of one. We claim that this works.
+  
+  \begin{claim}
+    If $(x_1, \ldots, x_n) \in Y'$, then $x_i \not= x_j$ for all $i$ and $j$.
+  \end{claim}
+  If $\pi_{i, j}: Y^n \to Y^2$ is the projection onto the $i, j$ coordinates, then this is the same as saying $\pi_{ij}^{-1}(\Delta(Y)) \cap Y' = \emptyset$. But since $\Delta(Y)$ is open and closed and $\pi_{ij}^{-1}$ is continuous, we know $\pi_{ij}^{-1}(\Delta(Y)) \cap Y'$ is either $Y'$ or empty. But it does not contain $(y_1, \ldots, y_n) \in Y'$. So it is empty.
+
+  \begin{claim}
+    $Y' \to X$ is Galois.
+  \end{claim}
+  Any element in $F(Y^n)$ is of the form $(x_{i_1}, \ldots, x_{i_n})$, and by the above, if it is in $Y'$, then it is of the form $(x_{\sigma(1)}, \ldots, x_{\sigma(n)})$ for some permutation $\sigma \in S_n$. This $\sigma$ also acts on $X^n$ by permuting the coordinates, and $\sigma(Y') \cap Y'$ is non-empty since it contains $(x_{\sigma(1)}, \ldots, x_{\sigma(n)})$. So $\sigma(Y') = Y'$, and hence $\sigma \in \Aut(Y')$. So $\Aut(Y')$ acts transitively on $F(Y')$.
+
+  \begin{claim}
+    If $Z$ is Galois and $q: Z \to Y$, then it factors through $Y'$.
+  \end{claim}
+
+  Fix a lift $z \in F(Z)$. Then by composing with automorphisms of $\Aut(Z)$, we can pick maps $q_1, \ldots, q_n: Z \to Y$ such that $q_i(z) = y_i$. Then the image of $(q_1, \ldots, q_n): Z \to Y^n$ includes a point in $Y'$, namely $y$, and hence maps into $Y'$ by connectedness of $Z$.
+\end{proof}
+
+
+\begin{thm}
+  Let $(X_\alpha)_\alpha \subseteq \FEt{X}$ be the poset of Galois covers of $X$, ordered under $X_\alpha \leq X_\beta$ if there is a morphism $X_\beta \to X_\alpha$. For each $X_\alpha$, pick a point $x_\alpha \in F(X_\alpha)$. Then if $X_\alpha \leq X_\beta$, we pick the morphism that sends $x_\alpha$ to $x_\beta$ for use in the pro-system. Then this pro-system pro-represents $F$.
+\end{thm}
+
+\begin{proof}
+  This is indeed a pro-system since the pullback of two Galois covers is yet another Galois cover of $X$. There is a natural transformation
+  \[
+    \colim \Hom(X_\alpha, Y) \to F(Y)
+  \]
+  that sends a map $q: X_\alpha \to Y$ to $q(x_\alpha)$. Conversely, given any $y \in F(Y)$, we may restrict to the component of $y$ and assume $Y$ is connected. Then since $X_\alpha \to Y$ is surjective and $\Aut(X_\alpha)$ acts transitively on $F(X_\alpha)$, precomposing with an automorphism gives a morphism $X_\alpha \to Y$ that sends $x_\alpha$ to $y$, and such a map is unique since $\Aut(X_\alpha)$ acts freely. This gives the desired inverse map.
+\end{proof}
+
+\begin{thm}
+  $\FEt{X}$ is naturally equivalent to the category of continuous finite $\pi_1(X, x)$-sets.
+\end{thm}
+
+\begin{proof}\leavevmode
+  The functor is given by $F$. Conversely, given a continuous finite $\pi_1(X, x)$ set $S$, pick $X_\alpha$ such that $\Aut(X_\alpha)$ acts transitively with stabilizer $H$. Then $X \cong F(X_\alpha)/H \cong F(X_\alpha/H)$\footnote{Quotienting an affine scheme $\Spec A$ by a finite group action $G$ is okay --- simply take $\Spec A^G$. It is then easy to extend to affine, and in particular finite morphisms. To show this is an \'etale cover, one uses that being an \'etale cover is the same as being fpqc-locally trivial, and observe that pullback is compatible with quotients and everything works with trivial covers.}. Functions can be constructed similarly.
+\end{proof}
+
+\appendices
+\section{Faithfully flat morphisms}
+In this appendix, we document some important facts about flat and faithfully flat morphisms.
+\begin{defi}
+  Let $f: A \to B$ be a ring homomorphism. We say $f$ is flat if the functor
+  \[
+    -\otimes_A B: A\text{-Mod} \to B\text{-Mod}
+  \]
+  is exact.
+\end{defi}
+
+\begin{defi}
+  A morphism $p: Y \to X$ is flat if for all $y \in Y$ and $x = f(y)$, the map $\mathcal{O}_{X, x} \to \mathcal{O}_{Y, y}$ is flat. This in particular implies the pullback functor
+  \[
+    p^*: \QCoh(Y) \to \QCoh(X)
+  \]
+  is exact.
+\end{defi}
+If $X$ is quasi-compact and quasi-separated, then $p^*$ being exact implies $p$ being flat.
+
+\begin{lemma}
+  Compositions and pullbacks of flat maps are flat.
+\end{lemma}
+\begin{proof}
+  We only have to show that the pullback of flat maps is flat. Since flatness is local, it suffices to show that if $f: A \to B$ is a flat map of rings and $g:A \to C$ is any map of rings, then $C \to B \otimes_A C$ is flat. But if $M_\Cdot$ is a exact sequence of chain complexes, then
+  \[
+    B \otimes_A C \otimes_C M_\Cdot = B \otimes_A M_\Cdot,
+  \]
+  where we think of $M_\Cdot$ as an $A$-module via $g$. So this is exact.
+\end{proof}
+
+\begin{thm}
+  Let $p: Y \to X$ be flat. Then the following are equivalent:
+  \begin{enumerate}
+    \item $p^*$ is faithful, i.e.\ if $h: \mathcal{F} \to \mathcal{F}'$ is a morphism of quasi-coherent sheaves over $Y$, and $p^*h = 0$, then $h = 0$.
+    \item If $p^* \mathcal{F} = 0$, then $\mathcal{F} = 0$.
+    \item $p^*$ reflects exactness, i.e. if a sequence $\mathcal{F}_\Cdot$ is such that $p^* \mathcal{F}_\Cdot$ is exact, then so is $\mathcal{F}_\Cdot$.
+    \item $p$ is surjective.
+  \end{enumerate}
+  When these hold, we say $p$ is \emph{faithfully flat}.
+\end{thm}
+
+\begin{proof}\leavevmode
+  \begin{itemize}[leftmargin=2cm]
+    \item [(1) $\Rightarrow$ (2)] Take $h = \mathrm{id}: \mathcal{F} \to \mathcal{F}$.
+    \item [(2) $\Rightarrow$ (3)] Apply (2) to the homology groups of $\mathcal{F}_\Cdot$.
+    \item [(3) $\Rightarrow$ (1)] $h = 0$ iff $\mathcal{F} \overset{h}{\to} \mathcal{F}' \overset{1}{\to} \mathcal{F}'$ is exact.
+    \item [(4) $\Rightarrow$ (2)] Take $\mathcal{F} \not= 0$. We may assume $\mathcal{F}$ is in fact coherent, for $\mathcal{F}$ contains a coherent subsheaf $\mathcal{G}$ and $p^*$ preserves subsheaves by flatness. So if $p^* \mathcal{G} \not= 0$, then $p^* \mathcal{F} \not= 0$.
+    
+      Pick $x \in X$ such that $\mathcal{F}_x \not= 0$. By surjectivity, there is a field $k$ and a map $\tilde{x}: \Spec k \to X$ that sends the unique point to $x$ and has a lift to $Y$ (e.g.\ by first picking a map to $Y$ that hits a preimage of $x$). This means the pullback $Y \times_{\Spec k} X$ is non-empty. Moreover, $\tilde{x}^* \mathcal{F} \not= 0$ by Nakayama, and is free since $\Spec k$ is a field. So the pullback of $\mathcal{F}$ to $Y \times_{\Spec k} X$ is non-zero. Hence $p^* \mathcal{F} \not= 0$.
+
+    \item [(2) $\Rightarrow$ (4)] Let $\mathfrak{p} \in X$, and $\Spec A \subseteq X$ an affine open containing $\mathfrak{p}$. Set $\mathcal{F}|_{\Spec A} = \widetilde{A_\mathfrak{p}/\mathfrak{p} A_\mathfrak{p}}$ and extend by zero. Then $p^* \mathcal{F} \not= 0$ implies there is some affine open $\Spec B \subseteq Y$ such that $B \otimes_A \frac{A_\mathfrak{p}}{\mathfrak{p}A_\mathfrak{p}} =B_\mathfrak{p}/\mathfrak{p}B_\mathfrak{p} \not= 0$. Then a prime of $B_\mathfrak{p}/\mathfrak{p}B_\mathfrak{p}$ is a prime of $B$ that gets mapped to $\mathfrak{p}$ under $p$.\qedhere
+  \end{itemize}
+\end{proof}
+Using (4), it is clear that
+\begin{lemma}
+  Compositions and pullbacks of faithfully flat maps are faithfully flat.
+\end{lemma}
+
+We say a property P of morphisms satisfies fpqc descent if whenever we have a pullback diagram
+\[
+  \begin{tikzcd}
+    Y \times_X X' \ar[d, "p'"] \ar[r, "f'"] & Y \ar[d, "p"]\\
+    X' \ar[r, "f"] & X
+  \end{tikzcd}
+\]
+with $f$ faithfully flat, then $p$ has property P iff $p'$ does.
+\begin{thm}
+  Flat morphisms satisfy fpqc descent.
+\end{thm}
+
+\begin{proof}
+  Suppose $p'$ is flat. If we have a sequence $\mathcal{F}_\Cdot$ of quasi-coherent sheaves on $X$, then $p'^* f^* \mathcal{F}_\Cdot$ is exact since $f$ and $p'$ are flat, and since $p'^* f^* = f'^* p^*$, we know $p^* \mathcal{F}_\Cdot$ is exact by faithfulness.
+\end{proof}
+
+\begin{thm}
+  Finite morphisms satisfy fpqc descent.
+\end{thm}
+
+\begin{proof}[Proof sketch]
+  The pullback of a finite morphism is clearly finite. For the other direction, We will prove the affine version. The gluing step part (which is the hard step) is annoying and will be omitted.
+
+  Suppose that $f: R \to S$ is faithfully flat and $M$ is an $R$-module. We want to show that $M \otimes_R S$ being finitely-generated implies $M$ is finitely generated.
+  
+  Suppose $y_1, \ldots y_m$ generate $M \otimes_R S$, and $y_j = \sum x_{i, j} \otimes f_{i, j}$. Then the $x_{i, j}$ generate $M$, since they generate $M \otimes_R S$ as an $S$-module and $R \to S$ is faithfully flat, hence reflects surjectivity.
+\end{proof}
+\bibliographystyle{plain}
+\bibliography{etale_fundamental_group}
+\end{document}
