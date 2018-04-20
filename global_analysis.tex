@@ -1,0 +1,678 @@
+\documentclass{shortart}
+
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{tikz-cd}
+\usepackage[titletoc]{appendix}
+
+\title{Global Analysis}
+\author{Dexter Chua}
+
+\newtheorem*{prop}{Proposition}
+\newtheorem*{thm}{Theorem}
+\newtheorem*{lemma}{Lemma}
+\newtheorem*{cor}{Corollary}
+\newtheorem*{fact}{Fact}
+\newtheorem*{claim}{Claim}
+
+\theoremstyle{definition}
+\newtheorem*{defi}{Definition}
+\newtheorem*{eg}{Example}
+\newtheorem*{ex}{Exercise}
+
+\newcommand\bra\langle
+\newcommand\ket\rangle
+\newcommand\R{\mathbb{R}}
+\newcommand\Z{\mathbb{Z}}
+\newcommand\C{\mathbb{C}}
+\renewcommand\d{\mathrm{d}}
+\newcommand\D{\mathrm{D}}
+\DeclareMathOperator\im{im}
+\DeclareMathOperator\coker{coker}
+\DeclareMathOperator\Hom{Hom}
+\DeclareMathOperator\Maps{Maps}
+\DeclareMathOperator\symb{sym}
+\newcommand*{\Cdot}{{\raisebox{-0.25ex}{\scalebox{1.5}{$\cdot$}}}}
+
+\begin{document}
+\section{Introduction}
+The document is intended to lead to a proof of the Hodge decomposition theorem and spectral theorem of elliptic operators. The reader is assumed to be familiar with analysis and the arguments are not very detailed. The most glaring omission is the proof of (local) elliptic regularity, which is only very briefly sketched.
+
+A lot of the material is based on lecture notes by Johannes Ebert, which can be found at \url{https://ivv5hpp.uni-muenster.de/u/jeber_02/skripten.html}.
+
+\section{Differential Operators}
+Fix a manifold $M$, and Hermitian vector bundles $E_0, E_1 \to M$ with inner products.
+
+\begin{defi}
+  A differential operator $L: \Gamma(M, E_0) \to \Gamma(M, E_1)$ of order $k$ is a $\C$-linear map that is local, i.e.\ the value of $Lu$ near a point $p \in M$ depends only on the values of $u$ near $p$, and in a coordinate chart, it is of the form
+  \[
+    Lf = \sum_{|\alpha| \leq k} A^\alpha(x) \D_\alpha f
+  \]
+  for some $A^\alpha \in \Gamma(\Hom(E_0, E_1))$.
+\end{defi}
+Note that under our definition, any differential operator of order $k$ is also a differential operator of order $k + 1$.
+
+Just as we can define tangent vectors as derivations, we have the following coordinate-free definition of differential operators (which we will not use), with a similar proof:
+\begin{fact}
+  Let $L: \Gamma(M, E_0) \to \Gamma(M, E_1)$ be linear. Then
+  \begin{enumerate}
+    \item $L$ is a differential operator of order $0$ iff $[L, f] = 0$ for all $f \in C^\infty(M)$.
+    \item $L$ is a differential operator of order $k$ iff $[L, f]$ is a differential operator of order $k - 1$ for all $f \in C^\infty(M)$.\fakeqed
+  \end{enumerate}
+\end{fact}
+
+Integration by parts implies that we have
+\begin{lemma}
+  For any differential operator $L: \Gamma(M, E_0) \to \Gamma(M, E_1)$, there is a \emph{formal adjoint} $L^*: \Gamma(M, E_1) \to \Gamma(M, E_0)$ such that for any $f_i \in \Gamma(M, E_i)$, we have
+  \[
+    (Lf_0, f_1)_{L^2} = (f_0, L^* f_1)_{L^2}.\fakeqed
+  \]
+\end{lemma}
+
+\begin{defi}
+  Let $L$ be a differential operator of order $k$. The (principal) symbol of $L$ is the family of operators $\symb_k(L)(x, \xi)\in \Hom((E_0)_x, (E_1)_x)$ for $(x, \xi) \in T^*M$ given locally by
+  \[
+    \symb_k (L)(x, \xi) = \sum_{|\alpha| = k} A^\alpha(x) \xi_\alpha.
+  \]
+  Formally, if $\pi: T^*M \to M$ is the projection, then $\symb_k(L) \in \Gamma(\Hom(\pi^* E_0, \pi_* E_1))$.
+
+  In a coordinate-free manner, if $s \in \Gamma(M, E_0)$ and $f \in C^\infty(M)$ with $f(x) = 0$, then
+  \[
+    \symb_k (L)(x, (\d f)_x)(s(x)) = \frac{1}{k!} L(f^k s)(x).
+  \]
+  We say $L$ is \emph{elliptic} at $x \in M$ if $\symb_k(x, \xi)$ is invertible for all $\xi \in T^*_x M \setminus \{0\}$, and $L$ is elliptic if it is elliptic everywhere.
+\end{defi}
+While the coordinate-free definition seems rather artificial, it is actually useful when we want to do computations later on.
+
+It will be convenient to note that the adjoint of an elliptic operator is elliptic. More generally,
+\begin{lemma}
+  For any operators $L, L'$, we have
+  \begin{align*}
+    \symb_k(L^*)(x, \xi) &= \pm (\symb_k(L)(x, \xi))^*\\
+    \symb_k(L \circ L')(x, \xi) &= \symb_k(L)(x, \xi) \circ \symb_k(L')(x, \xi).\fakeqed
+  \end{align*}
+\end{lemma}
+Hence the composition and adjoints of elliptic operators is elliptic.
+
+\begin{eg}
+  Consider the exterior derivative $\d: \Omega^p(M) \to \Omega^{p + 1}(M)$. Using the coordinate-free definition, we compute the symbol as
+  \[
+    \symb_1(\d)(x, (\d f)_x)(\omega_x) = (\d (f\omega))_x = (\d f \wedge \omega)_x
+  \]
+  whenever $f(x) = 0$. So the symbol of $\d$ is
+  \[
+    (\xi, \omega) \mapsto \xi \wedge \omega.
+  \]
+\end{eg}
+Note that for $p > 0$, this is not invertible. Instead, what we have is an elliptic complex.
+\begin{defi}
+  An \emph{elliptic complex} is a sequence of vector bundles $E_0, \ldots, E_m$ with first-order differential operators
+  \[
+    L_i: \Gamma(M, E_{i - 1}) \to \Gamma(M, E_i)
+  \]
+  such that $L_{i + 1} \circ L_i = 0$ and for any non-zero $\xi \in T^*_x M$, the sequence
+  \[
+    \begin{tikzcd}[column sep=large]
+      0 \ar[r] & \pi_* E_0 \ar[r, "\symb_1(L_1)"] & \pi^* E_0 \ar[r, "\symb_1(L_2)"] & \cdots \ar[r] & \pi^* E_m \ar[r] & 0
+    \end{tikzcd}
+  \]
+  is \emph{exact} outside of the zero section of $T^*M$.
+\end{defi}
+\begin{ex}
+  The de Rham complex and Dolbeault complex are elliptic complexes.
+\end{ex}
+Ultimately, we will prove Hodge decomposition for elliptic complexes, which subsumes the Hodge decomposition of Riemannian and K\"ahler manifolds.
+
+To get from an elliptic complex to an elliptic operator, we use the following linear algebraic result:
+\begin{lemma}
+  Let $\{V_i\}$ be finite-dimensional vector spaces, and 
+  \[
+    \begin{tikzcd}
+      0 \ar[r] & V_0 \ar[r, "f_1"] & V_1 \ar[r, "f_2"] & \cdots \ar[r] & V_m \to 0
+    \end{tikzcd}
+  \]
+  be an exact sequence. Let $V = \bigoplus V_i$. Then $f + f^*: V \to V$ is an isomorphism.
+\end{lemma}
+
+\begin{proof}
+  It suffices to show $f + f^*$ is injective. Suppose $(f + f^*)x = 0$. Then
+  \[
+    (f + f^*)^2 x = (ff^* + f^* f)x = 0.
+  \]
+  So we get
+  \[
+    0 = \bra ff^*x, x\ket + \bra f^*fx\ket = \bra f^* x, f^* x\ket + \bra fx, fx\ket.
+  \]
+  So $fx = f^*x = 0$. By exactness, $x = fy$ for some $y$, and then
+  \[
+    0 = \bra f^* fy, y\ket = \bra fy, fy\ket = \bra x, x \ket.
+  \]
+  So $x = 0$.
+\end{proof}
+
+\begin{cor}
+  If $(E_*, L_*)$ is an elliptic complex, define $E = \bigoplus E_i$. Then
+  \[
+    D = L + L^*: \Gamma(M, E) \to \Gamma(M, E)
+  \]
+  is elliptic.\fakeqed
+\end{cor}
+
+\section{Sobolev Spaces}
+\subsection{Local Sobolev spaces}
+To apply functional analytic techniques to PDE problems, we need an appropriate Hilbert space of functions. The right notion is that of a Sobolev space.
+\begin{defi}
+  Let $U \subseteq \R^n$ be an open set, $s \in \R$ (possibly negative) and $f, g \in C_c^\infty(U)$. We define
+  \begin{align*}
+    (f, g)_s &= \int_{\R^n} (1 + |\xi|^2)^s \overline{\hat{f}(\xi)}\hat{g}(\xi) \;\d \xi\\
+    \|f\|_s &= (f, f)_s
+  \end{align*}
+  We define $H^s(U)$ to be the Hilbert space completion of $C_c^\infty(U)$ under $\|\cdot\|_s$.
+
+  If no confusion arises, we will omit the $(U)$ in $H^s(U)$.
+\end{defi}
+This space is actually usually called $H_0^s(U)$ instead, with $H^s(U)$ reserved for the same definition but without the compactly supported requirement. We will only need the compactly supported version, and will not write the $_0$.
+
+Basic properties of Fourier transforms imply that for $s \in \Z_{>0}$, we have the following more intuitive definition:
+\begin{lemma}
+  If $s$ is a non-negative integer, and $f \in C_c^\infty(U)$, then $\|\cdot\|_s$ is equivalent to the norm
+  \[
+    \|f\|_s' = \sum_{|\alpha| \leq s} \|\mathrm{D}^\alpha f\|_{L^2}.\fakeqed
+  \]
+\end{lemma}
+\begin{lemma}
+  For any $s$, $\D_\alpha$ extends to a continuous map $H^s \to H^{s - |\alpha|}$.\fakeqed
+\end{lemma}
+A priori, the above definition does not let us think of elements of $H^s$ as genuine functions. Thankfully, we have the following result:
+\begin{lemma}\leavevmode
+  \begin{enumerate}
+    \item The natural map $C_c^\infty(U) \hookrightarrow L^2$ induces an isomorphism $H^0 \cong L^2$.
+    \item If $s \geq t$ and $f \in C_c^\infty$, then $\|f\|_t \leq \|f\|_s$. Hence there is a continuous map $H^s \to H^t$.
+    \item The map is injective.
+  \end{enumerate}
+\end{lemma}
+
+\begin{proof}
+  Only (3) requires proof. We have to show that if $f_n \in C_c^\infty$ is $\|\cdot\|_s$-Cauchy and $\|f_n\|_t \to 0$, then $\|f_n\|_s \to 0$. By assumption, we know $\hat{f}_n^2(1 + |\xi|^2)^t \to 0$ in $L^1$. So it converges to $0$ almost everywhere. So $\hat{f}_n^2 (1 + |\xi|^2)^s \to 0$ almost everywhere. But we know it is Cauchy in $L^1$. So it converges to $0$ in $L^1$.
+\end{proof}
+
+This lets us view the $H^s$ as nested subspaces of $L^2$. In fact, we get something better.
+\begin{thm}[Sobolev embedding theorem]
+  Let $k$ an integer such that $s > k + \frac{n}{2}$. Then there exists a constant $A$ such that for any $u \in C^{\infty}(U)$, we have
+  \[
+    \|u\|_{C^k} \leq A \|u\|_s.
+  \]
+  Thus, there is a continuous inclusion $H^s \hookrightarrow C^k$.
+\end{thm}
+\begin{proof}
+  Let $|\alpha| = \ell < k$. For $x \in U$ and $u \in C^\infty_c(U)$, we have
+  \begin{multline*}
+    |\D_\alpha u(x)| \propto \left| \int e^{ix\xi} \xi_\alpha \hat{u}(\xi) \;\d \xi\right| \leq \int |\xi_\alpha| |\hat{u}(\xi)| \;\d \xi \leq \int |\xi|^\ell |\hat{u}(\xi)|\;\d \xi \\
+    \leq \left(\int |\xi|^2 (1 + |\xi|^2)^{-s}\;\d \xi\right)^{1/2}\left(\int |\hat{u}(\xi)|^2 (1 + |\xi|^2)^s\;\d \xi\right)^{1/2}.
+  \end{multline*}
+  The second term is exactly $\|u\|_s$, and the first term is a constant, which by elementary calculus, is finite iff $s > \ell + \frac{n}{2}$.
+\end{proof}
+
+Admittedly, the proof above does not make much sense. The following more direct proof of a special case shows why we should expect a result along these lines to be true:
+\begin{proof}[Proof of special case]
+  We consider the case $r = 1$, $U = (0, 1)$ and $k = 0$. Then we want to show that
+  \[
+    \|u\|_{C^0} \leq A \|u\|_1
+  \]
+  for some constant $A$. In other words, if $u \in H^1$, we want to be able to make sense of $u$ as a continuous function. The trick is to notice we can make sense of $\frac{\d u}{\d x}$ as an $L^2$ function, and hence we can write
+  \[
+    u(t) = \int_0^t \frac{\d u}{\d x}\;\d x + C
+  \]
+  for some integration constant $C$. This can be determined by
+  \[
+    C = \int_0^1 u(x)\;\d x - \int_0^1 \int_0^t \frac{\d u}{\d x}\;\d x\;\d t.
+  \]
+  This lets us control $\sup u$ in terms of integrals of $u$ and $\frac{\d u}{\d x}$.
+\end{proof}
+One can in fact come up with a similar proof as long as $s$ is an integer.
+
+Another crucial theorem is the following:
+\begin{thm}[Rellich compactness theorem]
+  If $U \subseteq \R^n$ is precompact and $s > t$, then the natural map $H^s \to H^t$ is compact.
+\end{thm}
+\begin{proof}
+  Let $u_k \in C^\infty_c(U)$ be such that $\|u_k\|_s \leq 1$. We have to produce a subsequence that converges in $H^t$. The key claim is
+  \begin{claim}
+    $\hat{u}_k$ that equicontinuous and uniformly bounded on compact sets.
+  \end{claim}
+  Assuming this claim, Arzel\'a--Ascoli implies there is a subsequence of $\hat{u}_k$ that is uniformly convergent on compact subsets. Thus, we write
+  \[
+    \|u_k - u_\ell\|_t^2 = \left(\int_{|\xi|\leq R} + \int_{|\xi| > R}\right)|\hat{u}_k - \hat{u}_\ell|^2 (1 + |\xi|^2)^t \;\d \xi.
+  \]
+  For any fixed $R$, the first term vanishes in the limit $k, \ell \to \infty$ by uniform convergence. For the second term, we bound
+  \[
+    (1 + |\xi|^2)^t \leq (1 + |\xi|^2)^s (1 + R^2)^{t - s}.
+  \]
+  So we know that
+  \[
+    \int_{|\xi| > R}|\hat{u}_k - \hat{u}_\ell|^2 (1 + |\xi|^2)^t \;\d \xi \leq (1 + R^2)^{t - s}(\|u_k\|_s^2 + \|u_\ell\|_s^2) \leq 2 (1 + R^2)^{t - s}.
+  \]
+  This can be made small with large $R$, and we are done.
+
+  To prove the claim, we use the following trick --- pick a bump function $a \in C_c^\infty(\R^n)$ such that $a|_U \equiv 1$. Then trivially, $u_k = au_k$, and thus we have
+  \[
+    \hat{u}_k = \hat{a} * \hat{u}_k.
+  \]
+  Then controlling $\hat{u}_k$ would be the same as controlling $\hat{a}$, which is fixed. For example, to show that $\hat{u}_k$ is bounded, we write
+  \[
+    |\hat{u}_k| = |\hat{a} * \hat{u}_k| \leq \int |\hat{a}(\xi - \eta) \hat{u}_k(\eta)|\;\d \eta \leq \left(\int |\hat{a} (\xi - \eta)|^2 (1 + |\eta|^2)^{-s}\;\d \eta\right)^{1/2} \|u_k\|_s
+  \]
+  by Cauchy--Schwarz. Since $\hat{a}$ is a Schwarz function, the first factor is finite and depends continuously on $\xi$. So $\hat{u}_k$ is uniformly bounded on compact subsets. Equicontinuity follows from similar bounds on $\D_j \hat{u}_k = (\D_j \hat{a}) * \hat{u}_k$.
+\end{proof}
+
+If we are lazy, we will often restrict to the case where $s \in \Z$. If further $s \geq 0$, then the definition of the Sobolev norm in terms of derivatives can be very useful. For $s < 0$, we will exploit the following duality:
+\begin{lemma}
+  The pairing
+  \begin{align*}
+    C_c^\infty \times C_c^\infty &\to \C\\
+    (f, g) &\mapsto \int \overline{f(x)} g(x) \;\d x.
+  \end{align*}
+  satisfies
+  \[
+    |(f, g)| \leq \|f\|_s \|g\|_{-s}.
+  \]
+  Thus, it extends to a map $H^s \times H^{-s} \to \C$. Moreover,
+  \[
+    \|f\|_s = \sup_{g \not= 0} \frac{|(f, g)|}{\|g\|_{-s}}.\tag{$\dagger$}
+  \]
+  Thus, this pairing exhibits $H^s$ and $H^{-s}$ as duals of each other.
+\end{lemma}
+Note that this duality pairing is ``canonical'', and doesn't really depend on the Hilbert space structure on $H^s$ (while the canonical isomorphism between $H^s$ and $(H^s)^*$ does). Later, we will see that in the global case, the Hilbert space structure is not quite canonical, but the duality pairing here will still be canonical.
+
+\begin{proof}
+  The first inequality follows from Plancherel and Cauchy--Schwarz
+  \[
+    (f, g) = (\hat{f}, \hat{g}) = \int \overline{\hat{f}(\xi)}(1 + |\xi|^2)^{s/2} \hat{g}(\xi) (1 + |\xi|^2)^{-s/2}\;\d \xi.
+  \]
+  To show $(\dagger)$, one direction of the inequality is clear. For the other, if $f \in C^\infty$, take $\hat{g} = \hat{f} (1 + |\xi|^2)^s$. For general $f$, approximate.
+\end{proof}
+
+A sample application of this is to show that differential operators induce maps between Sobolev spaces. We already said that $\D_\alpha$ tautologically induces a map $H^s \to H^{s - |\alpha|}$. In a general differential operator, we differentiate, then multiply by a smooth function. Thus, we want to show that multiplication by a smooth function is a bounded linear operator. This is easy to show for $s \in \Z_{\geq 0}$, and duality implies the result for negative $s \in \Z$.
+
+\begin{lemma}
+   Let $s \in \Z$, $a \in C_c^\infty(\R)$ and $u \in H^s(U)$. Then
+  \[
+    \|au\|_s \leq C\|a\|_{C^{|s|}} \|u\|_s.
+  \]
+  for some constant $C$ independent of $a$. Thus, if $L$ is a differential operator of compact support of order $k$, then it extends to a map $L: H^{s + k} \to H^s$.
+\end{lemma}
+
+\begin{proof}
+  We only have to check this for $u \in C_c^\infty(U)$. For $s \geq 0$, this is straightforward, since $\|au\|_s^2$ is a sum of terms of the form $\|\D_\alpha (au)\|_0^2$ for $|\alpha| \leq k$, and the product rule together with the bound $\|a u\|_0 \leq \|a\|_{C^0} \|u\|_0$ implies the result.
+  
+%  If we expand $\|\D_\alpha(au)\|_0^2$, then there are terms where the derivative only hits $u$, and we can bound
+%  \[
+%    \|a \D_\alpha u\|_0^2 \leq \|a\|_{C^0} \|\D_\alpha u\|_0^2 \leq \|a\|_{C^0} \|u\|_{|\alpha|} \leq \|a\|_{C^0} \|u\|_s.
+%  \]
+%  For other terms, we get things of the form
+%  \[
+%    \|(\D_\beta a)(\D_\gamma u)\|_0^2 \leq \|a\|_{C^{|\beta|}} \|u\|_{|\gamma|} \leq \|a\|_{C^s} \|u\|_{s - 1}
+%  \]
+%  We then use that if $s < s'$, then $\|u\|_s < \|u\|_{s'}$ to get the desired bounds.
+%
+%  We next prove the coarser bound for $s < 0$ by duality. If $s > 0$, then
+  For negative $s$, if $s > 0$, then
+  \[
+    \|au\|_{-s} = \sup_{v \not= 0} \frac{|(au, v)|}{\|v\|_s} = \sup \frac{|(u, \bar{a}v)|}{\|v\|_s} \leq \sup \frac{\|u\|_{-s} \|\bar{a}v\|_s}{\|v\|_s} \leq \|u\|_{-s} \|a\|_{C^s}.\fakeqed
+  \]
+\end{proof}
+When proving elliptic regularity, we will need a slight refinement of the above result.
+\begin{lemma}
+   Let $s \in \Z$, $a \in C_c^\infty(\R)$ and $u \in H^s(U)$. Then
+  \[
+    \|au\|_s \leq \|a\|_{C^0} \|u\|_s + C \|a\|_{C^{|s| + 1}} \|u\|_{s - 1}
+  \]
+  for some constant $C$ independent of $a$.
+\end{lemma}
+
+\begin{proof}
+  Again the case $s > 0$ is straightforward. If we look at a term $\|\D_\alpha(a u)\|_0$, the terms in the product rule where $|\alpha| = k$ and the derivatives all hit $u$ contribute to the firs term, and the remainder go into the second. 
+
+  For $s < 0$, we proceed by downward induction on $s$, using the isometry $H^{s + 2} \to H^s$ given by extending $1 + \Delta$. This is an isomorphism, because in the Fourier world, this is just multiplication by $(1 + |\xi|^2)$. Thus, we check the claim for $u$ of the form $Lv$. We have
+  \[
+    \|a Lv\|_s \leq \|[a, L]v\|_s + \|L(av)\|_s \leq \|[a, L]v\|_s + \|av\|_{s + 2}.
+  \]
+  The second term is bounded, by induction, by
+  \[
+    \|a\|_{C^0} \|v\|_{s + 2} + C \|a\|_{C^{|s + 2| + 1}} \|v\|_{s + 1} = \|a\|_{C^0} \|Lv\|_s + C\|a\|_{C^{|s + 2| + 1}} \|Lv\|_{s - 1}
+  \]
+  Observing that $|s + 2| \leq |s|$ since $s < 0$, we are happy with this term. To bound the first term, we have
+  \[
+    [a, L]v = [a, \Delta]v = -\nabla a \cdot \nabla v.
+  \]
+  So we get a bound (omitting constant multiples)
+  \[
+    \|[a, L]v\|_s = \|\nabla a \cdot \nabla v\|_s \leq \|\nabla a\|_{C^{|s|}} \|\nabla v\|_{s} \leq \|a\|_{C^{|s| + 1}} \|v\|_{s + 1} = \|a\|_{C^{|s| + 1}} \|Lv\|_{s - 1}.\qedhere
+  \]
+\end{proof}
+\subsection{Global Sobolev spaces}
+To define Sobolev spaces on manifolds, first observe the following lemma:
+\begin{lemma}
+  Let $U', V' \subseteq \R^n$ be open and $\phi: U' \to V'$ a diffeomorphism. If $U \subseteq U'$ is precompact and $V = \phi(U) \subseteq V'$, then the induced map $H^s(V) \to H^s(U)$ is a bounded isomorphism for all $s \in \Z$.\fakeqed
+\end{lemma}
+The proof is an exercise in the chain rule (for $s \geq 0$) and duality (for $s < 0$). From now on, we always assume $s$ is an integer.
+
+This means it makes sense to define
+\begin{defi}
+  Let $M$ be a compact manifold and $E \to M$ a Hermitian vector bundle. Fix an open cover $\{\varphi_i: \R^n \overset{\sim}{\to} U_i \subseteq M\}$ and a partition of unity $\{\rho_i\}$ subordinate to $\varphi_i$. For any $u \in \Gamma(M, E)$, we define the Sobolev norm by
+  \[
+    \|u\|_s^2 = \sum_i \|\rho_i u \circ \varphi_i^{-1}\|_s^2,
+  \]
+  and define $H^s(M; E)$ to be the completion of $\Gamma(M, E)$ with respect to $\|\cdot\|_k^s$.
+\end{defi}
+There is an obvious inner product that gives rise to the Sobolev norm.
+
+One should check for themselves that
+\begin{lemma}
+  The norm $\|\cdot\|_s$ is well-defined up to equivalence, i.e.\ does not depend on the choice of the $U_i, \phi_i, \rho_i$.\fakeqed
+\end{lemma}
+
+One sees that our local theorems generalize easily to
+
+\begin{lemma}\leavevmode
+  \begin{enumerate}
+    \item There are bounded inclusions $H^s \to H^t$ for $s > t$ which are compact.
+    \item There are bounded inclusions $H^s \to C^k$ for $s > \frac{n}{2} + k$.
+    \item There is a natural duality pairing $H^s(M; E) \times H^{-s}(M; E) \to \C$.
+    \item Any differential operator $L: \Gamma(M, E_0) \to \Gamma(M, E_1)$ of order $k$ induces a continuous map $H^{s + k}(E_0) \to H^s(M; E_1)$.\fakeqed
+  \end{enumerate}
+\end{lemma}
+
+\section{Elliptic Regularity}
+\subsection{Local elliptic regularity}
+The main theorem of elliptic regularity is the following:
+\begin{thm}[Local elliptic regularity]
+  Let $L$ be a differential operator of order $k \geq 1$ on $\R^n$, $U \subseteq \R^n$ precompact and $L$ elliptic over $\bar{U}$. Then
+  \begin{enumerate}
+    \item There is a constant $A$ such that for all $u \in H^{s + k}(U)$, we have
+      \[
+        \|u\|_{s + k} \leq A(\|u\|_s + \|Lu\|_s).
+      \]
+    \item If $u \in H^r$ for some $r$ is such that $Lu \in H^s$ for some $s$, then $\mu u \in H^{s + k}(U)$ for every $\mu \in C_c^\infty(U)$.
+  \end{enumerate}
+\end{thm}
+The first part requires getting our hands dirty and proving explicit estimates. A proof sketch will be given here, with the details carried out in the Appendix.
+\begin{proof}[Proof sketch of (1)]
+  First prove it if $L$ has constant coefficients, which is easy since
+  \[
+    \widehat{Lu}(\xi) = p(\xi) \hat{u}(\xi)
+  \]
+  for some polynomial $p$.
+
+  Next, for arbitrary $L$, we show that for any $x \in x_0$, there is a neighbourhood $V \subseteq U$ such that the estimate holds for all $u$ supported in $V$. To do so, let $L_0$ be the differential operator with constant coefficients that agree with $L$ at $x_0$. We then have to bound $\|(L - L_0)u\|_s$ on the assumption that the coefficients of $L - L_0$ can be made arbitrarily small near the support of $u$.
+
+  Finally, use compactness and partitions of unity to glue these results together.
+\end{proof}
+The second part follows from the first formally.
+
+Observe the first part tells us if we already knew that $u$ were in $H^{s + k}$, then $\|u\|_{s + k}$ would be very well-behaved. This is an \emph{a priori estimate}. To show that $u$ is actually in $H^{s + k}$, we apply appropriate smooth approximations.
+
+Fix a $\phi \in C_c^\infty(\R^n)$ such that
+\[
+  \phi \geq 0,\quad \int \phi\;\d x = 1,\quad \phi(-x) = \phi(x).
+\]
+For $\varepsilon > 0$, we define
+\[
+  \phi_\varepsilon(x) = \frac{1}{\varepsilon^n} \phi\left(\frac{x}{\varepsilon}\right).
+\]
+We then define the \emph{mollifier}
+\begin{align*}
+  F_\varepsilon: C^\infty(\R^n) &\to C^\infty(\R^n)\\
+  u &\mapsto \phi_\varepsilon * u.
+\end{align*}
+The main theorem about mollifiers, which I will not prove, is that
+\begin{thm}
+  $F_\varepsilon$ extends to a bounded operator $H^s \to H^s$ with norm $\leq 1$. Moreover
+  \begin{itemize}
+    \item $F_\varepsilon$ commutes with all differential operators with constant coefficients.
+    \item If $L$ is a differential operator with compact support, then $[F_\varepsilon, L]$ extends to a map $H^s \to H^{s - k + 1}$ for all $s \in \R$, and has uniformly bounded operator norm.
+    \item For any $u \in H^s$, we have $F_\varepsilon u \in C^\infty \cap H^s$.
+    \item For any $u \in H^s$, we have $F_\varepsilon u \to u$ in $H^s$.
+    \item If $U \subseteq \R^n$ is precompact and $u \in H^r(U)$ for some $r < s$, and $\|F_t u\|_s$ is uniformly bounded in $t$, then $u \in H^s(U)$.\fakeqed
+  \end{itemize}
+\end{thm}
+The last point is how we are going to show that $u \in H^{s + k}(U)$, while the others are needed to establish the required bounds.
+
+\begin{proof}[Proof of (2) from (1)]
+  Inductively, we may assume $\mu u \in H^{s + k - 1}$. We then bound
+  \begin{align*}
+    \|F_\varepsilon \mu u\|_{s + k} &\leq A(\|F_\varepsilon \mu u\|_s + \|L F_\varepsilon \mu u\|_s)\\
+    &\leq A(\|F_\varepsilon \mu u\|_s + \|[L, F_\varepsilon] \mu u\|_s + \|F_\varepsilon [L, \mu] u\|_s + \|F_\varepsilon \mu Lu\|_s)\\
+    &\leq A\|\mu u\|_s + A_1 \|\mu u\|_{s + k - 1} + A_2\|u\|_{s + k - 1} + A_3 \|Lu\|_s,
+  \end{align*}
+  where for the third term, we used that $[L, \mu]$ is a differential operator of degree $k - 1$.
+\end{proof}
+
+\subsection{Global elliptic regularity}
+Let $M$ be a compact manifold, $E_0, E_1$ complex vector bundles, and $L$ an elliptic differential operator from $E_0$ to $E_1$ of order $k$. By patching local results together, we conclude that
+\begin{thm}[Global elliptic regularity]\leavevmode
+  \begin{enumerate}
+    \item There is a constant $A$ such that for all $s \geq 0$ and $u \in H^{s + k}(M; E_0)$, we have
+      \[
+        \|u\|_{s + k} \leq A(\|u\|_k + \|Lu\|_k).
+      \]
+    \item If $Lu \in H^s$, then $u \in H^{s + k}$. In particular, if $Lu = 0$, then $u \in C^\infty(M)$.\fakeqed
+  \end{enumerate}
+\end{thm}
+
+This implies a lot of very nice properties about elliptic operators. First observe the following result:
+\begin{prop}
+  Let $U, V, W$ be Hilbert spaces and $L: U \to V$ bounded, $K: U \to W$ compact. If there is an $A$ such that
+  \[
+    \|u\|_U \leq C (\|L u\|_V + \|K u\|_W),
+  \]
+  then $\ker L$ is finite-dimensional and $\im L$ is closed.
+\end{prop}
+
+\begin{proof}
+  We show that the unit ball of $\ker L$ is compact. If $(u_n)$ is a sequence in the unit ball of $\ker L$, then
+  \[
+    \|u_n - u_m\|_U \leq A \|Ku_n - Ku_m\|.
+  \]
+  Since $K$ is compact, there is a subsequence $u_{n_i}$ such that $K u_{n_i}$ is Cauchy. So $u_{n_i}$ is Cauchy. So we are done.
+
+  To show $\im L$ is closed, by restricting to the complement of the kernel, we may assume $L$ is injective. We will show that there is a $c$ such that
+  \[
+    \|u\|_U \leq c \|L u\|_V.
+  \]
+  If not, pick a sequence $u_n$ with $\|u_n\|_U = 1$ but $\|L u\|_V \to 0$. By compactness, we may assume that $Ku_n$ is Cauchy. Then we see that $u_n$ must also be Cauchy, and the limit $u$ must satisfy $\|u\|_U = 1$ and $Lu = 0$, a contradiction.
+\end{proof}
+
+\begin{cor}
+  $L: H^{s + k} \to H^s$ has finite-dimensional kernel and closed image.\fakeqed
+\end{cor}
+The compactness of the manifold $M$ is crucial for the inclusion $H^{s + k} \to H^s$ to be compact.
+
+We want to show that in fact $L$ is Fredholm, i.e.\ both the kernel and the cokernel are compact. Here we simply use duality. We need to show that
+\[
+  K = \{v \in H^{-s} : \bra Lu, v\ket = 0\text{ for all }u \in H^{s + k}\}
+\]
+is finite-dimensional. But this is exactly the kernel of $L^*$. So we deduce
+\begin{cor}
+  $L$ is Fredholm, and in fact
+  \[
+    H^s = \ker L^* + \im (L: H^{s + k} \to H^s).
+  \]
+  The first factor is independent of $s$ (since all elements are $C^\infty$), and taking the limit $s \to \infty$, we get
+  \[
+    \Gamma(M, E_1) = \ker L^* \oplus \im L.\fakeqed
+  \]
+\end{cor}
+A bit of care is actually needed to take the limit $s \to \infty$, but we leave that for the reader.
+\section{Hodge Theory}
+We now arrive at the main theorem we were working towards.
+\begin{thm}[Hodge Decomposition Theorem]
+  Let $(E_*, L)$ be an elliptic complex with $D = L + L^*$ and $\Delta = D^2$ as before. Then
+  \[
+    \Gamma(M, E) = \ker D \oplus \im D.
+  \]
+  Moreover,
+  \begin{enumerate}
+    \item $\ker D$ is finite-dimensional.
+    \item $\ker D = \ker \Delta = \ker L \cap \ker L^*$
+    \item $\im \Delta = \im D = \im LL^* \oplus \im L^*L = \im L \oplus \im L^*$
+    \item $\ker L = \im L \oplus \ker \Delta$, and $\ker \Delta \to H(E_*)$ is an isomorphism.
+  \end{enumerate}
+\end{thm}
+
+\begin{proof}
+  (1) follows from regularity. (2) follows from the identities
+  \[
+    \bra u, \Delta u\ket = \bra D u, D u\ket = \bra L u, L u\ket + \bra L^* u + L^* u\ket,\quad u \in \Gamma(M, E_i).
+  \]
+  For (3), we can also decompose $\Gamma(M, E) = \ker \Delta \oplus \im \Delta$. Since $\im \Delta \subseteq \im D$, they must be equal. Moreover,
+  \[
+    \im D \subseteq \im(LL^*) \oplus \im (L^*L) \subseteq \im L \oplus \im L^*,
+  \]
+  but clearly $\im L \oplus \im L^* \perp \ker \Delta$ since
+  \[
+    \bra L u + L^* v, w\ket = \bra u + v, D w\ket.
+  \]
+  So we must have equality throughout, and $\im L$ is clearly orthogonal to $\im L^*$. For (4), it is clear that $\ker L \supseteq \im L \oplus \ker \Delta$, and since $\ker L \perp \im L^*$, that must be an equality.
+\end{proof}
+
+\begin{thm}[Spectral theorem]
+  Let $M$ be a closed Riemannian manifold and $E \to M$ a Hermitian vector bundle. Let $D: \Gamma(M, E) \to \Gamma(M, E)$ be formally self-adjoint of order $k \geq 1$. Then we have an orthogonal decomposition
+  \[
+    L^2(M, E) = \bigoplus_{\lambda \in \R} \ker (D - \lambda).
+  \]
+  Moreover, each $\ker (D - \lambda)$ is finite-dimensional, and for any $\Lambda$, there are only finitely many eigenvalues of magnitude $< \Lambda$.
+\end{thm}
+The idea is to apply the spectral theorem for compact self-adjoint operators to the inverse of $D$. Of course, $D$ need not be invertible. So we do the following:
+
+\begin{proof}
+  Consider the operator $L = 1 + D^2: \Gamma(M, E) \to \Gamma(M, E)$. It is then clear that $L = L^*$ is elliptic and injective. So $L: H^{2k} \to L^2$ is invertible (since the complement of the image is $\ker L^*$), with inverse $S: L^2 \to H^{2k}$. Since $L$ induces a bijection between the smooth sections, so does $S$. Let $T$ be the composition $L^2 \overset{S}{\to} H^{2k} \hookrightarrow L^2$. Then this is compact and self-adjoint (can check this for smooth sections, and use that its ``inverse'' $L$ is formally self adjoint).
+
+  By the spectral theorem of compact self--adjoint operators (and positivity of $T$),
+  \[
+    L^2(M; E) = \bigoplus_{\mu > 0} \ker (T - \mu).
+  \]
+  Moreover, each factor is finite-dimensional, and $0$ is the only accumulation point of the spectrum.
+
+  We will show that $\ker (T - \mu)$ decomposes as a sum of eigenspaces for $D$. We first establish that
+  \[
+    \ker (T - \mu) = \im (1 - \mu L)^\perp = \ker (1 - \mu L).
+  \]
+  Since $L$ is self-adjoint, the second equality follows by elliptic regularity. The first equality follows from the computation
+  \[
+    \bra x, (1 - \mu L)u\ket = \bra x, u\ket - \mu \bra x, Lu\ket = \bra Tx, Lu\ket - \mu \bra x, Lu\ket = \bra (T- \mu)x, Lu\ket,
+  \]
+  plus the density of $\Gamma(M, E)$ and surjectivity of $L: \Gamma(M, E) \to \Gamma(M, E)$.
+
+  Now since $D$ commutes with $L$, we know $D$ acts as a self-adjoint operator on the \emph{finite-dimensional} vector space $\ker (T - \mu) = \ker (1 - \mu L)$. Moreover, restricted to this subspace, we have
+  \[
+    D^2 = \frac{1}{\mu} - 1.
+  \]
+  So by linear algebra, $\ker (T - \mu)$ decomposes into eigenspaces of $D$ of eigenvalues $\pm \sqrt{\frac{1}{\mu} - 1}$, and the theorem follows.
+\end{proof}
+
+\appendices
+\section{Proof of local elliptic regularity}
+We fill in the details of the proof of local elliptic regularity. We fix $L$ a differential operator of order $k \geq 1$ on $\R^n$, $U \subseteq \R^n$ precompact and $L$ elliptic over $\bar{U}$.
+\begin{lemma}
+  If $L$ has constant coefficients, i.e.
+  \[
+    L = \sum_{|\alpha| \leq k} a^\alpha \D_\alpha,
+  \]
+  then there is an $A$ such that for all $u \in C_c^\infty(U)$,
+  \[
+    \|u\|_{s + k} \leq A(\|u\|_s + \|Lu\|_{s}).
+  \]
+\end{lemma}
+
+\begin{proof}
+  Observe that we have
+  \[
+    \widehat{Lu}(\xi) = p(\xi) \hat{u}(\xi).
+  \]
+  for some polynomial $p$ of degree at most $k$. By ellipticity, for some $R \gg 0$ and constant $A > 0$, we have
+  \[
+    A |p(\xi)| \geq (1 + |\xi|^2)^{k/2}.
+  \]
+  So in the decomposition
+  \[
+    \int |\hat{u}(\xi)|^2 (1 + |\xi|)^{s + k} \;\d \xi = \left(\int_{|\xi| \leq R} + \int_{|\xi| \geq R}\right) |\hat{u}(\xi)|^2 (1 + |\xi|)^{s + k} \;\d \xi,
+  \]
+  we can bound the first term by $(1 + R^2)^k \|u\|_s$, and we can bound the second term by
+  \[
+    \int_{|\xi|\geq R} |\widehat{Lu}(\xi)|^2 (1 + |\xi|^2)^s\;\d \xi  \leq \|Lu\|_s.\qedhere
+  \]
+\end{proof}
+
+\begin{lemma}
+  For any fixed $L$ and $x_0 \in U$, there is some neighbourhood $V \subseteq U$ of $x$ and $A > 0$ such that for all $u \in C_c^\infty(V)$, we have
+  \[
+    \|u\|_{s + k} \leq A(\|u\|_s + \|Lu\|_{s}).
+  \]
+\end{lemma}
+
+\begin{proof}
+  Let $L_0$ be the differential operator with constant coefficients that agree with $L$ at $x_0$. Then $L_0$ is also an elliptic operator, and the above applies. So for any $u$, we have
+  \[
+    \|u\|_{s + k} \leq A_1(\|u\|_s + \|L_0u\|_s) \leq A'(\|u\|_s + \|(L - L_0) u\|_s + \|Lu\|_s).
+  \]
+  So we have to control the term $\|(L - L_0)u\|_s$. For a tiny $\delta \ll 1$, pick a neighbourhood $V$ of $x_0$ such that the coefficients of $L - L_0$ are bounded by $\delta$. Then
+  \[
+    \|(L - L_0)u\|_s \leq \delta A_2 \|u\|_{s + k} + A_3 \|u\|_{s + k- 1},
+  \]
+  where $A_2, A_3$ are fixed, independent of $u$ and $V$. By the next lemma, for any $\varepsilon > 0$, we can bound
+  \[
+    A_1 A_3 \|u\|_{s + k - 1} \leq \varepsilon \|u\|_{s + k} + A_4(\varepsilon) \|u\|_s.
+  \]
+  We then deduce that
+  \[
+    \|u\|_{s + k} \leq A_1 \|Lu\|_s + (\delta A_1 A_2 + \varepsilon) \|u\|_{s + k} + (A_1 + A_4(\varepsilon)) \|u\|_s.
+  \]
+  Picking $\delta$ and $\varepsilon$ to be small enough, we are done.
+\end{proof}
+
+\begin{lemma}
+  For any $r < s < t$ and $\varepsilon > 0$, there exists $C(\varepsilon)$ such that
+  \[
+    (1 + |\xi|^2)^s \leq (1 + |\xi|^2)^t \varepsilon + (1 + |\xi|^2)^r C(\varepsilon)
+  \]
+  for all $\xi$. Hence
+  \[
+    \|u\|_s \leq \varepsilon \|u\|_t + C(\varepsilon) \|u\|_r.
+  \]
+\end{lemma}
+
+\begin{proof}
+  The claim is the same as
+  \[
+    1 \leq (1 + |\xi|^2)^{t - s} \varepsilon + (1 + |\xi|^2)^{r - s} C(\varepsilon).
+  \]
+  Observe that for any $y$, we always have
+  \[
+    1 \leq y^{t - s} + (1/y)^{s - r}.
+  \]
+  Then take $y = (1 + |\xi|^2) \varepsilon^{1/(t - s)}$.
+\end{proof}
+
+\begin{thm}
+  For any $L$, there exists $A$ such that
+  \[
+    \|u\|_{s + k} \leq A (\|u\|_s + \|Lu\|_s).
+  \]
+\end{thm}
+
+\begin{proof}
+  Pick $W \supseteq \bar{U}$ such that $L$ is elliptic on $W$, and cover $W$ (and hence $\bar{U}$) with finitely $V_i$ where we have a bound as above, say
+  \[
+    \|u\|_{s + k} \leq A (\|u\|_s + \|Lu\|_{s - k})
+  \]
+  for any $u$ supported in the $V_i$'s. Now pick a partition of unity $\{\mu_i\}$ subordinate to $\{V_i\}$. Then
+  \begin{multline*}
+    \|u\|_{s + k} \leq \sum \|\mu_i u\|_{s + k} \leq \sum C(\|\mu_i u\|_s + \|L \mu_i u\|_s)\\
+    \leq \sum C(\|\mu_i u\|_s + \|\mu_i Lu\|_s + \|[L, \mu_i] u\|_s).
+  \end{multline*}
+  We can bound the first two by a constant multiple of $\|u\|_s$ and $\|Lu\|_s$. To bound the last term, we use that $[L, \mu_i]$ is a differential operator of order $k - 1$, and hence
+  \[
+    \|[L, \mu_i] u\|_s \leq C \|u\|_{s + k - 1} \leq \varepsilon \|u\|_{s + k} + C(\varepsilon) \|u\|_s.\qedhere
+  \]
+\end{proof}
+\end{document}
