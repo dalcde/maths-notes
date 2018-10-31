@@ -1,0 +1,7 @@
+\ProvidesPackage{plastex}
+
+\newenvironment{useimager}{}{}
+\newif\ifplastex
+\plastexfalse
+
+\DeclareRobustCommand\tph[3]{{\texorpdfstring{#1}{#2}}}
