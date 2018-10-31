@@ -1,0 +1,213 @@
+\documentclass{shortart}
+
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{tikz-cd}
+\usepackage{booktabs}
+\usepackage{tikz}
+\usepackage{plastex}
+
+\tikzset{circ/.style = {fill, circle, inner sep = 0, minimum size = 3}}
+
+\title{Construction of \texorpdfstring{$v_1$}{v1} and \texorpdfstring{$v_2$}{v2} self-maps}
+\author{Dexter Chua}
+
+\newtheorem*{prop}{Proposition}
+\newtheorem*{thm}{Theorem}
+\newtheorem*{lemma}{Lemma}
+\newtheorem*{cor}{Corollary}
+\newtheorem*{claim}{Claim}
+
+\theoremstyle{definition}
+\newtheorem*{defi}{Definition}
+\newtheorem*{eg}{Example}
+
+\newcommand\dd{\mathrm{d}}
+\newcommand\R{\mathbb{R}}
+\newcommand\F{\mathbb{F}}
+\newcommand\Z{\mathbb{Z}}
+\newcommand\Sph{\mathbb{S}}
+
+\DeclareMathOperator\Ext{Ext}
+\begin{document}
+\ifplastex\else\vspace{10pt}\fi
+In these notes, I will define the notion of a $v_n$ self map, and prove their existence for $n = 1$ or $2$. These maps are used to construct infinite families in the homotopy groups of spheres.
+
+\section{Motivation and definitions}
+The Adams--Novikov spectral sequence is a spectral sequence
+\[
+  \Ext^{s, t}_{BP_*BP}(BP_*, BP_*) \Rightarrow \pi_{t - s}(\Sph).
+\]
+We will abbreviate $\Ext^{s, t}_{BP_*BP}(BP_*, M)$ as $\Ext^{s, t}(C)$, and sometimes omit the $t$.
+
+To use this to construct elements in $\pi_{t - s}(\Sph)$, we have to do three things:
+\begin{enumerate}
+  \item Find an element in $\Ext^{s, t}(BP_*)$
+  \item Show that it doesn't get hit by differentials
+  \item Show that all differentials vanish on it.
+\end{enumerate}
+All three steps are difficult, except with some caveats.
+\begin{enumerate}
+  \item We can do this if $s = 0$.
+  \item We can do this if $s$ is small enough.
+  \item We can do this if we know the map of spheres actually exists, and want to show it is non-zero.
+\end{enumerate}
+
+Of these three caveats, (1) is perhaps the worst, because the $s = 0$ line is boring. To make better use of our ability to calculate $\Ext^0$, suppose we have a short exact sequence of comodules, such as
+\[
+  0 \longrightarrow BP_* \overset{p}{\longrightarrow} BP_* \longrightarrow BP_*/p \longrightarrow 0.
+\]
+We then get a coboundary map
+\[
+  \delta : \Ext^0(BP_*/p) \to \Ext^1 (BP_*).
+\]
+So we can use this to produce elements in $\Ext^1(BP_*)$. To understand the geometry of this operation, so that we can do (3), we use the following lemma, whose proof is a fun diagram chase:
+\begin{lemma}
+  Suppose $A \to B \to C \to \Sigma A$ is a cofiber sequence, and suppose that the map $BP_* A \to BP_*B$ is injective, so that we have a short exact sequence
+  \[
+    0 \to BP_* A \to BP_* B \to BP_* C \to 0.
+  \]
+  Suppose $f: \Sph^? \to C$ is a map, whose corresponding element in the Adams spectral sequence is $\hat{f} \in \Ext^s (BP_*C)$. Then the composition $\Sph^? \to C \to \Sigma A$ corresponds to $\delta \hat{f} \in \Ext^{s + 1} (BP_* C)$. In particular, $\delta \hat{f}$ is a permanent cycle.\fakeqed
+\end{lemma}
+The slogan is
+
+\begin{quote}
+  \emph{If $\delta$ comes from geometry, it sends permanent cycles to permanent cycles.}
+\end{quote}
+
+For the short exact sequence above, we can realize it as the $BP$ homology of 
+\[
+  \Sph \overset{p}{\longrightarrow} \Sph \longrightarrow \Sph/p \equiv V(0).
+\]
+Recall that $\Ext^0(BP_*/p) = \F_p[v_1]$. If we can find a map $\tilde{v}_1: \Sph^{2p - 2} \to V(0)$ that gives $v_1 \in \Ext^0(BP_*/p)$, then we know $\delta (v_1) \in \Ext^1(BP_*/p)$ is a permanent cycle. Since this has $s = 1$, no differentials can hit it, and as long as $\delta (v_1) \not= 0 \in \Ext^1(BP_*)$, which is a \emph{purely algebraic problem}, we get a non-trivial element in the homotopy groups of sphere.
+
+This is actually not a very useful operation to perform, because the way we are going to construct $\tilde{v}_1$ is by analyzing the Adams--Novikov spectral sequence for $V(0)$, which is not very much easier than finding the element in $\Ext^1(BP_*)$ directly.
+
+But if we can promote this to a map $v_1: \Sigma^{2p - 2} V(0) \to V(0)$ that induces multiplication by $v_1$ on $BP_*$, then we can form the composition
+\[
+  \Sph^{t (2p - 2)} \hookrightarrow \Sigma^{t(2p - 2)} V(0) \overset{v_1^t}{\longrightarrow} V(0)
+\]
+which represents $v_1^t \in  \Ext^0(BP_*/p)$, where the first map is the canonical quotient map $\Sph \to \Sph/p = V(0)$. We then know that $\delta(v_1^t) \in \Ext^1(BP_*)$ is permanent, and the above argument goes through. Thus, by constructing a single map $v_1: \Sigma^{2p - 2} V(0) \to V(0)$, we have found an \emph{infinite} family of permanent cycles in $\Ext^1$, knowing by magic that all the differentials from it must vanish. It is in fact true that for $p > 2$, the map $v_1$ exists and they are all non-trivial. These elements are known as $\alpha_t$.
+
+The map $v_1$ is known as a \emph{$v_1$ self map} of $V(0)$. If we are equipped with such a map, we can play the same game with the cofiber sequence
+\[
+  \Sigma^{2p - 2} V(0) \overset{v_1}{\longrightarrow} V(0) \to V(1).
+\]
+We then know that $BP_* V(1) = BP_*/(p, v_1)$, and we have a short exact sequence
+\[
+  0 \longrightarrow BP_*/p \overset{v_1}{\longrightarrow} BP_*/p \longrightarrow BP_*/(p, v_1) \longrightarrow 0.
+\]
+
+Again we know that $\Ext^0(BP_*/(p, v_1)) = \F_p[v_2]$, and we can seek a \emph{$v_2$ self map} $v_2: \Sigma^{2p^2 - 2} V(1) \to V(1)$ that induces multiplication by $v_2$ on $BP_*$. If we can do so, then we know that $\delta (v_2^t) \in \Ext^1(BP_*/p)$ is a permanent cycle, and hence $\delta \delta (v_2^t) \in \Ext^2(BP_*)$ is also a permanent cycle. This gives us a second sequence of elements in the stable homotopy group of spheres. Moreover, in this case the non-triviality is again an \emph{algebraic} problem of showing that $\delta \delta (v_2^t) \not= 0 \in \Ext^2(BP_*)$, since no differentials can hit it. These elements are known as $\beta_t$.
+
+In these notes, I will construct the $v_1$ self maps for $p > 2$ and $v_2$ self maps for $p > 3$. It is true that the corresponding $\alpha_t$ and $\beta_t$ are in fact non-zero, but I will not prove it here. These maps were first constructed by Adams and Smith (for $v_1$ and $v_2$ respectively), but they had to do more work because they didn't have $BP$ and the Adams--Novikov spectral sequence.
+
+We can of course continue this process to seek $v_n$ self maps for larger $n$, and you should be glad to hear that this will become prohibitively difficult way before we run out of Greek letters.
+\section{Construction of \texorpdfstring{$v_1$}{v1} self maps}
+We wish to construct a map $\Sigma^{2p - 2} V(0) \to V(0)$ inducing multiplication by $v_1$ on $BP_*$ homology. The strategy is to construct a map $\Sph^{2p - 2} \to V(0)$ that induces multiplication by $v_1$ on $BP_*$ homology, and then extend it to a map $\Sigma^{2p - 2}V(0) \to V(0)$ by obstruction theory.
+
+First consider the $BP$ Adams--Novikov spectral sequence for $V(0)$. In degrees up to $2p - 2$, the spectral sequence looks like
+\begin{center}
+  \begin{tikzpicture}
+    \draw [->] (0, 0) -- (5, 0) node [right] {$t - s$};
+    \draw [->] (0, 0) -- (0, 3) node [above] {$s$};
+
+    \node [circ] at (0, 0) {};
+    \node [below] at (0, 0) {$1$};
+    
+    \node [opacity = 0, fill, circle, inner sep = 0, minimum size = 9] (v1) at (3.5, 0) {}; \node [circ] at (3.5, 0) {};
+    \node [below] at (3.5, 0) {$v_1$};
+
+    \node [circ] at (2.8, 0.7) {};
+    \node [left] at (2.8, 0.7) {$t_1$};
+
+    \draw [red, ->] (v1) -- (2.8, 1.4) node [pos=0.5, right] {$d_2$};
+  \end{tikzpicture}
+\end{center}
+where $v_1 \in (2p - 2, 0)$ and $t_1 \in (2p - 3, 1)$. If $p = 2$, then we have an extra $t_1^2$ which will be right above $v_1$.
+
+In either case, we see that there is no room for extra differentials. So we see that
+\begin{lemma}
+  There is a map $\tilde{v}_1: \Sph^{2p - 2} \to V(0)$ that induces multiplication by $v_1$ on $BP_*$. If $p > 2$, then this map has order $p$ and is unique.\fakeqed
+\end{lemma}
+Since $V(0) = \Sph/p$, the map $\tilde{v}_1$ having order $p$ is the same as it extending to a map $\Sigma^{2p - 2} V(0)$. Thus, we deduce that
+\begin{thm}
+  If $p > 2$, then there is a map $v_1: \Sigma^{2p - 2} V(0) \to V(0)$ that induces multiplication by $v_1$ on $BP_*$.
+\end{thm}
+
+In the case $p = 2$, we know $\pi_2 V(0) = \Z/4\Z$ or $\Z/2 \oplus \Z/2$. If it is $\Z/4\Z$, then this map has order $4$ and does not lift to a map $\Sigma^2 V(0) \to V(0)$. This is indeed the case, as one can check using the $H\F_2$ Adams spectral sequence, so we do not have a $v_1$ self map at $p = 2$.
+
+\section{Construction of \texorpdfstring{$v_2$}{v2} self maps}
+We next attempt to construct $v_2$ self maps. It turns out there is no $v_2$ self map when $p = 3$, so in this section we will exclusively concentrate on the case $p > 5$.
+
+We first sketch the argument to see how far in the Adams--Novikov spectral sequence we have to go. There is an element $v_2 \in \Ext^{0, 2p^2 - 2}(BP_*, BP_*/(p, v_1))$. We want to show this survives to give a map $\Sph^{2p^2 - 2} \to V(1)$, and so we will have to understand the $t - s = 2p^2 - 3$ column, which we will find to be empty.
+
+If we further find that this map has order $p$, then it factors through $\Sigma^{2p^2 - 2} V(0)$. This is the same as saying there are no elements in the $t - s = 2p^2 - 2$ column apart from (multiples of) $v_2$.
+
+Finally, to show that this descends to a map from $\Sigma^{2p^2 - 2} V(1)$, we precompose with the (suspension of the) $v_1$ self map of $V(0)$ to get a map
+\[
+  \Sigma^{2p^2 + 2p - 4} V(0) \overset{\Sigma^{2p^2 - 2} v_1}{\longrightarrow} \Sigma^{2p^2 - 2} V(0) \longrightarrow V(1),
+\]
+and we have to show that this vanishes. We shall show that $[\Sigma^{2p^2 + 2p - 4} V(0), V(1)] = 0$ using the long exact sequence
+\[
+  [\Sph^{2p^2 + 2p - 3}, V(1)] \to [\Sigma^{2p^2 + 2p - 4} V(0), V(1)] \to [\Sph^{2p^2 + 2p - 4}, V(1)]
+\]
+given by the cofiber sequence $\Sph \overset{p}{\rightarrow} \Sph \rightarrow V(0)$.
+
+So to show that $v_2$ exists, we have to prove the following:
+\begin{thm}
+  Suppose $p > 3$. Then $\Ext^{s, t}(BP_*/(p, v_1)) = 0$ for
+  \[
+    t - s = 2p^2 - 3, \quad 2p^2 + 2p - 3,\quad 2p^2 + 2p - 4.
+  \]
+  Moreover, the column $t - s = 2p^2 - 2$ is generated by $v_2$ of order $p$.
+\end{thm}
+
+So we will have to compute the Adams--Novikov spectral sequence up to $t - s \leq 2p^2 + 2p - 3$. In Ravenel's green book, the computation was done up to $\sim p^3$, but for our range, we can get away with doing some simple counting.
+
+In this range, the generators in $BP_*BP$ that show up in the cobar complex are $t_1, t_2$ and $v_2$. Note that there are two ways we can multiply $t_1$ --- either in $BP_* BP$ itself, or as $t_1 \otimes t_1$ in the cobar complex. In either case, any appearance of $t_1$ will contribute at least $2p - 3$ to $t - s$. Similarly, $t_2$ and $v_2$ contribute $2p^2 - 3$ and $2p^2 - 2$ respectively. The assumption that $p \geq 5$ allows us to perform the following difficult computation:
+
+\begin{thm}
+  If $p \geq 5$, then $2p - 3 \geq 7$.\fakeqed
+\end{thm}
+
+Thus, we can enumerate all the terms that appear in the cobar complex in the range $t - s \leq 2p^2 + 2p - 3$:
+\begin{center}
+  \begin{tabular}{cc}
+    \toprule
+    Element & $t - s$\\
+    \midrule
+    Terms involving only $t_1$ & ?? \\
+    $v_2$ & $2p^2 - 2$\\
+    $t_2$ & $2p^2 - 3$\\
+    $t_1 v_2$ & $2p^2 + 2p - 5$\\
+    $t_1 t_2$ & $2p^2 + 2p - 5$ \\
+    $t_1 \otimes t_2$ & $2p^2 + 2p - 6$\\
+    $t_2 \otimes t_1$ & $2p^2 + 2p - 6$\\
+    \bottomrule
+  \end{tabular}
+\end{center}
+
+The term $t_2$ is in a problematic column, but it shall not concern us for two reasons. Firstly, it has $s = 1$, so it wouldn't get hit by our differentials. Secondly, we can calculate that $\dd (t_2) = t_1 \otimes t_1^p$ (e.g. see 4.3.15 of Ravenel's Green book), and so $t_2$ does not actually appear in the Adams spectral sequence. So we would be done if we can show that there are no purely $t_1$ terms appearing in the four columns of the theorem.
+
+The element $t_1$ is a primitive element, and the following lemma is convenient:
+\begin{lemma}
+  Let $\Gamma = P(x)$ be a Hopf algebra over $\F_p$ ($p > 2$) on one primitive generator in even degree. Then
+  \[
+    \Ext_\Gamma(\F_p, \F_p) = E(h_i: i = 0, 1, \ldots) \otimes P(b_i: i = 0, 1, \ldots)
+  \]
+  where
+  \[
+    h_i = x^{p^i} \in \Ext^1,\quad b_i = \sum_{0 < j < p} \frac{1}{p} \binom{p}{j} x^{jp^i} \otimes x^{(p - j)p^i} \in \Ext^2.\fakeqed
+  \]
+\end{lemma}
+
+The presence of elements not involving $t_1$ will not increase the number of purely $t_1$ cohomology classes, but may kill off some if the coboundary of some term is purely $t_1$ (e.g.\ $\dd(t_2)$). So it is enough to see that there are no product of the $h_i$ and $b_i$ fall into the relevant columns.
+
+In degrees $t - s \leq 2p^2 + 2p - 4$, we have generators
+\[
+  1 \in \Ext^{0, 0}, \quad h_0 \in \Ext^{1, 2p - 2},\quad h_1 \in \Ext^{1, 2p^2 - 2p},\quad b_0 \in \Ext^{2, 2p^2 - 2p},
+\]
+We see that no product of these can enter the column we care about. So we are done.
+
+As a side note, in the case $p = 3$, we have $2p^2 + 2p - 3 = 21$, and $h_1 b_0 \in \Ext^{3, 24}$ is a non-trivial element with $t - s = 2p^2 + 2p - 3$. 
+\end{document}
