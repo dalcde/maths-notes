@@ -32,7 +32,7 @@
 \let\real@author\author
 \renewcommand\author[1]{\real@author{#1}\hypersetup{pdfauthor={#1}}}
 
-\AtBeginDocument{\maketitle\tableofcontents}
+\AtBeginDocument{\null \begin{center}\vskip 1.4em {\LARGE \@title \par } \vskip 1em{\large \@author}\end{center}\vskip 1.5em\tableofcontents\vskip 1.5em}
 
 \newcommand\qedshift{\vspace{-17pt}}
 \newcommand\fakeqed{\pushQED{\qed}\qedhere}
