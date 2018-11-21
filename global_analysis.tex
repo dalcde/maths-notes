@@ -64,7 +64,7 @@ Integration by parts implies that we have
   For any differential operator $L: \Gamma(M, E_0) \to \Gamma(M, E_1)$, there is a \emph{formal adjoint} $L^*: \Gamma(M, E_1) \to \Gamma(M, E_0)$ such that for any $f_i \in \Gamma(M, E_i)$, we have
   \[
     (Lf_0, f_1)_{L^2} = (f_0, L^* f_1)_{L^2}.\fakeqed
-  \]
+  \]\ifplastex\fakeqed\fi
 \end{lemma}
 
 \begin{defi}
@@ -88,7 +88,7 @@ It will be convenient to note that the adjoint of an elliptic operator is ellipt
   \begin{align*}
     \symb_k(L^*)(x, \xi) &= \pm (\symb_k(L)(x, \xi))^*\\
     \symb_k(L \circ L')(x, \xi) &= \symb_k(L)(x, \xi) \circ \symb_k(L')(x, \xi).\fakeqed
-  \end{align*}
+  \end{align*}\ifplastex\fakeqed\fi
 \end{lemma}
 Hence the composition and adjoints of elliptic operators is elliptic.
 
@@ -180,7 +180,7 @@ Basic properties of Fourier transforms imply that for $s \in \Z_{>0}$, we have t
   If $s$ is a non-negative integer, and $f \in C_c^\infty(U)$, then $\|\cdot\|_s$ is equivalent to the norm
   \[
     \|f\|_s' = \sum_{|\alpha| \leq s} \|\mathrm{D}^\alpha f\|_{L^2}.\fakeqed
-  \]
+  \]\ifplastex\fakeqed\fi
 \end{lemma}
 \begin{lemma}
   For any $s$, $\D_\alpha$ extends to a continuous map $H^s \to H^{s - |\alpha|}$.\fakeqed
@@ -208,10 +208,12 @@ This lets us view the $H^s$ as nested subspaces of $L^2$. In fact, we get someth
 \end{thm}
 \begin{proof}
   Let $|\alpha| = \ell < k$. For $x \in U$ and $u \in C^\infty_c(U)$, we have
-  \begin{multline*}
-    |\D_\alpha u(x)| \propto \left| \int e^{ix\xi} \xi_\alpha \hat{u}(\xi) \;\der \xi\right| \leq \int |\xi_\alpha| |\hat{u}(\xi)| \;\der \xi \leq \int |\xi|^\ell |\hat{u}(\xi)|\;\der \xi \\
-    \leq \left(\int |\xi|^2 (1 + |\xi|^2)^{-s}\;\der \xi\right)^{1/2}\left(\int |\hat{u}(\xi)|^2 (1 + |\xi|^2)^s\;\der \xi\right)^{1/2}.
-  \end{multline*}
+  \begin{useimager}
+    \begin{multline*}
+      |\D_\alpha u(x)| \propto \left| \int e^{ix\xi} \xi_\alpha \hat{u}(\xi) \;\der \xi\right| \leq \int |\xi_\alpha| |\hat{u}(\xi)| \;\der \xi \leq \int |\xi|^\ell |\hat{u}(\xi)|\;\der \xi \\
+      \leq \left(\int |\xi|^2 (1 + |\xi|^2)^{-s}\;\der \xi\right)^{1/2}\left(\int |\hat{u}(\xi)|^2 (1 + |\xi|^2)^s\;\der \xi\right)^{1/2}.
+    \end{multline*}
+  \end{useimager}
   The second term is exactly $\|u\|_s$, and the first term is a constant, which by elementary calculus, is finite iff $s > \ell + \frac{n}{2}$.
 \end{proof}
 
@@ -321,7 +323,7 @@ A sample application of this is to show that differential operators induce maps 
   For negative $s$, if $s > 0$, then
   \[
     \|au\|_{-s} = \sup_{v \not= 0} \frac{|(au, v)|}{\|v\|_s} = \sup \frac{|(u, \bar{a}v)|}{\|v\|_s} \leq \sup \frac{\|u\|_{-s} \|\bar{a}v\|_s}{\|v\|_s} \leq \|u\|_{-s} \|a\|_{C^s}.\fakeqed
-  \]
+  \]\ifplastex\fakeqed\fi
 \end{proof}
 When proving elliptic regularity, we will need a slight refinement of the above result.
 \begin{lemma}
@@ -503,7 +505,7 @@ is finite-dimensional. But this is exactly the kernel of $L^*$. So we deduce
   The first factor is independent of $s$ (since all elements are $C^\infty$), and taking the limit $s \to \infty$, we get
   \[
     \Gamma(M, E_1) = \ker L^* \oplus \im L.\fakeqed
-  \]
+  \]\ifplastex\fakeqed\fi
 \end{cor}
 A bit of care is actually needed to take the limit $s \to \infty$, but we leave that for the reader.
 \section{Hodge Theory}
@@ -669,10 +671,12 @@ We fill in the details of the proof of local elliptic regularity. We fix $L$ a d
     \|u\|_{s + k} \leq A (\|u\|_s + \|Lu\|_{s - k})
   \]
   for any $u$ supported in the $V_i$'s. Now pick a partition of unity $\{\mu_i\}$ subordinate to $\{V_i\}$. Then
-  \begin{multline*}
-    \|u\|_{s + k} \leq \sum \|\mu_i u\|_{s + k} \leq \sum C(\|\mu_i u\|_s + \|L \mu_i u\|_s)\\
-    \leq \sum C(\|\mu_i u\|_s + \|\mu_i Lu\|_s + \|[L, \mu_i] u\|_s).
-  \end{multline*}
+  \begin{useimager}
+    \begin{multline*}
+      \|u\|_{s + k} \leq \sum \|\mu_i u\|_{s + k} \leq \sum C(\|\mu_i u\|_s + \|L \mu_i u\|_s)\\
+      \leq \sum C(\|\mu_i u\|_s + \|\mu_i Lu\|_s + \|[L, \mu_i] u\|_s).
+    \end{multline*}
+  \end{useimager}
   We can bound the first two by a constant multiple of $\|u\|_s$ and $\|Lu\|_s$. To bound the last term, we use that $[L, \mu_i]$ is a differential operator of order $k - 1$, and hence
   \[
     \|[L, \mu_i] u\|_s \leq C \|u\|_{s + k - 1} \leq \varepsilon \|u\|_{s + k} + C(\varepsilon) \|u\|_s.\qedhere
