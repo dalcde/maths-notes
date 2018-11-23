@@ -5,6 +5,7 @@
 \usepackage{booktabs}
 \usepackage{graphicx}
 \usepackage{tikz}
+\usepackage{plastex}
 
 \theoremstyle{definition}
 \newtheorem*{defi}{Definition}
@@ -25,13 +26,13 @@
 \newcommand\rotarrow{\begin{tikzpicture}\draw (0.15, 0) -- (0, 0) -- (0, 0.15); \draw (0.1, 0.05) -- (0.15, 0) -- (0.1, -0.05);\end{tikzpicture}}
 
 \newtheorem{innercustomthm}{Theorem}
-\newenvironment{customthm}[1]
-  {\renewcommand\theinnercustomthm{#1}\innercustomthm}
-  {\endinnercustomthm}
+\newenvironment{customthm}[1]{\renewcommand\theinnercustomthm{#1}\innercustomthm}{\endinnercustomthm}
 
 \newcommand\bra\langle
 \newcommand\ket\rangle
-\let\index\relax
+\ifplastex\else
+  \let\index\relax % plastex does not understand \let .. \relax but isn't bothered by people redefining commands
+\fi
 
 \DeclareMathOperator{\coker}{coker}
 \DeclareMathOperator{\index}{idx}
@@ -60,7 +61,6 @@
 
 \begin{document}
 
-\section{Introduction}
 In \cite{abs1964}, Atiyah, Bott and Shapiro calculated certain groups $A_k$ associated to real Clifford algebra representations, and observed that they were isomorphic to $KO^{-k}(*)$. The same can be said for complex $K$-theory, but a sequence of groups alternating between $\Z$ and $0$ is less impressive. In their paper, they constructed a map $A_k \to KO^{-k}(*)$, and \emph{using their knowledge of $KO^{-k}(*)$}, they showed this is in fact an isomorphism. It wasn't a particularly exciting proof, since both sides have a ring structure that the map respects, and so they only had to check the map does the right thing to the handful of generators.
 
 Later, in \cite{atiyahsinger1969}, Atiyah and Singer found a \emph{good} reason why they had to be isomorphic. Roughly, the idea is that $KO^{-k}$ is represented by some group of Clifford algebra representation homomorphisms, and it is not too difficult to show that $\pi_0$ of this this space is isomorphic to $A_k$. The goal of these notes is to work through these results and conclude the Bott periodicity theorem.
@@ -203,14 +203,17 @@ Note that all our Clifford algebras are semi-simple, and most of them are in fac
   Let $A$ be an $\Z_2$-graded algebra. We define $M(A)$ to be the Grothendieck group of graded representations of $A$, and $N(A)$ be the Grothendieck group of ungraded representations of $A$. We also write $A^0$ for the degree zero part of $A$.
 \end{defi}
 
-\begin{lemma}
+\begin{lemma}\pushQED{\qed}
   We have an isomorphism of groups
-  \begin{align*}
-    M(C_k) &\cong N(C_k^0)\\
-    M^0 \oplus M^1 &\mapsto M^0\\
-    C_k \otimes_{C_k^0} M &\leftmapsto M.\fakeqed
-  \end{align*}
+  \begin{useimager}
+    \begin{align*}
+      M(C_k) &\cong N(C_k^0)\\
+      M^0 \oplus M^1 &\mapsto M^0\\
+      C_k \otimes_{C_k^0} M &\leftmapsto M.\qedhere
+    \end{align*}
+  \end{useimager}\ifplastex\fakeqed\fi
 \end{lemma}
+
 Moreover, we can also easily identify $C_k^0$:
 
 \begin{lemma}
@@ -263,12 +266,14 @@ One can prove this using some more direct arguments, but it is convenient for us
     x &\mapsto e_k x e_k^{-1} & x &\mapsto (-1)^{|x|} x.
   \end{align*}
   Check that these are related by the commutative diagram
-  \[
-    \begin{tikzcd}
-      C_{k - 1} \ar[r, "\phi"] \ar[d, "\beta"] & C_k \ar[d, "\alpha"]\\
-      C_{k - 1} \ar[r, "\phi"] & C_k.
-    \end{tikzcd}
-  \]
+  \begin{useimager}
+    \[
+      \begin{tikzcd}
+        C_{k - 1} \ar[r, "\phi"] \ar[d, "\beta"] & C_k \ar[d, "\alpha"]\\
+        C_{k - 1} \ar[r, "\phi"] & C_k.
+      \end{tikzcd}
+    \]
+  \end{useimager}
   Since multiplication by $e_k$ gives an isomorphism of vector spaces $M^0 \cong M^1$, we know that $M^* \cong M^{\alpha}$. Hence under the correspondence $M(C_k) \cong N(C_{k - 1})$, the operation $M \mapsto M^*$ corresponds to $M^0 \mapsto (M^0)^{\beta}$.
 
   Thus, it suffices to show that $\beta$ swaps the two irreducible ungraded representations of $C_{k - 1}$. Since $C_{k - 1} \cong C_{k - 2} \oplus C_{k - 2}$, we want to find the central idempotents that project to the two ideals, and show that $\beta$ swaps the two. We can just write this down.
@@ -331,7 +336,7 @@ It is difficult to directly connect Clifford algebras to $K$-theory. Instead, we
   Let $H$ be a Hilbert space. A bounded linear operator $T: H \to H$ is \emph{Fredholm} if $\ker T$ and $\coker T$ are both finite-dimensional.
 \end{defi}
 \begin{ex}
-  $T$ induces an isomorphism between $\ker T^\perp$ and $\im T$. In particular, $\im T$ is closed and (if $\ker T \not= 0$), $0$ is an isolated point in the spectrum of $T$.
+  $T$ induces an isomorphism between $\ker T^\perp$ and $\im T$. In particular, $\im T$ is closed and (if $\ker T \not= 0$) $0$ is an isolated point in the spectrum of $T$.
 \end{ex}
 
 \begin{defi}
@@ -369,12 +374,14 @@ We shall prove some basic properties of Fredholm operators. They all follow from
 
 \begin{lemma}
   Consider the commutative diagram
-  \[
-    \begin{tikzcd}
-      0 \ar[r] & H \ar[r] \ar[d, "T"] & H' \ar[r] \ar[d, "S"]& H'' \ar[r] \ar[d, "R"] & 0\\
-      0 \ar[r] & H \ar[r] & H' \ar[r] & H'' \ar[r] & 0
-    \end{tikzcd}
-  \]
+  \begin{useimager}
+    \[
+      \begin{tikzcd}
+        0 \ar[r] & H \ar[r] \ar[d, "T"] & H' \ar[r] \ar[d, "S"]& H'' \ar[r] \ar[d, "R"] & 0\\
+        0 \ar[r] & H \ar[r] & H' \ar[r] & H'' \ar[r] & 0
+      \end{tikzcd}
+    \]
+  \end{useimager}
   If the rows are short exact, and any two of $T$, $S$ and $R$ are Fredholm, then so is the third, and
   \[
     \index S = \index T + \index R.
@@ -383,11 +390,13 @@ We shall prove some basic properties of Fredholm operators. They all follow from
 
 \begin{proof}
   Apply the snake lemma to obtain a long exact sequence
-  \[
-    \begin{tikzcd}[column sep=small]
-      0 \ar[r] & \ker T \ar[r] & \ker S \ar[r] & \ker R \ar[r] & \coker T \ar[r] & \coker S \ar[r] & \coker R \ar[r] & 0
-    \end{tikzcd}.\qedhere
-  \]
+  \begin{useimager}
+    \[
+      \begin{tikzcd}[column sep=small]
+        0 \ar[r] & \ker T \ar[r] & \ker S \ar[r] & \ker R \ar[r] & \coker T \ar[r] & \coker S \ar[r] & \coker R \ar[r] & 0
+      \end{tikzcd}.\qedhere
+    \]
+  \end{useimager}
 \end{proof}
 
 \begin{cor}
@@ -406,12 +415,14 @@ Of course, we could have proved this directly.
 \end{cor}
 
 \begin{proof}
-  \[
-    \begin{tikzcd}
-      0 \ar[r] & H \ar[r, "{(\id, T)}"] \ar[d, "T"] & H \oplus H' \ar[r, "T - \id"] \ar[d, "ST \oplus \id"]& H' \ar[r] \ar[d, "S"] & 0\\
-      0 \ar[r] & H' \ar[r, "{(S, \id)}"] & H'' \oplus H' \ar[r, "\id - S"] & H'' \ar[r] & 0
-    \end{tikzcd}\qedshift
-  \]
+  \begin{useimager}
+    \[
+      \begin{tikzcd}
+        0 \ar[r] & H \ar[r, "{(\id, T)}"] \ar[d, "T"] & H \oplus H' \ar[r, "T - \id"] \ar[d, "ST \oplus \id"]& H' \ar[r] \ar[d, "S"] & 0\\
+        0 \ar[r] & H' \ar[r, "{(S, \id)}"] & H'' \oplus H' \ar[r, "\id - S"] & H'' \ar[r] & 0
+      \end{tikzcd}\qedshift
+    \]
+  \end{useimager}
 \end{proof}
 
 \begin{cor}
@@ -420,12 +431,14 @@ Of course, we could have proved this directly.
 
 \begin{proof}
   First consider the case where $K$ has finite-dimensional image. Then consider the short exact sequences
-  \[
-    \begin{tikzcd}
-      0 \ar[r] & \im K \ar[r] \ar[d] & H \ar[r] \ar[d]& \coker K \ar[r] \ar[d] & 0\\
-      0 \ar[r] & \im K \ar[r] & H \ar[r] & \coker K \ar[r] & 0
-    \end{tikzcd}
-  \]
+  \begin{useimager}
+    \[
+      \begin{tikzcd}
+        0 \ar[r] & \im K \ar[r] \ar[d] & H \ar[r] \ar[d]& \coker K \ar[r] \ar[d] & 0\\
+        0 \ar[r] & \im K \ar[r] & H \ar[r] & \coker K \ar[r] & 0
+      \end{tikzcd}
+    \]
+  \end{useimager}
   where the vertical maps are all restrictions of $\id + K$. One sees that the maps are well-defined.
 
   Now note that the left-hand map is one between finite-dimensional vector spaces, so is Fredholm with index $0$. On the other hand, the right-hand map is in fact the identity, since we quotiented out by the image of $K$, and is in particular Fredholm with index $0$. So we are done.
@@ -444,11 +457,13 @@ Of course, we could have proved this directly.
 \begin{proof}\leavevmode
   \begin{itemize}
     \item[($\Rightarrow$)] Note that $T$ gives an isomorphism between $(\ker T)^\perp$ and $\im T$. So we can make sense of $(T|_{\im T})^{-1}: \im T \to (\ker T)^{\perp}$. Then we can take $S$ to be
-      \[
-        \begin{tikzcd}[column sep=2cm]
-          H \cong \im T \oplus (\im T)^\perp \ar[r, "(T|_{\im T})^{-1} \oplus 0"] & (\ker T)^\perp \oplus \ker T \cong H
-        \end{tikzcd}.
-      \]
+      \begin{useimager}
+        \[
+          \begin{tikzcd}[column sep=2cm]
+            H \cong \im T \oplus (\im T)^\perp \ar[r, "(T|_{\im T})^{-1} \oplus 0"] & (\ker T)^\perp \oplus \ker T \cong H
+          \end{tikzcd}.
+        \]
+      \end{useimager}
       Then $ST - I$ and $TS - I$ have finite rank, as they vanish on $(\ker T)^\perp$ and $\im T$ respectively.
     \item[($\Leftarrow$)] Using the previous corollary, we know $ST$ and $TS$ are Fredholm. Since $ST$ is Fredholm, $\ker T$ is finite-dimensional. Since $TS$ is Fredholm, $\coker T$ is finite-dimensional. So we are done.\qedhere
   \end{itemize}
@@ -522,61 +537,67 @@ The mental picture we should have in mind is that we are allowed to ``rotate'' $
     \end{pmatrix}.
   \]
   for some invertible matrix $Q = Q(x)$. We can linearly homotopy $\tilde{f}$ to kill off the $*$ on the bottom left corner. We then write $H_0$ as the infinite sum of infinite-dimensional Hilbert subspaces, so that the matrix now looks like this:
-  \[
-    \begin{psmallmatrix}
-      Q \\
-      & \id\\
-      & & \id\\
-      & & & \id\\
-      & & & & \id\\
-      & & & & & \id\\
-      & & & & & & \ddots
-    \end{psmallmatrix},
-  \]
+  \begin{useimager}
+    \[
+      \begin{psmallmatrix}
+        Q \\
+        & \id\\
+        & & \id\\
+        & & & \id\\
+        & & & & \id\\
+        & & & & & \id\\
+        & & & & & & \ddots
+      \end{psmallmatrix},
+    \]
+  \end{useimager}
   Using the fact that $\id =Q^{-1}Q$, the previous lemma tells us we have homotopies
-  \[
-    \begin{psmallmatrix}
-      Q \\
-      & QQ^{-1}\hspace{-5pt}\\
-      & \rotarrow & \id\\
-      & & & QQ^{-1}\hspace{-5pt}\\
-      & & & \rotarrow & \id\\
-      & & & & & QQ^{-1}\hspace{-5pt}\vspace{-5pt}\\
-      & & & & & \rotarrow & \ddots
-    \end{psmallmatrix}
-    \rightsquigarrow
-    \begin{psmallmatrix}
-      Q \\
-      & Q^{-1}\\
-      & & Q\\
-      & & & Q^{-1}\\
-      & & & & Q\\
-      & & & & & Q^{-1}\vspace{-5pt}\\
-      & & & & & & \ddots
-    \end{psmallmatrix},
-  \]
+  \begin{useimager}
+    \[
+      \begin{psmallmatrix}
+        Q \\
+        & QQ^{-1}\hspace{-5pt}\\
+        & \rotarrow & \id\\
+        & & & QQ^{-1}\hspace{-5pt}\\
+        & & & \rotarrow & \id\\
+        & & & & & QQ^{-1}\hspace{-5pt}\vspace{-5pt}\\
+        & & & & & \rotarrow & \ddots
+      \end{psmallmatrix}
+      \rightsquigarrow
+      \begin{psmallmatrix}
+        Q \\
+        & Q^{-1}\\
+        & & Q\\
+        & & & Q^{-1}\\
+        & & & & Q\\
+        & & & & & Q^{-1}\vspace{-5pt}\\
+        & & & & & & \ddots
+      \end{psmallmatrix},
+    \]
+  \end{useimager}
   We now apply the lemma again, but ``bracketing'' in a different way, to obtain
-  \[
-    \begin{psmallmatrix}
-      Q \\
-      \rotarrow & Q^{-1}\\
-      & & Q\\
-      & & \rotarrow & Q^{-1}\\
-      & & & & Q\\
-      & & & & \rotarrow & Q^{-1}\vspace{-5pt}\\
-      & & & & & & \ddots
-    \end{psmallmatrix}
-    \rightsquigarrow
-    \begin{psmallmatrix}
-      \id \\
-      & \id\\
-      & & \id\\
-      & & & \id\\
-      & & & & \id\\
-      & & & & & \id\vspace{-5pt}\\
-      & & & & & & \ddots
-    \end{psmallmatrix}.\qedshift
-  \]
+  \begin{useimager}
+    \[
+      \begin{psmallmatrix}
+        Q \\
+        \rotarrow & Q^{-1}\\
+        & & Q\\
+        & & \rotarrow & Q^{-1}\\
+        & & & & Q\\
+        & & & & \rotarrow & Q^{-1}\vspace{-5pt}\\
+        & & & & & & \ddots
+      \end{psmallmatrix}
+      \rightsquigarrow
+      \begin{psmallmatrix}
+        \id \\
+        & \id\\
+        & & \id\\
+        & & & \id\\
+        & & & & \id\\
+        & & & & & \id\vspace{-5pt}\\
+        & & & & & & \ddots
+      \end{psmallmatrix}.\qedshift
+    \]
+  \end{useimager}
 \end{proof}
 
 So the idea is to pick some subspace $H_0 \subseteq H$ and modify $f$ until the $f$ is the identity on $H_0$. In general, suppose we have another map $g(x): H_0 \to H$, and we want to modify $f$ so that $f(x)|_{H_0} = g(x)$ for all $x$. The key idea is that we can do so as long as $g(x)$ and $f(x)$ have orthogonal images, in which case we just do a simple rotation, using $g(x) f(x)^{-1}$ to identify the two subspaces we want to rotate. I must emphasize that the actual result and proofs are much easier and more intuitive than how I wrote them down, but I couldn't find a better way to do so.
@@ -619,142 +640,6 @@ Thus, if we can decompose $H = H_0 \oplus H_1 \oplus H_2$ such that $f(x)(H_0) \
 
   Next, pick $a_2$ that is orthogonal to everything chosen so far, and also so that $f(x)(a_2)$ is orthogonal to everything chosen so far for all $x$. This is possible since these conditions only exclude a finite-dimensional subspace. Keep going on countably many times, and afterwards if there is anything left, put it in $H_2$.
 \end{proof}
-%  \begin{claim}
-%    Fix an isomorphism $T: H_1 \to H_3$. Then $f$ is homotopic to a $\tilde{f}$ with $\tilde{f}|_{H_1} = T$.
-%  \end{claim}
-%  Write $H_x = (f(x)H_1 \oplus H_3)^\perp$. We claim that the following map is homotopic to the identity:
-%  \begin{align*}
-%    \varphi_x: f(x) H_1 \oplus H_3 \oplus H_x  & \to f(x) H_1 \oplus H_3 \oplus H_x\\
-%    f(x) a \oplus Tb \oplus c &\mapsto f(x) b \oplus (-Ta) \oplus c.
-%  \end{align*}
-%
-%  This certainly is true if there $f(x)$ and $T$ weren't there, using a simple rotation, but then we can just conjugate that homotopy with $f(x) \oplus T \oplus \id_{H_x}$. Then $\tilde{f}(x) = \varphi_x^{-1} f(x)$ does the job.
-%
-%  \begin{claim}
-%    $f$ is homotopic to a map that fixes $H_1$.
-%  \end{claim}
-%  This follows by threading a rotation through $I \oplus T \oplus I$, as above.
-%
-%To illustrate the proof strategy, we first prove it in the case $X = *$.
-%
-%\begin{prop}
-%  $\GL(H)$ is path connected.
-%\end{prop}
-%
-%\begin{proof}
-%  We first consider the complex case. Given an element $T \in B^\times$, we first show that we can homotope it to an operator that is the identity on some fixed, infinite dimensional space. To do so, we pick a sequence $v_i \in H$ recursively as follows --- we pick $v_1$ arbitrarily, and set $A_1 = \mathrm{spn}(v_1, A v_1)$.
-%
-%  Having chosen $v_1, \dots, v_k$ and $A_1, \dots, A_k$, we pick some
-%  \[
-%    v_{k + 1} \in \left(\bigoplus_{i = 1}^n A_i\right)^\perp \cap T^{-1}\left(\left(\bigoplus_{i = 1}^n A_i\right)^\perp\right)
-%  \]
-%  This intersection is non-empty, since both spaces have finite codimension.
-%  
-%  This choice means $v_{k + 1}$ and $Tv_{k + 1}$ are both perpendicular to the previous $A_i$. Set $A_{k + 1} = \mathrm{spn}(v_{k + 1}, T v_{k + 1})$, and keep going on.
-%
-%  Then we have a decomposition
-%  \[
-%    H = \tilde{H} \oplus \bigoplus_{i = 1}^\infty A_i
-%  \]
-%  for some $\tilde{H}$.
-%
-%  We now use the fact that $\GL(2)$ is path connected. So given any two independent vectors in $\C^2$, we can pick a homotopy from the identity map to the map that swaps those two vectors. In particular, we can use this to swap $v_{k + 1}$ and $T v_{k + 1}$. We do this in all components, and then composing with $T$, we obtain a new map that fixes all $v_k$\footnote{If $v_{k + 1}$ and $Tv_{k + 1}$ are dependent, then just use a linear scaling.}. For convenience, we will call the new map $T$ again.
-%
-%  So we can write $H = H_1 \oplus H'$, where $H'$ is an infinite-dimensional Hilbert space fixed by $T$. In this decomposition, the matrix of $T$ looks like
-%  \[
-%    \begin{pmatrix}
-%      Q & 0\\
-%      * & \id
-%    \end{pmatrix},
-%  \]
-%  where $Q$ is invertible and $*$ is some mysterious term. However, we can homotope this to $\mathrm{diag}(Q, \id)$ by using the homotopy
-%   \[
-%    \begin{pmatrix}
-%      Q & 0\\
-%      (1 - t)* & \id
-%    \end{pmatrix}.
-%  \]
-%  So our matrix is now diagonal.
-%
-%  The next trick is to pick a basis, and choose a bijection between $\N$ and $\N \times \N$. We can then use this to decompose
-%  \[
-%    H' = \bigoplus_{i = 2}^\infty H_i,
-%  \]
-%  where each $H_i$ has infinite dimension. Then in the decomposition
-%  \[
-%    H = \bigoplus_{i = 1}^\infty H_i,
-%  \]
-%  the matrix of $T$ looks like
-%  \[
-%    \begin{psmallmatrix}
-%      Q \\
-%      & \id\\
-%      & & \id\\
-%      & & & \id\\
-%      & & & & \id\\
-%      & & & & & \id\\
-%      & & & & & & \ddots
-%    \end{psmallmatrix},
-%  \]
-%  where $Q$ is some invertible matrix. Using the fact that $\id =Q^{-1}Q$, the previous lemma tells us we have homotopies
-%  \[
-%    \begin{psmallmatrix}
-%      Q \\
-%      & QQ^{-1}\\
-%      & \dlarrow& \id\\
-%      & & & QQ^{-1}\\
-%      & & & \dlarrow& \id\\
-%      & & & & & QQ^{-1}\\
-%      & & & & & \dlarrow& \ddots
-%    \end{psmallmatrix}
-%    \rightsquigarrow
-%    \begin{psmallmatrix}
-%      Q \\
-%      & Q^{-1}\\
-%      & & Q\\
-%      & & & Q^{-1}\\
-%      & & & & Q\\
-%      & & & & & Q^{-1}\\
-%      & & & & & & \ddots
-%    \end{psmallmatrix},
-%  \]
-%  We now apply the lemma again, but ``bracketing'' in a different way, to obtain
-%  \[
-%    \begin{psmallmatrix}
-%      Q \\
-%      \dlarrow& Q^{-1}\\
-%      & & Q\\
-%      & & \dlarrow& Q^{-1}\\
-%      & & & & Q\\
-%      & & & & \dlarrow& Q^{-1}\\
-%      & & & & & & \ddots
-%    \end{psmallmatrix}
-%    \rightsquigarrow
-%    \begin{psmallmatrix}
-%      \id \\
-%      & \id\\
-%      & & \id\\
-%      & & & \id\\
-%      & & & & \id\\
-%      & & & & & \id\\
-%      & & & & & & \ddots
-%    \end{psmallmatrix}.
-%  \]
-%  Then we are done.
-%
-%  In the real case, we have the problem that $\GL(2)$ is not connected, but has two components. So instead of homotoping $T$ to be the identity on some infinite-dimensional subspace, we make it either $I$ or $-I$ on each basis vector. But then we can just push the negative sign to infinity.
-%\end{proof}
-%
-%Now to prove the general theorem, a lot of the previous proof can be re-used. It's just that we need to be more careful in producing a subspace fixed by $T$. This involves some funny topological maneuver.
-%\begin{thm}
-%  For any compact space $X$, we have $[X, \GL(H)] = 0$.
-%\end{thm}
-%
-%\begin{proof}[Proof sketch]
-%  First observe the following general fact:
-%
-%  Thus, if $f: X \to \GL(H)$ is any map, since the image is compact, it is contained in some $\bigcup B(x_i, \varepsilon_i)$, and so we may wlog assume the image is contained in the affine span of some $T_1, \ldots, T_n$. Then as before, we have to homotope this map so that there is an infinite-dimensional subspace fixed by all $T_i$, and then we would be done. We have to do this carefully so that the whole complex remains within $\GL(H)$.
-%\end{proof}
 
 \subsection{The Atiyah--J\"anich theorem}
 Equipped with Kuiper's theorem, we can finally prove what we wanted to.
@@ -875,34 +760,6 @@ We first see how this proves that $KO^{-k}(*) = A_k$, and in particular implies 
   The map $\index: \mathcal{F}_*^k(H) \to A_k$ defined by $A \mapsto [\ker A]$ is continuous, and induces a bijection $\pi_0(\mathcal{F}^k_*) \to A_k$.
 \end{thm}
 This in fact gives us an isomorphism of \emph{rings}.
-
-%To do so, we need to know the spectral theorem for self-adjoint operators:
-%\begin{thm}[Spectral theorem]
-%  Let $H$ be a real Hilbert space, $T: H \to H$ a bounded self-adjoint operator. Then there exists a finite measure space $(X, \mu)$, an orthogonal operator $U: H \to L^2(X, \mu)$ and a bounded function $\lambda \in L^\infty(X, \mu)$ such that the following diagram commutes:
-%  \[
-%    \begin{tikzcd}
-%      H \ar[d, "T"] \ar[r, "U"] & L^2(X, \mu) \ar[d, "M_\lambda"]\\
-%      H \ar[r, "U"] & L^2(X, \mu)
-%    \end{tikzcd},
-%  \]
-%  where $M_\lambda$ is the multiplication-by-$\lambda$ operator.
-%\end{thm}
-%We should think of $X$ as an ``abstract spectrum'' of $T$, with $\lambda$ labeling the numerical value of the spectrum. While often it may not make sense to talk about the eigenvectors of $T$, given a measurable $B \subseteq \R$, we can form a subspace spanned by ``eigenvectors with eigenvalue in $B$''. Indeed, under the correspondence, this is just the space of functions in $L^2(X, \mu)$ supported in $g^{-1}(\{B\})$. We call this the \emph{spectral projection} on $B$.
-%
-%We need a tiny lemma about positive operators, which is clear from the spectral theorem.
-%\begin{lemma}
-%  Let $T: H\to H$ be a self-adjoint bounded linear operator. Suppose
-%  \[
-%    \bra Tx, x\ket \geq 0\text{ for all }x \in H.
-%  \]
-%  Then $\sigma(T) \subseteq [0, \infty)$. Thus, by functional calculus, it makes sense to talk about $T^{1/2}$.
-%
-%  In this case, We say $T$ is \emph{positive}, and if $-T$ is positive, we say $T$ is \emph{negative}.
-%\end{lemma}
-%
-%\begin{proof}
-%  Apply the spectral theorem to $T$. Then positivity implies $\lambda$ is non-negative almost everywhere, so we may suppose $\lambda$ is non-negative. Then if $\lambda < 0$, then $T - \lambda$ is given by multiplication by a function that is bounded both below and above, hence invertible.
-%\end{proof}
 
 \begin{proof}
   For convenience, we drop the $(H)$ in $F^k_*(H)$ when it is clear.
@@ -1029,15 +886,6 @@ To prove the theorem, it is convenient to consider the subspace of unitary eleme
   \end{tabular}
 \end{center}
 where $p: \mathcal{A} \to \mathcal{A}/\mathcal{K}$ is the natural projection (recall that $\mathcal{F} = p^{-1}(\mathcal{G})$).
-%\begin{notation}\leavevmode
-%  \begin{itemize}
-%    \item Let $\mathcal{A} = \End(H)$, $\mathcal{K} \subseteq \mathcal{A}$ be ideal of compact operators, and $p: \mathcal{A} \to \mathcal{A}/\mathcal{K} \equiv \mathcal{B}$ the projection.
-%    \item Let $\mathcal{L} = \GL(H)$, and $L \subseteq \mathcal{L}$ be the subspace of unitary elements.
-%    \item Let $\mathcal{G} \subseteq \mathcal{B}$ be the units, and $G \subseteq \mathcal{G}$ the unitary elements (i.e.\ the $x$'s such that $x^*x = 1$ in $\mathcal{G}$).
-%    \item For every calligraphic symbol $\mathcal{S}$, let $\mathcal{S}^k$ consist of those elements that are skew-Hermitian and anti-commute with $J_1, \ldots, J_{k - 1}$.
-%    \item Write $\Omega_{k - 1}$ for the set of orthogonal matrices $T$ such that $T$ anti-commutes with $J_1, \ldots, J_{k - 2}$, $T^2 = -1$ and $J = J_{k - 1}$ mod compact operators.
-%  \end{itemize}
-%\end{notation}
 
 We need a theorem of Bartle and Graves.
 \begin{thm}[Bartle--Graves, {\cite{bartlegraves52}}] % Theorem 6?
@@ -1046,14 +894,16 @@ We need a theorem of Bartle and Graves.
 
 \begin{lemma}
   All the arrows marked as $\sim$ in the diagram below are homotopy equivalences:
-  \[
-    \begin{tikzcd}[row sep=small, column sep=tiny]
-      F^k_* \ar[rrrr, bend left, red] \ar[rr, "\alpha"] \ar[dd, "\sim"] \ar[rd, "\sim"] && P(L^{k - 1}_*, \Omega_{k - 1}) \ar[rd, dash, dashed, gray] \ar[dd, green!50!black] \ar[rr, green!50!black] & & \Omega_{k - 1}\\
-      & \mathcal{F}^k_* \ar[rr, crossing over, dash, dashed] && \Omega \mathcal{F}^{k - 1}_* \ar[dd, "\sim"]\\
-      G^k_* \ar[rr, "\beta", pos=0.6] \ar[rd, "\sim"] & & \Omega G^{k - 1}_* \ar[rd, "\sim"]\\
-      & \mathcal{G}^k_* \ar[from=uu, crossing over, "\sim"', pos=0.3] \ar[rr, dash, gray, dashed] & & \Omega \mathcal{G}^{k - 1}_*
-    \end{tikzcd}
-  \]
+  \begin{useimager}
+    \[
+      \begin{tikzcd}[row sep=small, column sep=tiny]
+        F^k_* \ar[rrrr, bend left, red] \ar[rr, "\alpha"] \ar[dd, "\sim"] \ar[rd, "\sim"] && P(L^{k - 1}_*, \Omega_{k - 1}) \ar[rd, dash, dashed, gray] \ar[dd, green!50!black] \ar[rr, green!50!black] & & \Omega_{k - 1}\\
+        & \mathcal{F}^k_* \ar[rr, crossing over, dash, dashed] && \Omega \mathcal{F}^{k - 1}_* \ar[dd, "\sim"]\\
+        G^k_* \ar[rr, "\beta", pos=0.6] \ar[rd, "\sim"] & & \Omega G^{k - 1}_* \ar[rd, "\sim"]\\
+        & \mathcal{G}^k_* \ar[from=uu, crossing over, "\sim"', pos=0.3] \ar[rr, dash, gray, dashed] & & \Omega \mathcal{G}^{k - 1}_*
+      \end{tikzcd}
+    \]
+  \end{useimager}
   where $\alpha(T)_t = J_{k - 1} \exp (\pi t TJ_{k - 1})$, and $\beta$ is defined by the same formula. Note that by assumption, since elements $T \in G_*^k$ satisfy $T^2 = -1$ and anti-commute with $J_{k - 1}$, it follows that $(TJ_{k - 1})^2 = -1$ as well. So we can equivalently write
   \[
     \beta(T)_t = J_{k - 1}\cos \pi t + A \sin \pi t,
@@ -1124,7 +974,7 @@ Similarly, $\tilde{\Omega}_{k - 1}$ consists of operators $S$ such that
 We now want to show that $\exp \pi: \tilde{F}_*^k \to \tilde{\Omega}_{k - 1}$ is a homotopy equivalence. Dropping the tildes, we consider filtrations on $F_*^k$ and $\Omega_{k - 1}$ as follows: We define $\Omega_{k - 1}(n)$ to be those operators $T$ such that $I + T$ has rank $\leq n$, and $F_*^k(n) = (\exp \pi)^{-1} (\Omega_{k - 1}(n))$.
 
 \begin{lemma}
-  For any $m$ and $a \in \Omega_{k - 1}(m), b \in F^k_*(m)$, the natural inclusion induces bijecitons
+  For any $m$ and $a \in \Omega_{k - 1}(m), b \in F^k_*(m)$, the natural inclusion induces bijections
   \begin{align*}
     \lim_{n \to \infty} \pi_k(\Omega_{k - 1}(n), a) &\to \pi_k(\Omega_{k - 1}, a)\\
     \lim_{n \to \infty} \pi_k(F_*^k(n), b) &\to \pi_k(F_*^k, b).
@@ -1173,7 +1023,7 @@ Now it suffices to show that $\exp \pi: F^k_*(m) \to \Omega_{k - 1}(m)$ is a hom
   \[
     f|_{Y_1}: Y_1 \to Z_1,\quad f|_{Y_2}: Y_2 \to Z_2,\quad f|_{Y_1 \cap Y_2} \to Z_1 \cap Z_2
   \]
-  are all weak homotopy equivalences, then so is $f$.
+  are all weak homotopy equivalences, then so is $f$.\fakeqed
 \end{lemma}
 
 We shall take
@@ -1238,12 +1088,14 @@ Suppose $\pi: V \to X$ is a rank $k$ vector bundle with a Euclidean metric. Then
   M(V) \to \widetilde{KO}(X^V).
 \]
 Suppose $E$ came from a $C(V \oplus 1)$-module, then by a linear deformation, we can use a vector in the trivial factor as the isomorphism between $\pi^*E_1$ and $\pi^*E_2$ instead, and this extends to an isomorphism defined on all of $V$. So the resulting class is trivial in $\widetilde{KO}(X^V)$. Moreover, this map is natural with respect to products, namely if $V \to X$ and $W \to Y$ are two bundles, then the following diagram commutes:
-\[
-  \begin{tikzcd}
-    A(V) \otimes A(W) \ar[d] \ar[r] & A (V \oplus W) \ar[d]\\
-    \widetilde{KO}(X^V) \otimes \widetilde{KO}(Y^W) \ar[r] & \widetilde{KO}(X \times Y^{V \oplus W}).
-  \end{tikzcd}
-\]
+\begin{useimager}
+  \[
+    \begin{tikzcd}
+      A(V) \otimes A(W) \ar[d] \ar[r] & A (V \oplus W) \ar[d]\\
+      \widetilde{KO}(X^V) \otimes \widetilde{KO}(Y^W) \ar[r] & \widetilde{KO}(X \times Y^{V \oplus W}).
+    \end{tikzcd}
+  \]
+\end{useimager}
 In particular, taking $X = *$, we obtain \emph{ring} homomorphisms
 \[
   A_* \to \sum_{k \geq 0} KO^{-k}(*)
