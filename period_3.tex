@@ -182,7 +182,7 @@ We have seen that if $I \to I$, then $I$ contains a fixed point of $f$. The foll
 This is trivial if we don't require $f^k(x) \in I_k$, since $f^n(I) \supseteq I$, and we can apply the lemma. The (slightly) hard part is getting the points to lie in the $I_k$.
 
 \begin{proof}
-  It is an exercise to convince yourself that if $I, J \subseteq [0, 1]$ are closed subintervals and $f(I) \supseteq J$, then we can find a subinterval $K \subseteq I$ such that $f(K) = J$.
+  Note that if $I, J \subseteq [0, 1]$ are closed subintervals with $f(I) \supseteq J$, then $f^{-1}(J)$ is a disjoint union of closed intervals contained in $I$, each of which has image $J$. By picking one of these, we get a subinterval $K \subseteq I$ such that $f(K) = J$.
 
   Now if $I_0 \to I_1 \to I_2 \to \cdots \to I_{n - 1} \to I_0$, then we can find some $J_{n - 1} \subseteq I_{n-1}$ such that $f(J_{n-1}) = I_0$. We still have $f(I_{n-2}) \supseteq J_{n-1}$, so we have a sequence
   \[
