@@ -12,54 +12,54 @@
 \newtheorem*{ques}{Question}
 \newtheorem*{ans}{Answer}
 
-\newcommand\Sph{\mathbb{S}}
+\renewcommand\S{\mathbb{S}}
 \newcommand\F{\mathbb{F}}
 \newcommand\Z{\mathbb{Z}}
 \newcommand\qq{/\!\!/}
 \DeclareMathOperator\Ext{Ext}
 
-\title{Ring structures on \texorpdfstring{$\Sph/p$}{S/p}}
+\title{Ring structures on \texorpdfstring{$\S/p$}{S/p}}
 \author{Dexter Chua}
 
 \begin{document}
-Let $\Sph$ be the sphere spectrum. Then $\Sph$ is, in particular, a commutative ring spectrum (i.e.\ a commutative monoid in the stable homotopy category), using the canonical identification $\Sph \wedge \Sph \overset{\sim}{\to} \Sph$. Let $p$ be a prime. We seek the answer the following question:
+Let $\S$ be the sphere spectrum. Then $\S$ is, in particular, a commutative ring spectrum (i.e.\ a commutative monoid in the stable homotopy category), using the canonical identification $\S \wedge \S \overset{\sim}{\to} \S$. Let $p$ be a prime. We seek the answer the following question:
 \begin{ques}
-  When is $\Sph/p$ a ring spectrum?
+  When is $\S/p$ a ring spectrum?
 \end{ques}
 
-To turn $\Sph/p$ into a ring spectrum, we have to solve the extension problem
+To turn $\S/p$ into a ring spectrum, we have to solve the extension problem
 \begin{useimager}
 \[
   \begin{tikzcd}
-    \Sph \wedge \Sph \ar[r, "\sim"] \ar[d] & \Sph \ar[d]\\
-    \Sph/p \wedge \Sph/p \ar[r, dashed] & \Sph/p
+    \S \wedge \S \ar[r, "\sim"] \ar[d] & \S \ar[d]\\
+    \S/p \wedge \S/p \ar[r, dashed] & \S/p
   \end{tikzcd}
 \]
 \end{useimager}
 and then check associativity of the multiplication map (unitality is clear).
 
-To solve the extension problem, we factor the left vertical map as $\Sph \wedge \Sph \to \Sph \wedge \Sph/p \to \Sph/p \wedge \Sph/p$, and observe that there is an extension to $\Sph \wedge \Sph/p$ given essentially by the identity map. Thus we have to solve
+To solve the extension problem, we factor the left vertical map as $\S \wedge \S \to \S \wedge \S/p \to \S/p \wedge \S/p$, and observe that there is an extension to $\S \wedge \S/p$ given essentially by the identity map. Thus we have to solve
 \begin{useimager}
 \[
   \begin{tikzcd}
-    \Sph \wedge \Sph/p \ar[d, "p"] \\
-    \Sph \wedge \Sph/p \ar[r, "\sim"] \ar[d] & \Sph/p\\
-    \Sph/p \wedge \Sph/p \ar[ur, dashed]
+    \S \wedge \S/p \ar[d, "p"] \\
+    \S \wedge \S/p \ar[r, "\sim"] \ar[d] & \S/p\\
+    \S/p \wedge \S/p \ar[ur, dashed]
   \end{tikzcd}
 \]
 \end{useimager}
-Here the vertical maps form a cofibration sequence, so solving the lifting problem is equivalent to showing that $p: \Sph/p \to \Sph/p$ is zero, or equivalently, that $[\Sph/p, \Sph/p] = \Z/p\Z$. This can be calculated via a sequence of homotopy long exact sequence calculations using $\Sph \to \Sph \to \Sph/p$, or we can do it more systematically via the Adams spectral sequence.
+Here the vertical maps form a cofibration sequence, so solving the lifting problem is equivalent to showing that $p: \S/p \to \S/p$ is zero, or equivalently, that $[\S/p, \S/p] = \Z/p\Z$. This can be calculated via a sequence of homotopy long exact sequence calculations using $\S \to \S \to \S/p$, or we can do it more systematically via the Adams spectral sequence.
 
-Since $\Sph/p$ is the cofiber of $p: \Sph \to \Sph$, we can compute its (co)homology using the cellular chain complex. We find that
+Since $\S/p$ is the cofiber of $p: \S \to \S$, we can compute its (co)homology using the cellular chain complex. We find that
 \begin{lemma}
-  $H\F_p^*(\Sph/p)$ is $\F_p$ in degrees $0$ and $1$, and vanishes otherwise. The Bockstein homomorphism acts non-trivially between the degrees.\fakeqed
+  $H\F_p^*(\S/p)$ is $\F_p$ in degrees $0$ and $1$, and vanishes otherwise. The Bockstein homomorphism acts non-trivially between the degrees.\fakeqed
 \end{lemma}
 
 Dualizing, we get
 \begin{cor}
   As a Steenrod comodule, we have
   \[
-    (H\F_p)_*(\Sph/p) =
+    (H\F_p)_*(\S/p) =
     \begin{cases}
       E(\xi_1) & p = 2\\
       E(\tau_0) & p > 2
@@ -69,7 +69,7 @@ Dualizing, we get
 Note that when $p = 2$, the comodule $E(\xi_1)$ is not a subalgebra of the Steenrod algebra, where $\xi_1$ is not nilpotent. This immediately lets us conclude
 
 \begin{prop}
-  $E(\xi_1)$ does not have the structure of a comodule algebra. Hence $\Sph/2$ does not admit a ring structure.
+  $E(\xi_1)$ does not have the structure of a comodule algebra. Hence $\S/2$ does not admit a ring structure.
 \end{prop}
 
 \begin{proof}
@@ -80,13 +80,13 @@ Note that when $p = 2$, the comodule $E(\xi_1)$ is not a subalgebra of the Steen
   However, the image of $\psi$ in $\mathcal{A} \otimes E(\xi_1)$ is given by linear combinations of $1 \otimes 1$ and $\xi_1 \otimes 1 + 1 \otimes \xi_1$.
 \end{proof}
 
-Alternatively, we can compute $\pi_2(\Sph/2)$ using the Adams spectral sequence and show that it has order $4$ elements, hence $2: \Sph/2 \to \Sph/2$ is non-zero.
+Alternatively, we can compute $\pi_2(\S/2)$ using the Adams spectral sequence and show that it has order $4$ elements, hence $2: \S/2 \to \S/2$ is non-zero.
 
-For $p > 3$, we shall show that the spectrum $\Sph/p$ \emph{does} admit a commutative ring spectrum structure.
+For $p > 3$, we shall show that the spectrum $\S/p$ \emph{does} admit a commutative ring spectrum structure.
 
-Noting that $\Sph/p$ is already $p$-local, the Adams spectral sequence gives us
+Noting that $\S/p$ is already $p$-local, the Adams spectral sequence gives us
 \[
-  E_2^{s, t} = \Ext^{s, t}_{\mathcal{A}_*} (E(\tau_0), E(\tau_0)) \Rightarrow [\Sigma^{t - s} \Sph/p, \Sph/p].
+  E_2^{s, t} = \Ext^{s, t}_{\mathcal{A}_*} (E(\tau_0), E(\tau_0)) \Rightarrow [\Sigma^{t - s} \S/p, \S/p].
 \]
 By the change of rings theorem, we can write
 \[
@@ -96,31 +96,31 @@ where $x \in E_2^{0, -1}$, since $E(\tau_0)$ is a trivial $\mathcal{A}_*\qq E(\t
 
 Now the terms of lowest degree in $\overline{\mathcal{A}_*\qq E(\tau_0)}$ are generated by $\xi_1$ and have degree $2p - 2$. So in the cobar complex, we see that apart from $\F_2\{1, x\}$, all terms have $t - s \geq 2p - 3$. In particular,
 \begin{lemma}
-  $[\Sph/p, \Sph/p] = \Z/p\Z$.\fakeqed
+  $[\S/p, \S/p] = \Z/p\Z$.\fakeqed
 \end{lemma}
 This tells us we can solve our original extension problem. We can actually go further and understand the set of possible lifts. This amounts to understanding the kernel of the map
 \[
-  [\Sph/p\wedge \Sph/p, \Sph/p] \to [\Sph \wedge \Sph, \Sph/p].
+  [\S/p\wedge \S/p, \S/p] \to [\S \wedge \S, \S/p].
 \]
 This is not difficult because we can use the same technique to compute these groups explicitly. Using K\"unneth's formula and the same calculation, we find that
 \begin{lemma}
-  Let $p > 3$. Then $[\Sph/p^{\wedge k}, \Sph/p] = \Z/p\Z$ for $k = 1, 2, 3$. More precisely, the maps
+  Let $p > 3$. Then $[\S/p^{\wedge k}, \S/p] = \Z/p\Z$ for $k = 1, 2, 3$. More precisely, the maps
   \[
-    [\Sph/p^{\wedge k}, \Sph/p] \to [\Sph^{\wedge k}, \Sph/p]
+    [\S/p^{\wedge k}, \S/p] \to [\S^{\wedge k}, \S/p]
   \]
   are bijections for $k = 1, 2, 3$.
 \end{lemma}
 
 \begin{proof}
-  We can directly calculate the value of $[\Sph/p^{\wedge k}, \Sph/p]$. To see that the map we wrote down in particular is a bijection, we note that both sides are $\Z/p\Z$, and the map is non-zero since the unit map $\Sph \to \Sph/p$ is in the image.
+  We can directly calculate the value of $[\S/p^{\wedge k}, \S/p]$. To see that the map we wrote down in particular is a bijection, we note that both sides are $\Z/p\Z$, and the map is non-zero since the unit map $\S \to \S/p$ is in the image.
 \end{proof}
-In particular, the case of $k = 2$ tells us there is a unique choice of $\mu: \Sph/p \wedge \Sph/p \to \Sph/p$ up to homotopy, and in particular, since the map $\Sph \wedge \Sph \to \Sph/p$ is symmetric in the $\Sph$'s, the same is true of $\mu$. Similarly, the $k = 3$ case tells us the multiplication is associative, since that is true for $\Sph$.
+In particular, the case of $k = 2$ tells us there is a unique choice of $\mu: \S/p \wedge \S/p \to \S/p$ up to homotopy, and in particular, since the map $\S \wedge \S \to \S/p$ is symmetric in the $\S$'s, the same is true of $\mu$. Similarly, the $k = 3$ case tells us the multiplication is associative, since that is true for $\S$.
 
 \begin{ans}\leavevmode
   \begin{itemize}
-    \item $\Sph/2$ does not admit the structure of a ring spectrum.
-    \item $\Sph/3$ has a multiplication but is not (necessarily) associative.
-    \item $\Sph/p$ is a (homotopy) commutative ring spectrum for $p > 3$.
+    \item $\S/2$ does not admit the structure of a ring spectrum.
+    \item $\S/3$ has a multiplication but is not (necessarily) associative.
+    \item $\S/p$ is a (homotopy) commutative ring spectrum for $p > 3$.
   \end{itemize}
 \end{ans}
 \end{document}
