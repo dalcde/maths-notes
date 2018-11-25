@@ -1,7 +1,6 @@
 \documentclass{shortart}
 
 \usepackage{amsmath, amssymb, amsthm}
-\usepackage{todonotes}
 \usepackage{tikz}
 \usepackage{booktabs}
 
@@ -123,6 +122,11 @@ The \emph{lemniscate sine} is an example of an elliptic integral. Elliptic integ
     \draw (0, 0) -- (2.1651, 1.25) node [pos=0.5, above] {$r$};
 
     \draw (0.5, 0) arc(0:30:0.5) node [pos=0.7, right] {$\theta$};
+    \node [fill, circle, inner sep = 0, minimum size = 3] at (2.1, 0) {};
+    \node [below] at (2.1, 0) {$a$};
+
+    \node [fill, circle, inner sep = 0, minimum size = 3] at (-2.1, 0) {};
+    \node [below] at (-2.1, 0) {$-a$};
   \end{tikzpicture}
 \end{center}
 Explicitly, this is given by
@@ -235,11 +239,12 @@ Crucially, since $(1 + i)(1 - i) = 2$, we can iterate these two formulas to obta
 The presence of these $\sqrt{1 - \sl(z)^4}$ may be a bit off-putting, but there is no reason to fear them --- they are simply the $y$ coordinates of $R$, which we should think of as the lemniscate arcsine of $z$. The ambiguity in sign is fixed by what happens in a small neighbourhood of $2$, where we choose $\sqrt{1 - \sl(z)^4}$ to be positive whenever $z$ is small and positive.
 
 It is an elementary exercise to iterate these formulas to obtain
-\begin{align*}
-  \sl(2(1 + i)z) &= \frac{2(1 + i) \sl(z) \sqrt{1 - \sl(z)^4} (1 + \sl(z)^4)}{1 - 6 \sl(z)^4 + \sl(z)^8}\\
-  \sl(4z) &= \frac{4\sl(z) \sqrt{1 - \sl(z)^4} (1 + \sl(z)^4) (1 - 6 \sl(z)^4 + \sl(z)^8)}{1 + 20 \sl(z)^4 - 26 \sl(z)^8 + 20 \sl(z)^{12} + \sl(z)^{16}}
-\end{align*}
-
+\[
+  \begin{aligned}
+    \sl(2(1 + i)z) &= \frac{2(1 + i) \sl(z) \sqrt{1 - \sl(z)^4} (1 + \sl(z)^4)}{1 - 6 \sl(z)^4 + \sl(z)^8}\\
+    \sl(4z) &= \frac{4\sl(z) \sqrt{1 - \sl(z)^4} (1 + \sl(z)^4) (1 - 6 \sl(z)^4 + \sl(z)^8)}{1 + 20 \sl(z)^4 - 26 \sl(z)^8 + 20 \sl(z)^{12} + \sl(z)^{16}}
+  \end{aligned}
+\]
 Given the duplication formula for $\sl(2z)$, it is reasonable to guess that we might have an addition formula of the form
 \[
   \sl(z + w) = \frac{\sl(z) \sqrt{1 - \sl(w)^4} + \sl(w) \sqrt{1 - \sl(z)^4}}{1 + \sl(z)^2 \sl(w)^2},
