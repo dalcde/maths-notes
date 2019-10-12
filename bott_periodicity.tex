@@ -1,0 +1,290 @@
+\documentclass{shortart}
+
+\usepackage{amsmath, amsthm, amssymb}
+\usepackage{tikz-cd}
+\usepackage{booktabs}
+\usepackage{plastex}
+
+\newtheorem{thm}{Theorem}
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem{lemma}[thm]{Lemma}
+\newtheorem{cor}[thm]{Corollary}
+
+\theoremstyle{definition}
+\newtheorem*{remark}{Remark}
+\newtheorem{defi}[thm]{Definition}
+
+\newcommand\U{\mathrm{U}}
+\newcommand\BU{B\mathrm{U}}
+\newcommand\EU{E\mathrm{U}}
+\newcommand\Z{\mathbb{Z}}
+\renewcommand\O{\mathrm{O}}
+\newcommand\BO{B\mathrm{O}}
+
+\newcommand\CP{\mathbb{CP}}
+\newcommand\C{\mathbb{C}}
+\newcommand\R{\mathbb{R}}
+
+\DeclareMathOperator*\colim{colim}
+\DeclareMathOperator\Vect{Vect}
+
+
+\author{Dexter Chua}
+\title{Bott Periodicity}
+
+\begin{document}
+
+Bott periodicity is a theorem about the matrix groups $\U(n)$ and $\O(n)$. More specifically, it is about the limiting behaviour as $n \to \infty$. For simplicity, we will focus on the case of $\U(n)$, and describe the corresponding results for $\O(n)$ at the end.
+
+In these notes, we will formulate the theorem in three different ways --- in terms of the groups $\U(n)$ themselves; in terms of their classifying spaces $\BU(n)$; and in terms of topological $K$-theory.
+\section{The groups \texorpdfstring{$\U$}{U} and \texorpdfstring{$\O$}{O}}
+
+There is an inclusion $\U(n - 1) \hookrightarrow \U(n)$ that sends
+\[
+  M \mapsto
+  \begin{pmatrix}
+    M & 0\\
+    0 & 1
+  \end{pmatrix}.
+\]
+We define $\U$ to be the union (colimit) along all these inclusions. The most basic form of Bott periodicity says
+
+\begin{thm}[Complex Bott periodicity]
+  \[
+    \pi_k \U = 
+    \begin{cases}
+      \Z & k\text{ odd}\\
+      0 & k\text{ even}
+    \end{cases}.
+  \]
+  In particular, the homotopy groups of $\U$ are \emph{$2$-periodic}.
+\end{thm}
+This is a remarkable theorem. The naive way to compute the groups $\pi_k \U(n)$ is to inductively use the fiber sequences
+\begin{useimager}
+  \[
+    \begin{tikzcd}
+      \U(n) \ar[r] & \U(n + 1) \ar[d]\\
+      & S^{2n + 1}
+    \end{tikzcd}
+  \]
+\end{useimager}
+arising from the action of $\U(n + 1)$ on $S^{2n + 1}$. This requires understanding all the unstable homotopy groups of (odd) spheres, which is already immensely complicated, and then piece them together via the long exact sequence. Bott periodicity tells us that in the limit $n \to \infty$, all these cancel out, and we are left with the very simple $2$-periodic homotopy groups.
+
+One can define $\O$ similarly as the union of the $\O(n)$'s, and the resulting homotopy groups are $8$-periodic.
+\begin{thm}[Real Bott periodicity]
+  We have
+  \begin{center}
+    \begin{tabular}{ccccccccc}
+      \toprule
+      $k \bmod 8$ & $0$ & $1$ & $2$ & $3$ & $4$ &$5$ & $6$ &$7$\\
+      \midrule
+      $\pi_k \O$ & $\Z_2$ & $\Z_2$ & $0$ & $\Z$ & $0$ & $0$ & $0$ & $\Z$\\
+      \bottomrule
+    \end{tabular}
+  \end{center}
+\end{thm}
+The number theorists in the audience should note (in dismay) that $\Z_2$ refers to the integers mod $2$, not the $2$-adics.
+
+\section{The spaces \texorpdfstring{$\BU$}{BU} and \texorpdfstring{$\BO$}{BO}}
+A better way to think about Bott periodicity is to not look at $\U$, but $\BU$.  To describe $\BU$, we again start with the ``unstable'' versions $\BU(n)$.
+
+$\BU(n)$ is defined to be a space such that for any CW complex $X$, there is a canonical bijection
+\[
+  [X, \BU(n)] \leftrightarrow \Big\{\text{$n$ dimensional (complex) vector bundles on $X$}\Big\}.
+\]
+An explicit model of $\BU(n)$ can be described as the Grassmannian of $n$-planes in $\C^\infty$, the countable dimension complex vector space.
+
+This universal property of $\BU(n)$ is very useful because it gives us a very geometric handle on the spaces $\BU(n)$. For example, the direct sum and tensor product of vector bundles are classified by maps
+\[
+  \begin{aligned}
+    \oplus: \BU(n) \times \BU(m) &\to \BU(n + m)\\
+    \otimes: \BU(n) \times \BU(m) &\to \BU(nm).
+  \end{aligned}
+\]
+
+The first question to ask is --- how does $\BU(n)$ relate to $\U(n)$? Fix any base point of $\BU(n)$, and consider the space of based loops in $\BU(n)$, written $\Omega \BU(n)$.
+
+\begin{prop}
+  $\Omega \BU(n) \cong \U(n)$.
+\end{prop}
+
+\begin{proof}
+  The core content of the statement is that clutching functions work. Indeed, suppose $X$ is a connected based space. Then we have
+  \[
+    [X, \Omega \BU(n)]_* = [\Sigma X, \BU(n)]_* = [\Sigma X, \BU(n)],
+  \]
+  where the last equality comes from $\pi_0 \BU(n) = \pi_1 \BU(n) = 0$ (e.g.\ by inspecting the construction of $\BU(n)$ as a Grassmannian to see it only has cells of dimension $\geq 2$). So the proposition is equivalent to saying that vector bundles on $\Sigma X$ are the same as (based) maps $X \to \U(n)$, which is exactly the clutching construction.\footnote{There are more subtleties for the real case since $\pi_1 \BO(n) \neq 0$, but we shall not go into that.}
+\end{proof}
+
+\begin{remark}
+  $\BU(n)$ is not characterized (up to homotopy) by the above property. Note, however, that $\U(n)$ is in particular a topological monoid, and $\Omega \BU(n)$ can be made one by considering loops of all lengths so that composition of loops is strictly associative. The above homotopy equivalence is then one of topological monoids (or rather, $\mathbb{A}_\infty$-spaces). This property \emph{does} characterize $\BU(n)$.
+\end{remark}
+
+The importance of this proposition is that it allows us to read off the homotopy groups of $\BU(n)$ from those of $\U(n)$. Of course, this is not too useful until we pass on to the limit $n \to \infty$. There is a map $\BU(n) \hookrightarrow \BU(n + 1)$ given by adding a trivial line bundle. Under the clutching construction, this corresponds to the map $\U(n) \hookrightarrow \U(n + 1)$ we had previously. We then let
+\[
+  \BU = \colim_{n \to \infty} \BU(n).
+\]
+In particular, there is a map $* = \BU(0) \to \BU$ which we will choose to be our canonical basepoint of $\BU$.
+
+\begin{cor}
+  We have
+  \[
+    \pi_k \BU = 
+    \begin{cases}
+      \Z & \text{$k \neq 0$ even}\\
+      0 & \text{otherwise}
+    \end{cases}.
+  \]
+\end{cor}
+
+The direct sum and of vector bundles is compatible with the inclusion $\BU(n) \hookrightarrow \BU(n + 1)$, and so gives rise to a map
+\[
+  \oplus: \BU \times \BU \to \BU.
+\]
+
+We would like a map that comes from tensor products as well, but that is not compatible with the inclusion, since
+\[
+  (E \oplus 1) \otimes (F \oplus 1) \neq E \otimes F \oplus 1.
+\]
+
+To fix this, we need to think about what $\BU$ represents.
+\begin{defi}
+  A \emph{virtual vector bundle} is a formal difference of two vector bundles.
+  
+  More precisely, if $X$ is a finite CW complex, write $\Vect_\C(X)$ for the monoid of vector bundles over $X$ (up to isomorphism) under direct sum. Write $KU(X)$ to be the group completion of $\Vect_\C(X)$. A virtual vector bundle is then an element of $KU(X)$.
+\end{defi}
+If $E$ is a vector bundle, we write $[E]$ for its image in $KU(X)$. Then every element in $KU(X)$ is of the form $[E] - [F]$, and its \emph{rank} is $\dim E - \dim F$.\footnote{This should be viewed as a locally constant function on $X$ if $X$ is disconnected.} We also write $n$ for the $n$-dimensional trivial vector bundle.
+
+\begin{lemma}
+  For any vector bundle $E$ over $X$, there is some other vector bundle $F$ such that $E \oplus F$ is trivial.
+
+  Hence, any virtual vector bundle can be written as $[E] - n$ for some vector bundle $E$.\fakeqed
+\end{lemma}
+
+\begin{thm}
+  If $X$ is a finite CW complex, then $[X, \BU]$ is the group of rank $0$ virtual vector bundles, where the group structure comes from the direct sum map $\oplus: \BU \times \BU \to \BU$.
+\end{thm}
+
+\begin{proof}
+  Since $X$ is finite, we have
+  \[
+    [X, \BU] = \colim_{n \to \infty} [X, \BU(n)].
+  \]
+  If a map $f: X \to \BU(n)$ classifies a vector bundle $E$, then the correspondence sends this to $[E] - n \in K(X)$.
+\end{proof}
+
+\begin{cor}
+  If $X$ is a finite CW complex, then
+  \[
+    KU(X) \cong [X, \BU \times \Z].
+  \]
+\end{cor}
+
+\begin{proof}
+  Use the $\Z$ factor to keep track of the rank, since every virtual vector bundle is the sum of a rank zero virtual vector bundle plus a trivial bundle.
+\end{proof}
+
+Now since $\otimes$ is linear, it induces a map $KU(X) \times KU(X) \to KU(X)$, classified by a map 
+\[
+  \otimes: (\BU \times \Z) \times (\BU \times \Z) \to \BU \times \Z.
+\]
+In fact, we get something even better, since the basepoint of $\BU \times \Z$, corresponding to the trivial rank 0 vector bundle, kills everything under $\otimes$, so this factors to give a map
+\[
+  \otimes: (\BU \times \Z) \wedge (\BU \times \Z) \to \BU \times \Z,
+\]
+where as always, $X \wedge Y = X \times Y/X \vee Y$.
+
+This is important, since it induces a ring structure on $\pi_* (\BU \times \Z)$ --- if $f_i: S^{k_i} \to \BU \times \Z$, then smashing them together gives
+\[
+  f_1 \wedge f_2: S^{k_1 + k_2} \cong S^{k_1} \wedge S^{k_2} \to (\BU \times \Z) \wedge (\BU \times \Z) \overset{\otimes}{\to} \BU \times \Z.
+\]
+
+As a group, the ring $\pi_*(\BU \times \Z)$ is $\Z$ in every even degree, and is zero otherwise. The ring structure is the best you can hope for.
+\begin{thm}[Complex Bott periodicity]
+  \[
+    \pi_*(\BU \times \Z) \cong \Z[u],\quad\deg u = 2.
+  \]
+\end{thm}
+
+This has some nice geometric consequences. Observe that $\pi_*(\BU \times \Z) \cong \pi_*(\Omega^2(\BU \times \Z))$ abstractly as groups, and we know this without using the ring structure. This does not automatically imply $\BU \times \Z \cong \Omega^2(\BU \times \Z)$, since we need a map that realizes this isomorphism of groups in order to apply Whitehead's theorem. The ring structure provides exactly this.
+
+Indeed, let $u: S^2 \to \BU \times \Z$ be a generator of $\pi_2(\BU \times \Z)$. Then we get a map
+\[
+  S^2 \wedge (\BU \times \Z) \overset{f \wedge 1}\to (\BU \times \Z) \wedge (\BU \times \Z) \overset{\otimes}\to (\BU \times \Z).
+\]
+The adjoint map $(\BU \times \Z) \to \Omega^2 (\BU \times \Z)$ is then multiplication by $u$, which is an isomorphism. So
+\begin{cor}
+  The map above gives a homotopy equivalence
+  \[
+    \BU \times \Z \simeq \Omega^2 (\BU \times \Z).
+  \]
+\end{cor}
+This is a \emph{geometric} incarnation of the Bott periodicity theorem, which says two \emph{spaces} are homotopy equivalent.
+
+Given the importance of the map $u$, it is reassuring to know there is a very concrete description of it:
+\begin{thm}
+  The class $u$ can be chosen to be represented by the map
+  \[
+    S^2 \cong \CP^1 \hookrightarrow \CP^\infty \cong \BU(1) \hookrightarrow \BU \hookrightarrow \BU \times \Z.
+  \]
+  Equivalently, it is $[\gamma] - 1 \in K(\CP^1)$, where $\gamma$ is the tautological bundle over $\CP^1$.
+\end{thm}
+
+The real version of these results is slightly less pretty.
+\begin{thm}[Real Bott periodicity]
+  We have
+  \[
+    \pi_*(\BO \times \Z) \cong \Z[\eta, \alpha, \beta]/(2\eta, \eta^3, \alpha^2 - 4 \beta)
+  \]
+  where $\deg \eta = 1, \deg \alpha = 4, \deg \beta = 8$. Therefore,
+  \[
+    \BO \times \Z \cong \Omega^8(\BO \times \Z).
+  \]
+\end{thm}
+
+\section{Topological \texorpdfstring{$K$}{K}-theory}
+We will end by saying a bit more about the functor $KU$ defined above. Pullback of vector bundle makes it a contravariant functor on the category of finite CW complexes. We can extend this to a functor on all CW complexes by defining it to be the functor represented by $\BU \times \Z$, but its values on infinite complexes have less straightforward descriptions.\footnote{If we have an infinite CW complex $X$, we can pick an exhaustion by finite subcomplexes. Then the class in $KU(X)$ restricts to a virtual vector bundle of the form $[E] - n$ on each finite subcomplex. However, the $n$ needed may be arbitrarily large as we move up the exhaustion, so it cannot be written as the formal difference as two genuine vector bundles on $X$.} For technical reasons, we actually want a reduced version of this --- on a based space $X$, we have
+\[
+  \widetilde{KU}(X) = [X, \BU \times \Z]_*.
+\]
+This corresponds to virtual vector bundles that are rank zero on the base point component. This is really not that important and not worth worrying about.
+
+This functor $\widetilde{KU}$ behaves like the degree $0$ part of a (reduced) cohomology theory. For example, it satisfies an appropriate form of Mayer--Vietoris. So we will write it as $KU^0$ instead. The goal is the manufacture a (generalized) cohomology $KU$ whose degree $0$ part is this $KU^0$ we already have. This is called (complex) topological $K$-theory, and is of utmost importance in algebraic topology.
+
+We first do it for \emph{negative} degrees, which is easy. If $h^*$ is a (reduced) cohomology theory, then Mayer--Vietoris implies we always have
+\[
+  h^n(\Sigma X) = h^{n - 1}(X).
+\]
+So for $n \geq 0$, we can simply define
+\[
+  KU^{-n}(X) = KU^0(\Sigma^n X).
+\]
+The functor $KU^{-n}(X)$ is then represented by $\Omega^n (\BU \times \Z)$.
+
+The key fact is that Bott periodicity tells us $\Omega^2 (\BU \times \Z) \cong \BU \times \Z$. So another way to state Bott periodicity is that
+\begin{thm}[Complex Bott periodicity]
+  There is a canonical isomorphism
+  \[
+    KU^k(X) \cong KU^{k - 2}(X)
+  \]
+  whenever both are defined.
+\end{thm}
+
+Once we know this, we can simply define the remaining groups by
+\[
+  KU^n(X) =
+  \begin{cases}
+    KU^0(X) & n\text{ even}\\
+    KU^{-1}(X) & n\text{ odd}.
+  \end{cases}
+\]
+We then know automatically that this satisfies properties like Mayer--Vietoris, and hence is a generalized cohomology theory.
+
+For completeness, we state the corresponding real result as well.
+\begin{thm}[Real Bott periodicity]
+  There is a canonical isomorphism
+  \[
+    KO^0(\Sigma^8 X) \cong KO^0(X).
+  \]
+\end{thm}
+\end{document}

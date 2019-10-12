@@ -1,0 +1,464 @@
+\documentclass{shortart}
+
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{tikz-cd}
+\usepackage{bbm}
+\usepackage{plastex}
+
+\title{Goodwillie filtration and factorization homology}
+\author{Dexter Chua}
+\date{}
+
+\newtheorem{lemma}{Lemma}
+\newtheorem{thm}[lemma]{Theorem}
+\newtheorem*{claim}{Claim}
+
+\theoremstyle{definition}
+\newtheorem{defi}[lemma]{Definition}
+\newtheorem{eg}[lemma]{Example}
+
+
+\DeclareMathOperator*\colim{colim}
+\DeclareMathOperator\Conf{Conf}
+\DeclareMathOperator\Ext{Ext}
+\DeclareMathOperator\Mod{Mod}
+\DeclareMathOperator\Sp{Sp}
+
+\newcommand\Algn{\mathrm{Alg}_n^{\mathrm{aug}}(\mathcal{V})}
+\newcommand\lims{\lim_{\emptyset \neq T \subseteq S}}
+\newcommand\Disk{\mathrm{Disk}}
+\newcommand\F{\mathbb{F}^{\mathrm{aug}}}
+\newcommand\fr{{\mathrm{fr}}}
+\newcommand\I{\ifplastex 1\else\mathbbm{1}\fi}
+\newcommand\R{\mathbb{R}}
+\newcommand\Z{\mathbb{Z}}
+\newcommand\ZMfld{\mathrm{ZMfld}}
+
+\renewcommand\d{\mathrm{d}}
+\renewcommand\O{\mathrm{O}}
+\renewcommand\P{\mathbb{P}}
+\renewcommand\S{\mathbb{S}}
+
+\begin{document}
+Let $\mathcal{V}$ be a symmetric monoidal stable $\infty$-category, satisfying appropriate adjectives. (Reduced) factorization homology is then a functor
+\[
+  \int_{(-)} (-)\colon \ZMfld_n \times \Algn \to \mathcal{V}.
+\]
+The way we have viewed this so far is to fix an $A \in \Algn$ and consider this a functor $\int_{(-)}A\colon \ZMfld_n \to \mathcal{V}$. We can then prove theorems such as $\otimes$-excision. As far as categories go, $\ZMfld_n$ is not the best category to apply category-theoretic techniques to. In this talk, we will fix an $M_* \in \ZMfld_n$ and consider the functor
+\[
+  \int_{M_*}(-)\colon \Algn \to \mathcal{V}.
+\]
+
+The only explicit calculation we know about this functor is its values on free algebras, which we did in the case of (non-zero-pointed framed) manifolds in the first talk. We shall begin by setting up the analogous version for augmented $n$-disk algebras and zero-pointed manifolds.
+
+\section{Free algebras}
+If $A \in \Algn$, then it has an underlying object in ${}^{1/}\mathcal{V}_{/1}$, i.e.\ an object in $V$ that comes with a map to and from the unit $\I$ (whose composite is the identity). Since $\mathcal{V}$ is assumed to be stable, this gives us a splitting
+\[
+  A = \I \oplus V.
+\]
+The module $V$ has a canonical action of $\mathrm{Emb}(\R^n, \R^n)$, which deformation retracts to $\O(n)$ (by scaling then Gram--Schmidt). So the ``underlying module'' $V$ has a canonical $\O(n)$ action, and this defines a forgetful functor
+\[
+  \begin{aligned}
+    U\colon \Algn &\to \Mod_{\O(n)}(\mathcal{V})\\
+    I \oplus V &\mapsto V
+  \end{aligned}
+\]
+The free functor $\F$ is defined to be the left adjoint of $U$. In the first talk, we observed
+\begin{thm}
+  \[
+    \int_{M_*} \F(V) = \bigoplus_{i \geq 0} \Conf_i^{\fr}(M_*) \bigotimes_{\Sigma_i \wr \O(n)} V^{\otimes i},
+  \]
+  where $\Conf_i^{\fr}(M_*)$ is the configuration space of $i$ points together with a framing of the tangent bundle at each point.
+\end{thm}
+
+All the proofs in the talk will be based on this computation, and so it would be nice to have a functor $L: \Algn \to \Mod_{\O(n)}(\mathcal{V})$ that sends $\F(V)$ to $V$, which we can think of as the indecomposables functor. Moreover, we can write an arbitrary augmented $n$-disk algebra as a sifted colimit of free algebras, and so it would be nice if this functor preserves colimits as well.
+
+We will construct $L$ as a left adjoint by identifying its right adjoint. The right adjoint should be a functor $\Mod_{\O(n)}(\mathcal{V}) \to \Algn$ whose composition with $U$ is the identity. We can pick this to be the square zero extension functor $t$, which one can check satisfies the hypothesis of the adjoint functor theorem, so it admits a left adjoint
+\[
+  L\colon \Algn \to \Mod_{\O(n)}(\mathcal{V}).
+\]
+This functor $L$ (and $t$) actually play a special categorical role:
+\begin{thm}
+  The adjunction
+  \begin{useimager}
+    \[
+      \begin{tikzcd}
+        \Algn \ar[r, yshift=2, "L"] & \Mod_{\O(n)}(\mathcal{V}) \ar[l, yshift=-2, "t"]
+      \end{tikzcd}
+    \]
+  \end{useimager}
+  exhibits $\Mod_{\O(n)}(\mathcal{V})$ as the stabilization of $\Algn$.
+\end{thm}
+This will be very important when we get to the Goodwillie calculus part of the story.
+
+\section{The Goodwillie filtration}
+Most of the material here about Goodwillie calculus are due to Goodwillie, and a ``modern'' account can be found in Chapter 6 of Higher Algebra. We will provide references to Higher Algebra when we omit proofs of theorems.
+
+Goodwillie calculus is a method of approximating functors $F\colon \mathcal{C} \to \mathcal{V}$ by a sequence of ``polynomial'' functors. For the theory to work out, we have to make the following assumptions:
+\begin{itemize}
+  \item $\mathcal{C}$ and $\mathcal{D}$ are pointed.
+  \item $\mathcal{C}$ has finite colimits.
+  \item $\mathcal{D}$ has finite limits and sequential colimits which commute past each other.
+\end{itemize}
+The first hypothesis is not necessary, but our examples are all of this form. Moreover, the theorems we seek are usually first proven for the pointed case and then transferred to unpointed case, so we might as well focus on the pointed case only.
+
+Before we go into the definition of a ``polynomial functor'', we give the special case of a linear functor. We should think of linear functors as functors like homology, which satisfy Mayer--Vietoris.
+
+\begin{eg}
+  A linear functor is a functor that sends pushout squares to pullback squares.
+\end{eg}
+
+\begin{eg}
+  If $\mathcal{D}$ is stable, then pushouts are the same as pullbacks. So any colimit preserving functor is in particular linear.
+\end{eg}
+
+A $k$-excisive functor, which should be thought of as a polynomial functor of degree $\leq k$, satisfies a higher-dimensional analogue of this axiom involving higher-dimensional cubes.
+\begin{defi}
+  Let $S$ be a finite set with $|S| = k$. A $k$-cube in $\mathcal{C}$ is a functor $\P(S) \to \mathcal{C}$, where $\P(S)$ is the power set of $S$, considered as a poset category.
+\end{defi}
+
+\begin{eg}
+  $\P(\{0, 1\})$ and $\P(\{0, 1, 2\})$ can be depicted as follows
+  \begin{useimager}
+    \[
+      \begin{tikzcd}
+        \emptyset \ar[r] \ar[d] & \{0\} \ar[d]\\
+        \{1\} \ar[r] & \{0, 1\}
+      \end{tikzcd},\quad
+      \begin{tikzcd}[row sep=small, column sep=small]
+        & \emptyset \ar[rr] \ar[ld] \ar[dd] & & \{0\} \ar[ld] \ar[dd]\\
+        \{2\} \ar[dd] \ar[rr, crossing over] & & \{0, 2\}\\
+        & \{1\} \ar[ld] \ar[rr]& & \{0, 1\} \ar[ld]\\
+        \{1, 2\} \ar[rr] & & \{1, 2, 3\} \ar[from=uu, crossing over]
+      \end{tikzcd}
+    \]
+  \end{useimager}
+\end{eg}
+
+\begin{defi}
+  A $k$-cube is (co)Cartesian if it is a (co)limit diagram.
+
+  It is strongly coCaretsian if it is the left Kan extension of the restriction to $\P_{\leq 1}(S)$, the sub-poset of subsets of $S$ of cardinality at most $1$ (strongly Cartesian is defined similarly).
+\end{defi}
+
+\begin{defi}
+  A functor is $k$-excisive if it sends strongly coCartesian $(k + 1)$-cubes to Cartesian $(k + 1)$-cubes.
+\end{defi}
+
+It is not too hard to see that
+\begin{lemma}[{[HA 6.1.1.14]}]
+  If $k' \geq k$, then every $k$-excisive functor is also $k'$-excisive.
+\end{lemma}
+
+\begin{thm}[Goodwillie]
+  For each $k$, there is a universal approximation $P_k F$ that is polynomial of degree $\leq k$ and a natural transformation $F \to P_k F$ universal amongst natural transformations to polynomial functors of degree $\leq k$. These assemble to give a ``Taylor tower''
+  \begin{useimager}
+    \[
+      \begin{tikzcd}
+        & \vdots \ar[d]\\
+        & P_2 F \ar[d]\\
+        & P_1 F \ar[d]\\
+        F \ar[r] \ar[ur] \ar[uur] & P_0 F
+      \end{tikzcd}
+    \]
+  \end{useimager}
+\end{thm}
+We will prove this theorem in the next section. Note that the theorem does not claim whether the tower actually converges to $F$ or not. This is an issue that has to be addressed separately.
+
+The goal of this talk is to understand the polynomial approximations $P_k \int_{M_*}(-)$.
+
+\begin{eg}
+  A $1$-cube is just a morphism. It is always strongly coCartesian and is Cartesian iff it is an equivalence. So $0$-excisive functors are constant functors, and $P_0 F(X) = F(*)$.
+\end{eg}
+
+\begin{eg}
+  A $2$-cube is a square, and being $1$-excisive means sending pushouts to pullbacks, as promised.
+\end{eg}
+
+We will prove the theorem by providing an explicit model for $P_k F$. We can give an indication of what this explicit model looks like in the case where $F$ is reduced, i.e.\ $F(*) = *$.
+\begin{eg}
+  If $F$ is reduced, then
+  \[
+    P_1 F(X) = \colim_{n \to \infty} \Omega^n F(\Sigma^n X).
+  \]
+\end{eg}
+
+The fiber of the map $P_k F \to P_{k - 1} F$ is called the $k$th derivative of $F$ (at $*$). It is $k$-homogeneous:
+\begin{defi}
+  A functor $F$ is $k$-homogeneous if $F = P_k F$ and $P_{k - 1}F = *$.
+\end{defi}
+
+In general, the polynomial approximations $P_k F$ are rather difficult to understand, but often times, the derivatives admit rather explicit descriptions. This is the case, for example, when $F$ is the identity map from the category of spaces to itself. 
+Our \emph{actual} goal is to understand the derivatives of the functor $\int_{M_*} (-)\colon \Algn \to \mathcal{V}$ for a fixed $M_*$.
+
+While polynomial functors of degree $k$ can be pretty complicated, $k$-homogeneous functors are not.
+\begin{thm}[{[HA 6.1.4.14, HA 6.1.2.9]}]
+  An $k$-homogeneous functor $F\colon \mathcal{C} \to \mathcal{D}$ is uniquely of the form
+  \[
+    F(X) = G(\Sigma^\infty X, \cdots, \Sigma^\infty X)_{\Sigma_k},
+  \]
+  where $\Sigma^\infty\colon \mathcal{C} \to \Sp(\mathcal{C})$ is the stabilization functor and $G\colon \Sp(\mathcal{C})^k \to \mathcal{D}$ is symmetric in the $k$ variables and $1$-homogeneous in each variable.
+
+  Conversely, every functor of this form is $k$-homogeneous.
+\end{thm}
+This is an actual, non-trivial theorem to prove, and is a crucial ingredient in our identification of the derivatives. We will, however, not prove it.
+
+\begin{eg}
+  $F$ is reduced iff $P_0 F$ is trivial. So if $F$ is reduced, then $P_1 F$ is also the first derivative. Our explicit formula above shows that it is indeed of the form we claimed.
+\end{eg}
+
+In the case of interest, the map $\Sigma^\infty\colon \Algn \to \Sp(\Algn)$ is exactly the functor $L$ we had previously. So the $k$th derivative of $\int_{M_*}(-)$ is determined by its values on free algebras. The main theorem we want to prove is
+\begin{thm}
+  The $k$th derivative of $\int_{M_*}(-)$ is
+  \[
+    A \mapsto \Conf_k^{\fr}(M_*) \bigotimes_{\Sigma_k \wr \O(n)} L(A)^{\otimes k}.\fakeqed
+  \]
+\end{thm}
+Note that by the theorem above, this functor is indeed $k$-homogeneous, with
+\[
+  G(X_1, \ldots, X_k) = \Conf_k^{\fr}(M_*) \bigotimes_{\O(n)^k} (X_1 \otimes \cdots \otimes X_k),
+\]
+which is cocontinuous and in particular linear in each variable. We will prove this theorem by explicitly calculating the polynomial approximations evaluated on free algebras:
+\begin{eg}
+  In the case where $A = \F(V)$, we have
+  \[
+    P_k\int_{M_*} \F(V) = \bigoplus_{0 \leq i \leq k} \Conf_i^{\fr}(M_*) \bigotimes_{\Sigma_i \wr \O(n)} V^{\otimes i}.
+  \]
+\end{eg}
+
+\section{Basics of Goodwillie calculus}
+The calculation of the derivative will use the explicit description of $P_k F$ in the proof of its existence, which is the focus of this section.
+
+We keep the assumptions of the previous section. To construct the universal approximation of $F$ by a $k$-excisive functor, we force $F$ to send certain strongly coCartesian diagrams to Cartesian diagrams, and it will turn out that this is enough.
+
+More specifically, we find some strongly coCarteisan diagrams $\mathcal{X}: \P(S) \to \mathcal{C}$, where $|S| = k + 1$ and $\mathcal{X}(\emptyset) = X$. We then replace $F(X)$ by $\lims F(\mathcal{X}(T))$ (which would equal $F(X)$ if $F$ were $k$-excisive). We repeat this procedure and hope we eventually end up with something $k$-excisive.
+
+To define such an $\mathcal{X}$, we need to specify $\mathcal{X}|_{\P_{=1}(S)}$, since we know $\mathcal{X}(\emptyset) = X$ and everything is the left Kan extension of this. Since $X$ is the only thing we know, the only thing we can do is to set $\mathcal{X}(\{s\}) = *$ (placing $X$ there does no good).
+
+We define $C_{(-)}(X): \P(S) \to \mathcal{C}$ to be the unique strongly coCartesian diagram such that $C_{\emptyset}(X) = X$ and $C_{\{s\}} = *$. Concretely, $C_T(X)$ is the colimit of the diagram
+\begin{useimager}
+  \[
+    \begin{tikzcd}
+      & & X \ar[dll] \ar[dl] \ar[d] \ar[dr] \ar[drr]\\
+      * & * & \cdots & *& *
+    \end{tikzcd}
+  \]
+\end{useimager}
+where the vertices are indexed by $T$.
+
+We define
+\[
+  T_k F(X) = \lims F(C_T(X)).
+\]
+There is then a natural transformation $t_F\colon F \to T_k F$.
+
+\begin{thm}
+  If $F\colon \mathcal{C} \to \mathcal{D}$ is any functor, define $P_k F\colon \mathcal{C} \to \mathcal{D}$ as the sequential colimit
+  \begin{useimager}
+    \[
+      \begin{tikzcd}
+        F \ar[r, "t_F"] & T_k F \ar[r, "t_{T_k F}"] & T_k T_k F \ar[r] & \cdots
+      \end{tikzcd}
+    \]
+  \end{useimager}
+  Then $P_k F$ is $k$-excisive and the natural map $\theta_F: F \to P_k F$ is the universal natural transformation to such a functor.
+\end{thm}
+
+\begin{proof}
+  We first figure out what we have to prove. Of course, we have to prove that $P_k F$ is $k$-excisive. It turns out this is the only non-trivial thing to prove.
+
+  In the $1$-categorical case, to prove the universal property, we first need to know that $\theta_F$ is an equivalence if $F$ is already $k$-excisive, which is clear in our case. This means if we have a map $\alpha: F \to G$ where $G$ is $k$-excisive, then we have a diagram
+  \begin{useimager}
+    \[
+      \begin{tikzcd}
+        F \ar[r, "\alpha"] \ar[d, "\theta_F"] & G \ar[d, "\theta_G"]\\
+        P_k F \ar[r, "P_k \alpha"] & P_k G
+      \end{tikzcd}
+    \]
+  \end{useimager}
+  Since $\theta_G$ is an equivalence, $P_k\alpha$ lifts to a map to $G$ that makes the diagram commute.
+
+  To show that the extension to $P_k F$ is unique, suppose we have two extensions $\tilde{\alpha}, \tilde{\alpha}'$
+  \begin{useimager}
+    \[
+      \begin{tikzcd}
+        F \ar[r, "\alpha"] \ar[d, "\theta_F"] & G\\
+        P_k F \ar[ur, dashed]
+      \end{tikzcd}
+    \]
+  \end{useimager}
+  Applying $P_k$ to the whole diagram, we know that $P_k(\tilde{\alpha}) \circ P_k(\theta_F) = P_k(\tilde{\alpha}') \circ P_k(\theta_F)$. If $P_k(\theta_F)$ were an equivalence, then this implies $P_k(\tilde{\alpha}) = P_k(\tilde{\alpha}')$. Since $P_k$ essentially acts as the identity on $P_k F$ and $G$, this implies $\tilde{\alpha} = \tilde{\alpha}'$.
+
+  In the $\infty$-categorical case, HTT 5.2.7.4 implies these two conditions are also sufficient.
+
+  As we said, the first condition is immediate from construction, and to prove that $P_k(\theta_F)$ is an equivalence, it suffices to show that $P_k(t_F: F \to T_k F)$ is an equivalence. But this is clear, since we are just shifting the sequential colimit.
+
+  So all we have to do is to show that $P_k F$ is in fact $k$-excisive.
+  \begin{claim}
+    Let $\mathcal{X}\colon \P(S) \to \mathcal{C}$ be a strongly coCartesian $k$-cube. Then the canonical map $\theta_F\colon F(\mathcal{X}) \to (T_kF)(\mathcal{X})$ factors through a Cartesian $k$-cube in  $\mathcal{D}$.
+  \end{claim}
+  If this were true, then $P_k F(\mathcal{X})$ would be the sequential colimit of Cartesian cubes, hence Cartesian (since we assumed finite limits commute with sequential colimits).
+
+  The Cartesian $k$-cube $Y: \P(S) \to \mathcal{D}$ we seek admits a very simple description. Indeed, we simply take $F(\mathcal{X})$ and replace the $\emptyset$ vertex with the pullback of the rest of the diagram. This is then by construction a Cartesian cube, and there is a canonical map $F(\mathcal{X}) \to Y$ by the universal property.
+
+  To show that $\theta_F$ factors through this map, we need to use a funny description of $Y$, and this description uses the fact that $\mathcal{X}$ is strongly coCartesian.
+
+  Fix a $T \subseteq S$. We define $\mathcal{X}_T: \P(S) \to \mathcal{C}$ by setting $\mathcal{X}_T(I)$ to be the pushout of the diagram
+  \begin{useimager}
+    \[
+      \begin{tikzcd}[column sep=small]
+        & & \mathcal{X}(I) \ar[dll] \ar[dl] \ar[d] \ar[dr] \ar[drr]\\
+        \mathcal{X}(I \cup \{s_1\}) & \mathcal{X}(I \cup \{s_2\}) & \cdots & \mathcal{X}(I \cup \{s_{k - 1}\}) & \mathcal{X}(I \cup \{s_k\})
+      \end{tikzcd}
+    \]
+  \end{useimager}
+  where $T = \{s_1, \ldots, s_k\}$.
+
+  We make the following observations:
+  \begin{itemize}
+    \item $\mathcal{X}_{\emptyset}(I) = \mathcal{X}(I)$.
+    \item If $\mathcal{X}$ is strongly coCartesian, then essentially by definition, $\mathcal{X}_T(I) = \mathcal{X}(I \cup T)$.
+    \item If we replace the bottom vertices with $*$, then this gives $C_T(\mathcal{X}(I))$. So there is a canonical map $\mathcal{X}_T(I) \to C_T(\mathcal{X}(I))$.
+  \end{itemize}
+  The last fact gives us a map
+  \[
+    F(\mathcal{X}_U(T)) \to F(C_U(\mathcal{X}(T)))
+  \]
+  natural in $U$ and $T$. These assemble to give maps
+  \[
+    F(\mathcal{X}(I)) \cong F(\mathcal{X}_{\emptyset}(I)) \to \lim_{\emptyset \not= T \subseteq S} F(\mathcal{X}_T(I)) \to \lim_{\emptyset \not= T \subseteq S} F(C_T(\mathcal{X}(I))) \cong T_kF(\mathcal{X})(I)
+  \]
+  It remains to show that the middle object is equal to $Y$. But it is not difficult to use the second fact to see that
+  \[
+    \lims F(\mathcal{X}_T(I)) =
+    \begin{cases}
+      \lims F(\mathcal{X}(T)) & I = \emptyset\\
+      F(\mathcal{X}(I)) & I \neq \emptyset
+    \end{cases}.\qedhere
+  \]
+\end{proof}
+
+\section{The proofs}
+\subsection{Derivatives}
+We now embark on the journey to prove the theorems we stated at the beginning. We shall begin by explicitly calculating $P_k \int_{M_*} \F(V)$. Note that since the construction of $P_n F$ was done pointwise, we can do this calculation without knowing what the whole functor $P_k \int_{M_*} (-)$ is.
+
+First note that both $\mathcal{V}$ and $\Algn$ have a zero object, and $\F$ sends to zero object to the zero object by virtue of being a left adjoint. So
+\[
+  C_T(\F(V)) = \F(C_T(V)).
+\]
+Using this and fixing a $(k + 1)$-cube $S$, we can compute $T_k \int_{M_*}(-)$:
+\[
+  \begin{aligned}
+    T_k \int_{M_*}\F(V) &= \lims \int_{M_*} C_T(\F(V)) \\
+    &= \lims \int_{M_*} \F(C_T(V)) \\
+    &= \lims \bigoplus_{0 \leq i < \infty} \Conf_i^{\fr}(M_*) \bigotimes_{\Sigma_i \wr \O(n)} C_T(V)^{\otimes i}\\
+    &= \bigoplus_{0 \leq i < \infty} \lims \Conf_i^{\fr}(M_*) \bigotimes_{\Sigma_i \wr \O(n)} C_T(V)^{\otimes i}.
+  \end{aligned}
+\]
+Fixing $M_*$, let us write
+\[
+  R_i(V) = \Conf_i^{\fr}(M_*) \bigotimes_{\Sigma_i \wr \O(n)} V^{\otimes i}.
+\]
+We have then shown that
+\[
+  T_k \int_{M_*} \F(V) = \bigoplus_{0 \leq i < \infty} (T_k(R_i))(V).
+\]
+Similarly, we have
+\[
+  T_k^j \int_{M_*} \F(V) = \bigoplus_{0 \leq i < \infty} (T_k^j(R_i))(V).
+\]
+Therefore, we conclude that
+\[
+  P_k \int_{M_*}\F(V) = \bigoplus_{0 \leq i < \infty} (P_k(R_i)) (V).
+\]
+But we have already concluded that $R_i$ is $i$-homogeneous (as a functor of $V$), so $P_k(R_i)$ is just $R_i$ if $i \leq k$, and $0$ otherwise. So
+\[
+  P_k \int_{M_*}\F(V) = \bigoplus_{0 \leq i < k} \Conf_i^{\fr}(M_*) \bigotimes_{\Sigma_i \wr \O(n)} V^{\otimes i}.
+\]
+In particular, the $k$th derivative evaluated on $\F(V)$ is exactly
+\[
+  \Conf_k^{\fr}(M_*) \bigotimes_{\Sigma_k \wr \O(n)} V^{\otimes k}.
+\]
+But since the $k$th derivative evaluated at an augmented $n$-disk algebra $A$ only depends on $L(A)$, and $L(A) = L(\F(L(A)))$, we know
+
+\begin{thm}
+  The $k$th derivative of $\int_{M_*}(-)$ is
+  \[
+    A \mapsto \Conf_k^{\fr}(M_*) \bigotimes_{\Sigma_k \wr \O(n)} L(A)^{\otimes k}.
+  \]
+\end{thm}
+
+In other words, we always have a cofiber sequence
+\[
+  \Conf_k^{\fr}(M_*) \bigotimes_{\Sigma_k \wr \O(n)} L(A)^{\otimes k} \to P_k \int_{M_*} A \to P_{k - 1} \int_{M_*} A.
+\]
+
+\subsection{Convergence}
+We next want to study the problem of convergence. For $A = \F(V)$ we can do this pretty explicitly using the description above, and for non-free algebras, our strategy is to write them as sifted colimits of free algebras.
+\begin{lemma}
+  Every element of $\Algn$ is a sifted colimit of free augmented $n$-disk algebras.
+\end{lemma}
+
+\begin{proof}
+  The forgetful functor $\Algn \to {}^{\I/}V_{/\I}$ is monadic, and so every augmented $n$-disk algebra $A$ is the geometric realization of the bar construction $(\F)^{\bullet + 1}A$.
+\end{proof}
+
+\begin{lemma}
+  $\int_{M_*}(-)$ and $P_k \int_{M_*}(-)$ preserves sifted colimits.
+\end{lemma}
+
+\begin{proof}
+  Recall that an augmented $n$-disk algebra is a symmetric monoidal functor $\Disk_{n, +} \to \mathcal{V}$. Suppose $A\colon \mathcal{J} \to \Algn$ is a sifted diagram of augmented $n$-disk algebras. Then
+  \[
+    \colim_{j \in \mathcal{J}} \int_{M_*}A_j = \colim_{j \in \mathcal{J}} \colim_{U_+ \hookrightarrow M_*} A_j(U_+) = \colim_{U_+ \hookrightarrow M_*} \colim_{j \in \mathcal{J}} A_j(U_+).
+  \]
+
+  So to show that $\int_{M_*}$ commutes with sifted colimits, we have to show that
+  \[
+    \colim_{j \in \mathcal{J}} A_j(U_+) \cong \left(\colim_{j \in \mathcal{J}} A_j\right)(U_+).
+  \]
+  Since $A_j$ is symmetric monoidal, it suffices to prove this for the case where $U_+ = \R^n_+$. That is, we have to show that the forgetful functor $\Algn \to \mathcal{V}$ preserves sifted colimits, which is a general fact about algebras over monads.
+
+  For the case of $P_k \int_{M_*}(-)$, we observe that this is true for $P_0 \int_{M_*}(-)$, which is constant, and then proceed by induction using the explicit formula for the $k$th derivative.
+\end{proof}
+
+Finally, we consider the problem of convergence. In the case of a free algebra, we are asking when the map
+\[
+  \bigoplus_{0 \leq i < \infty} \Conf_i^{\fr}(M_*) \bigotimes_{\Sigma_i \wr \O(n)} V^{\otimes i} \to \prod_{0 \leq i < k} \Conf_i^{\fr}(M_*) \bigotimes_{\Sigma_i \wr \O(n)} V^{\otimes i}
+\]
+is an equivalence. This is not always true. In the case where $\mathcal{V}$ is the category of spectra, say, a sufficient condition for this to be true is that the connectivity of $\Conf_i^{\fr}(M_*) \bigotimes_{\Sigma_i \wr \O(n)} V^{\otimes i}$ tends to infinity as $i \to \infty$. There are (at least) two ways this can happen --- either the connectivity of $\Conf_i^{\fr}(M_*)$ tends to infinity, or the connectivity of $V^{\otimes i}$ tends to infinity.
+
+In general, to make sense of this argument in an arbitrary stable $\infty$-category, we need a $t$-structure, which is a collection of reflexive subcategories $\mathcal{V}_{\geq t}$ satisfying certain properties, which we think of as the subcategory of $t$-connective objects. We require this to be compatible with the tensor product, i.e.\ $\otimes$ maps $\mathcal{V}_{\geq t} \times \mathcal{V}_{\geq s}$ to $\mathcal{V}_{\geq t + s}$, and to be cocomplete, i.e.\ $\bigcap_t \mathcal{V}_{\geq t} = \{0\}$.
+
+We can then state the following theorem:
+\begin{thm}
+  The map
+  \[
+    \int_{M_*} A \to \lim_{k \to \infty} P_k \int_{M_*} A
+  \]
+  is an equivalence if at least one of the following two hold:
+  \begin{enumerate}
+    \item The augmentation ideal $\ker(A \to \I) > 0$.
+    \item $\ker(A \to \I) \geq 0$ and $M_*$ is connected and compact.
+  \end{enumerate}
+\end{thm}
+
+\begin{proof}
+  Under these assumptions, we will show that
+  \[
+    \ker\left(\int_{M_*} A \to P_k \int_{M_*} A\right) \geq k.
+  \]
+  Then since taking kernels commutes with sequential limits, we know that
+  \[
+    \ker\left(\int_{M_*} A \to \lim P_k \int_{M_*} A\right) \geq m \text{ for all }m.
+  \]
+  Since the $t$-structure is cocomplete, the kernel is trivial. So this map is an isomorphism.
+
+  Since kernels are the same as cokernels (up to a shift), taking kernels commutes with taking shifted colimits. Moreover, if $A$ satisfies the conditions of the theorem, so does $\F(A)$. So it suffices to prove it for the free case.
+
+  In the case where $A = \F(V)$, the conditions $\ker(A \to \I) > 0$ and $\geq 0$ correspond to $V > 0$ and $V \geq 0$.
+
+  We then use the fact that if $V \geq \ell$, then $V^{\otimes i} \geq i\ell$; and if $M_*$ is compact and connected, then $\Conf_i(M_*)$ is $i$-connected.
+\end{proof}
+
+\end{document}

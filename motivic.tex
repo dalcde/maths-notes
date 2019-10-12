@@ -1,0 +1,497 @@
+\documentclass{shortart}
+
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{tikz-cd}
+\usepackage{todonotes}
+
+\title{Motivic Homotopy Theory}
+\author{Dexter Chua}
+
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{lemma}[thm]{Lemma}
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem{cor}[thm]{Corollary}
+
+\theoremstyle{definition}
+\newtheorem{defi}[thm]{Definition}
+\newtheorem{remark}[thm]{Remark}
+\newtheorem{eg}[thm]{Example}
+
+\newcommand\Sm{\mathrm{Sm}}
+\newcommand\Spc{\mathrm{Spc}}
+\newcommand\Sing{\mathrm{Sing}}
+\newcommand\Nis{\mathrm{Nis}}
+\newcommand\Th{\mathrm{Th}}
+\newcommand\Pre{\mathcal{P}}
+\newcommand\SH{\mathcal{SH}}
+\renewcommand\H{\mathcal{H}}
+\renewcommand\P{\mathbb{P}}
+\newcommand\A{\mathbb{A}}
+\newcommand\Ch{\mathrm{Ch}}
+\newcommand\Ab{\mathrm{Ab}}
+\newcommand\DM{\mathrm{DM}}
+\newcommand\G{\mathbb{G}}
+\newcommand\Z{\mathbb{Z}}
+\newcommand\Bl{\mathrm{Bl}}
+\newcommand\Mot{\mathrm{Mot}}
+\newcommand\eff{\mathrm{eff}}
+\newcommand\veff{\mathrm{veff}}
+\newcommand\PrL{\mathcal{P}r^L}
+\newcommand\PrR{\mathcal{P}r^R}
+
+\renewcommand\S{\mathbb{S}}
+
+\DeclareMathOperator\CAlg{CAlg}
+\DeclareMathOperator\Hom{Hom}
+\DeclareMathOperator\Sp{Sp}
+\DeclareMathOperator\Stab{Stab}
+\DeclareMathOperator\Spec{Spec}
+\DeclareMathOperator*\colim{colim}
+
+\begin{document}
+Throughout the talk, $S$ is a quasi-compact and quasi-separated scheme.
+
+\begin{defi}
+  Let $\Sm_S$ be the category of finitely presented smooth schemes over $S$.
+\end{defi}
+Since we impose the finitely presented condition, this is an essentially small (1-)category.
+
+The starting point of motivic homotopy theory is the $\infty$-category $\Pre(\Sm_S)$ of presheaves on $\Sm_S$. This is a symmetric monoidal category under the Cartesian product. Eventually, we will need the pointed version $\Pre(\Sm_S)_*$, which can be defined either as the category of pointed objects in $\Pre(\Sm_S)$, or the category of presheaves with values in pointed spaces. This is symmetric monoidal $\infty$-category under the (pointwise) smash product.
+
+In the first two chapters, we will construct the unstable motivic category, which fits in the bottom-right corner of the following diagram:
+\[
+  \begin{tikzcd}
+    \Pre(\Sm_S) \ar[r, "L_{\Nis}"] \ar[d, "\widetilde{L_{\A^1}}"] & L_{\Nis} \Pre(\Sm_S) \equiv \Spc_S \ar[d, "L_{\A^1}"]\\
+    L_{\A^1} \Pre(\Sm_S) \ar[r, "\widetilde{L_{\Nis}}"] & L_{A^1 \wedge \Nis} \Pre(\Sm_S) \equiv \Spc_S^{\A^1} \equiv \H(S)
+  \end{tikzcd}
+\]
+The first chapter will discuss the horizontal arrows (i.e. Nisnevich localization), and the second will discuss the vertical ones (i.e. $\A^1$-localization).
+
+Afterwards, we will start ``doing homotopy theory''. In chapter \ref{chapter:homotopy-sheaves}, we will discuss the motivic version of homotopy groups, and in chapter \ref{chapter:thom}, we will discuss Thom spaces.
+
+In chapter \ref{chapter:stable}, we will introduce the stable motivic category, and finally, in chapter \ref{chapter:effective}, we will introduce effective and very effective spectra.
+
+\section{The Nisnevich topology}
+Nisnevich localization is relatively standard. This is obtained by defining the Nisnevich topology on $\Sm_S$, and then imposing the usual sheaf condition. Consequently, the Nisnevich localization functor is a standard sheafification functor, and automatically enjoys the nice formal properties of sheafification. For example, it is an exact functor.
+
+\begin{defi}
+  Let $X \in \Sm_S$. A Nisnevich cover of $X$ is a finite family of \'etale morphisms $\{p_i: U_i \to X\}_{i \in I}$ such that there is a filtration
+  \[
+    \emptyset \subseteq Z_n \subseteq Z_{n - 1} \subseteq \cdots \subseteq Z_1 \subseteq Z_0 = X
+  \]
+  of $X$ by finitely presented closed subschemes such that for each strata $Z_m \setminus Z_{m + 1}$, there is some $p_i$ such that
+  \[
+    p_i^{-1}(Z_m \setminus Z_{m + 1}) \to Z_m \setminus Z_{m + 1}
+  \]
+  admits a section.
+\end{defi}
+
+\begin{eg}
+  Any Zariski cover is a Nisnevich cover. Any Nisnevich cover is an \'etale cover.
+\end{eg}
+
+\begin{eg}
+  Let $k$ be a field of characteristic not $2$, $S = \Spec k$ and $a \in k^\times$. Consider the covering
+  \[
+    \begin{tikzcd}[column sep=small]
+      & \A^1 \setminus \{0\} \ar[d, "x^2"]\\
+      \A^1 \setminus \{a\} \ar[r, hook] & \A^1
+    \end{tikzcd}.
+  \]
+
+  This forms a Nisnevich cover with the filtration $\emptyset \subseteq \{a\} \subseteq \A^1$ iff $\sqrt{a} \in k$.
+\end{eg}
+
+It turns out to check that something is a Nisnevich sheaf, it suffices to check it for very particular covers with two opens.
+
+\begin{defi}
+  An elementary distinguished square is a pullback diagram
+  \[
+    \begin{tikzcd}
+      U \times_X V \ar[r] \ar[d] & V \ar[d, "p"]\\
+      U \ar[r, "i"] & X
+    \end{tikzcd}
+  \]
+  of $S$-schemes in $\Sm_S$ such that $i$ is a Zariski open immersion, $p$ is \'etale, and $p^{-1}(X \setminus U) \to X \setminus U$ is an isomorphism of schemes, where $X \setminus U$ is equipped with the reduced induced scheme structure.
+\end{defi}
+$\{U, V\}$ forms a Nisnevich cover of $X$ with filtration $\emptyset \subseteq X \setminus U \subseteq X$.
+
+\begin{defi}
+  We define $\Spc_S = L_{\Nis}\Pre(\Sm_S)$ to be the full subcategory of $\Pre(\Sm_S)$ consisting of presheaves that satisfy descent with respect to Nisnevich covers. Such presheaves are also said to be Nisnevich local. This is an accessible subcategory of $\Pre(\Sm_S)$ and admits a localization functor $L_{\Nis} : \Pre(\Sm_S) \to \Spc_S$.
+\end{defi}
+
+\begin{eg}
+  Every representable functor satisfies Nisnevich descent, since they in fact satisfy \'etale descent. Note that these functors are valued in discrete spaces.
+\end{eg}
+
+\begin{lemma}
+  Then $F \in \Pre(\Sm_S)$ is Nisnevich local iff $F(\emptyset) \simeq *$ and for every elementary distinguished square
+  \[
+    \begin{tikzcd}
+      U \times_X V \ar[r] \ar[d] & V \ar[d, "p"]\\
+      U \ar[r, "i"] & X
+    \end{tikzcd}
+  \]
+  the induced diagram
+  \[
+    \begin{tikzcd}
+      F(X) \ar[r] \ar[d] & F(V) \ar[d]\\
+      F(U) \ar[r] & F(U \times_X V)
+    \end{tikzcd}
+  \]
+  is a pullback diagram.
+\end{lemma}
+Note that the ``only if'' direction is immediate from definition, and doesn't require the assumption on $S$.
+
+\begin{cor}
+  If 
+  \[
+    \begin{tikzcd}
+      U \times_X V \ar[r] \ar[d] & V \ar[d, "p"]\\
+      U \ar[r, "i"] & X
+    \end{tikzcd}
+  \]
+  is an elementary distinguished square, then, when considered a square $\Spc_S$, this is a pushout diagram.
+
+  In particular, this holds when $\{U, V\}$ is a Zariski cover.
+\end{cor}
+
+\section{\texorpdfstring{$\A^1$}{A1}-localization}
+\begin{defi}
+  A presheaf $F \in \Pre(\Sm_S)$ is $\A^1$-local if the natural map $F(X \times \A^1) \to F(X \times \{0\})$ is an equivalence for all $X$. We write $L_{\A^1}\Pre(\Sm_S)$ for the full subcategory of $\A^1$-local presheaves, and $L_{\A^1 \wedge \Nis}\Pre(\Sm_S) = \Spc_S^{\A^1}$ for the presheaves that are \emph{both} Nisnevich local and $\A^1$-local.
+\end{defi}
+Therefore we get a square of accessible localizations
+\[
+  \begin{tikzcd}
+    \Pre(\Sm_S) \ar[r, "L_{\Nis}"] \ar[d, "\widetilde{L_{\A^1}}"] & L_{\Nis} \Pre(\Sm_S) \equiv \Spc_S \ar[d, "L_{\A^1}"]\\
+    L_{\A^1} \Pre(\Sm_S) \ar[r, "\widetilde{L_{\Nis}}"] & L_{A^1 \wedge \Nis} \Pre(\Sm_S) \equiv \Spc_S^{\A^1} \equiv \H(S)
+  \end{tikzcd}
+\]
+We also write the composite $\Pre(\Sm_S) \to \Spc_S^{\A^1}$ as $L_{\Mot}$.
+
+\begin{remark}
+  Note that if we think of each of these as subcategories, $L_{\A^1}$ and $\widetilde{L_{\A^1}}$ are not the same functors.
+\end{remark}
+
+\begin{remark}
+  A representable functor is usually not $\A^1$-local. Hence if $X \in \Sm_S$, the resulting sheaf $L_{\Mot} X \in \Spc_S^{\A^1}$ is usually not discrete. If $X$ is already $\A^1$-local, then we say $X$ is \emph{$\A^1$-rigid}. For example, $\G_m$ is $\A^1$-rigid.
+\end{remark}
+Unlike $L_{\Nis}$, the $\A^1$-localization functor $L_{\A^1}$ is not a sheafification functor. Thus, \emph{a priori}, the only nice property of it we know is that it is a left adjoint. To remedy for this, we describe an explicit construction of $\widetilde{L_{\A^1}}$, and then observe that
+\begin{lemma}
+  $L_{\Mot} \simeq (L_{\Nis} \widetilde{L_{\A^1}})^{\omega}$.
+\end{lemma}
+
+The functor $\widetilde{L_{\A^1}}$ is better known as $\Sing^{\A^1}$.
+
+\begin{defi}
+  Define the ``affine $n$-simplex'' $\Delta^n$ by
+  \[
+    \Delta^n = \Spec k[x_0, \ldots, x_n]/(x_0 + \cdots + x_n = 1).
+  \]
+  This forms a cosimplicial scheme in the usual way.
+
+  For $X \in \Pre(\Sm_S)$, we define $\Sing^{\A^1}X \in \Pre(\Sm_S)$ by
+  \[
+    (\Sing^{\A^1}X)(U) = |X(U \times \Delta^\bullet)|.
+  \]
+\end{defi}
+
+It is then straightforward to check that
+\begin{lemma}
+  $\widetilde{L_{\A^1}} \simeq \Sing^{\A^1}$.
+\end{lemma}
+
+\begin{cor}
+  $\widetilde{L_{\A^1}}$ preserves finite products. Hence so does $L_{\Mot}$.
+\end{cor}
+
+\begin{eg}
+  Let $E \to X$ be a (Nisnevich-)locally trivial $\A^n$-bundle. Then $E \to X$ is an $\A^1$-equivalence in $L_{\Nis}\Pre(\Sm_S)$.
+\end{eg}
+
+\begin{eg}
+  We claim that $\P^1 \cong \Sigma \G_m = S^1 \wedge \G_m \in \Spc_S^{\A^1}$. Here we are working with pointed objects so that suspensions make sense.
+
+  Indeed, we have a Zariski open cover of $\P^1$ given by
+  \[
+    \begin{tikzcd}
+      \A^1 \setminus \{0\} \ar[r] \ar[d] & \A^1 \ar[d, "x^{-1}"]\\
+      \A^1 \ar[r, "x"] & \P^1
+    \end{tikzcd}
+  \]
+  Since this is in particular an elementary distinguished square, it is also a pushout in $(\Spc_S)_*$. Now apply $L_{\A^1}$ to this diagram, which preserves pushouts since it is a left adjoint. Since $L_{\A^1} \A^1 \simeq *$ the claim follows.
+
+  If we ``replace'' only one of the $\A^1$'s with $*$, we see that this also says
+  \[
+    \Sigma \G_m = \A^1 / (\A^1 \setminus \{0\}).
+  \]
+\end{eg}
+
+In general, we have
+\begin{lemma}
+  \[
+    \begin{aligned}
+      \A^n \setminus \{0\} &\cong S^{n - 1} \wedge \G_m^n\\
+      \P^n / \P^{n - 1} &\cong S^n \wedge \G_m^n.
+    \end{aligned}
+  \]
+\end{lemma}
+
+It is convenient to introduce the following notation:
+\begin{defi}
+  We define $S^{p, q} = \G_m^{\wedge q} \wedge (S^1)^{\wedge (p - q)}$ whenever it makes sense.
+\end{defi}
+
+\section{Homotopy sheaves}\label{chapter:homotopy-sheaves}
+Naively, one would like to define the motivic homotopy groups of $X \in (\Spc_S^{\A^1})_*$ as $[S^{p, q}, X]_*$. This is an abelian group. We can do better than that, and produce $\pi_{p, q} X$ as a \emph{sheaf}.
+
+\begin{defi}
+  Let $X \in \Spc_S$. We define $\pi_0^{\Nis}(X)$ to be the Nisnevich sheafification of the presheaf of sets
+  \[
+    U \mapsto [U, X]_{\Spc_S}.
+  \]
+
+  If $X \in (\Spc_S)_*$ and $n \geq 1$, define $\pi_n^{\Nis}(X)$ to be the Nisnevich sheafification of the presheaf of groups
+  \[
+    U \mapsto [S^n \wedge U_+, X]_{(\Spc_S)_*}.
+  \]
+
+  In general, if $X \in \Pre(\Sm_S)$, we define $\pi_n^{\Nis}(X) = \pi_n^{\Nis}(L_{\Nis} X)$. Finally, we define
+  \[
+    \pi_n^{\A^1}(X) = \pi_n^{\Nis}(L_{\Mot}X).
+  \]
+\end{defi}
+
+\begin{cor}
+  If $F \to X \to Y$ is a fiber sequence in $(\Spc_S^{\A^1})_*$, then there is a long exact sequence
+  \[
+    \cdots \pi_{n + 1}^{\A^1} Y \to \pi_n^{\A^1} F \to \pi_n^{\A^1} X \to \pi_n^{\A^1} Y \to \cdots
+  \]
+  of Nisnevich sheaves.
+\end{cor}
+
+\begin{proof}
+  The forgetful functor $\Spc_S^{\A^1} \to \Pre(\Sm_S)$ is a right adjoint, hence preserves fiber sequences. So fiber sequences in $\Spc_S^{\A^1}$ are computed objectwise. Then note that sheafification is exact.
+\end{proof}
+Here it is essential that we did not include $L_{\A^1}$ in the definition of $\pi_n^{\A^1}(X)$, since $L_{\A^1}$ is not exact.
+
+\begin{defi}
+  If $X \in \Pre(\Sm_S)$, we say $X$ is $\A^1$-connected if the canonical map $X \to S$ induces an isomorphism of sheaves $\pi_0^{\A^1} X \to \pi_0^{\A^1} S = *$.
+\end{defi}
+
+Given $X \in \Spc_S$, to check if $X$ is $\A^1$-connected, it turns out it suffices to check that $\pi_0^{\Nis}(X)$ is trivial.
+\begin{prop}[Unstable $\A^1$-connectivity]
+  Let $X \in \Pre(\Sm_S)$. Then the canonical map
+  \[
+    X \to L_{\Mot}X
+  \]
+  induces an epimorphism
+  \[
+    \pi_0^{\Nis}X \to \pi_0^{\Nis} L_{\Mot} X = \pi_0^{\A^1} X.
+  \]
+\end{prop}
+
+\begin{proof}
+  Since $\pi_0^{\Nis} X \to \pi_0^{\Nis} L_{\Nis} X$ is an isomorphism, it suffices to show that $\pi_0^{\Nis} X \to \pi_0^{\Nis} \Sing^{\A^1} X(U)$ is always an epimorphism. This follows by inspection.
+\end{proof}
+
+The final property of $\pi_n^{\Nis}$ we note is that over a perfect field, $\pi_n^{\Nis}$ is \emph{unramified}. Roughly speaking, it says
+\[
+  \pi_n^{\Nis}(X)(U) \to \pi_n^{\Nis}(X)(\Spec k(U))
+\]
+is injective for any $U \in \Sm_S$. We cannot exactly say this because $\Spec k(U)$ is in general not smooth over $S$.
+
+\section{Thom spaces}\label{chapter:thom}
+\begin{defi}
+  Let $E \to X$ be a vector bundle. Then we define the \emph{Thom space} to be
+  \[
+    \Th(E) = E / E^\times.
+  \]
+\end{defi}
+
+\begin{prop}
+  \[  
+    \Th(E) \cong \P(E \oplus 1)/\P(E).
+  \]
+\end{prop}
+
+\begin{thm}[Purity theorem]
+  Let $Z \hookrightarrow X$ be a closed embedding in $\Sm_S$ with normal bundle $\nu_Z$. Then we have an equivalence (in $\Spc_S^{\A^1}$).
+  \[
+    \frac{X}{X \setminus Z} \to \Th(\nu_Z).
+  \]
+\end{thm}
+
+\begin{proof}[Proof idea]
+  The first geometric input is the construction of a bundle of closed embeddings over $\A^1$ whose fiber over $\{0\}$ is $(\nu_Z, Z)$ and $(X, Z)$ elsewhere. This has a very explicit description:
+  \[
+    D_ZX = \Bl_{Z \times_S \{0\}} (X \times_S \A^1) \setminus \Bl_{Z \times_S \{0\}} (X \times_S \{0\}).
+  \]
+  Indeed, the fiber over $\{0\}$ is $\P(\nu_Z \oplus \mathcal{O}_Z) \setminus \P(\nu_Z)$, which is canonically isomorphic to $\nu_Z$. (This construction is known as ``deformation to the normal cone'')
+
+  The second step shows that in $\H(S)$, we have a homotopy pushout squares
+  \[
+    \begin{tikzcd}
+      \dfrac{\nu_Z}{\nu_Z \setminus Z} \ar[d] & Z \ar[r] \ar[l] \ar[d] & \dfrac{X}{X \setminus Z} \ar[d]\\
+      \dfrac{D_ZX}{D_ZX \setminus Z \times \A^1} & Z \times \A^1 \ar[l] \ar[r] & \dfrac{D_ZX}{D_Z X\setminus Z \times \A^1}
+    \end{tikzcd}
+  \]
+  To prove this, one uses Nisnevich descent to reduce to the affine case.
+\end{proof}
+
+\section{Stable motivic homotopy theory}\label{chapter:stable}
+The stable motivic homotopy category is obtained by inverting $\P^1$ in $\H(S)_*$:
+\[
+  \SH(S) = \H(S)_*[(\P^1)^{-1}].
+\]
+
+More generally, suppose we have a presentably symmetric monoidal $\infty$-category $\mathcal{C}$ (i.e.\ $\mathcal{C} \in \CAlg(\PrL)$) and $X \in \mathcal{C}$. We can then define
+\[
+  \Stab_X(\mathcal{C}) = \colim \left(\begin{tikzcd}[column sep=large]
+      \mathcal{C} \ar[r, "-\otimes X"] &
+      \mathcal{C} \ar[r, "-\otimes X"] &
+      \mathcal{C} \ar[r, "-\otimes X"] &
+      \cdots
+  \end{tikzcd}\right),
+\]
+or equivalently
+\[
+  \Stab_X(\mathcal{C}) = \lim \left(\begin{tikzcd}[column sep=large]
+      \mathcal{C} &
+      \mathcal{C} \ar[l, "(-)^X"'] &
+      \mathcal{C} \ar[l, "(-)^X"'] &
+      \cdots \ar[l, "(-)^X"']
+    \end{tikzcd}
+  \right),
+\]
+where these (co)limits are taken in the category of large categories (or equivalently $\PrL$/$\PrR$).
+
+\begin{thm}[Robalo]
+  If $X$ is \emph{symmetric}, i.e.\ the cyclic permutation on $X \otimes X \otimes X$ is homotopic to the identity, then $\Stab_X(\mathcal{C}) \in \CAlg(\PrL)$ is symmetric monoidal, and the natural map $\mathcal{C} \to \Stab_X(\mathcal{C})$ is universal among maps in $\CAlg(\PrL)$ that send $X$ to an invertible object.
+\end{thm}
+
+Note that there is always a map in $\CAlg(\PrL)$ satisfying this universal property, and $\Stab_X(\mathcal{C})$ always exists. The condition in the theorem ensures these two agree.
+
+It is easy to check that $\P^1$ is indeed symmetric by elementary row and column operations, so we can define
+\begin{defi}
+  $\SH(S) = \H(S)_*[(\P^1)^{-1}]$.
+\end{defi}
+
+As in the topological world, we have an adjunction
+\[
+  \begin{tikzcd}
+    \H(S)_* \ar[r, yshift = 2, "\Sigma^\infty_{\P^1}"] & \SH(S) \ar[l, yshift=-2, "\Omega^\infty_{\P^1}"]
+  \end{tikzcd}
+\]
+
+Note that $\Sigma^\infty_{\P^1}$ is by definition symmetric monoidal, and the fact that the tensor product preserves colimits in both variables tells us how to compute the tensor product in $\SH(S)$.
+
+\begin{defi}
+  For $E \in \SH(S)$ and $i, j \in \Z$, we define
+  \[
+    \pi_{p, q}(E) = \pi_0^{\A^1}(\Omega^\infty_{\P^1}(E \wedge S^{-p, -q})).
+  \]
+\end{defi}
+
+Of course, these also lead to homotopy \emph{groups} given by the global sections of the homotopy sheaves.
+
+\begin{defi}
+  For $E \in \SH(S)$ and $X \in (\Sm_S)_*$, and $p, q \in \Z$, we define
+  \[
+    \begin{aligned}
+      E_{p, q}(X) &= \pi_{p, q}(\Sigma^\infty_{\P^1} X \wedge E)\\
+      E^{p, q}(X) &= [\Sigma^\infty_{\P^1} X, \Sigma^{p, q} E]_{\SH(S)}.
+    \end{aligned}
+  \]
+\end{defi}
+
+We shall briefly introduce three examples of motivic spectra.
+\begin{eg}
+  Motivic cohomology is represented by a spectrum $H\Z$. If $U$ is smooth, motivic cohomology is equivalent to Bloch's higher Chow groups:
+  \[
+    H\Z^{p, q}(U_+) \cong CH^q(U, 2q - p).
+  \]
+
+  There are multiple ways one can construct $H\Z$, and I shall describe three. These mimic how one constructs the classical $H\Z$. These work over any perfect field, except for the second which only produces the right spectrum when the characteristic is $0$.
+
+  \begin{enumerate}
+    \item Classically, we have the $\infty$-category $\Ch(\Ab)$ of chain complexes of abelian groups, and singular chains defines a natural map $i^*: \Sp \to \Ch(\Ab)$. This admits a right adjoint $i_*$, and we can define $H\Z = i_* i^* \S$.
+
+      In the motivic world, we can define the triangulated category of motives $\DM(k)$, which receives a map $\SH(S) \to \DM(k)$ and we can repeat the previous paragraph.
+
+    \item Classically, we can construct $H\Z$ as an infinite loop space directly using the Eilenberg--Maclane spaces, which one can in turn construct using the Dold--Thom theorem as $\mathrm{Sym}^\infty(S^n)$. This works motivically as well.
+
+    \item Finally, we can define $H\Z = \tau_{\leq 0} \S$. Motivically, we can define $H\Z$ as the zero slice of $\S$, which we will discuss later.
+  \end{enumerate}
+\end{eg}
+
+\begin{eg}
+  We can construct a motivic spectrum $KGL$ that represents (homotopy) $K$-theory (which agrees with algebraic $K$-theory for sufficiently nice schemes). This is obtained by constructing $BGL$ (as the colimit of Grassmannians), and then showing that $\Omega_{\P^1} (BGL \times \Z) \cong BGL \times \Z$. We then have an explicit infinite loop space.
+\end{eg}
+
+\begin{eg}
+  We can construct the algebraic cobordism spectrum $MGL$ in the same way as we produce $MO$ or $MU$. There is a universal vector bundle $\gamma_n \to BGL_n$. We then define
+  \[
+    MGL = \colim \Sigma^{-2n, -n} \Th(\gamma_n).
+  \]
+\end{eg}
+
+\section{Effective and very effective motivic spectra}\label{chapter:effective}
+The category of (non-motivic) spectra admits a $t$-structure, where the connective objects $\Sp_{\geq 0}$ is the subcategory generated by $S^n$ for $n \geq 0$ under (sifted) colimits. In the motivic world, we have two kinds of spheres --- $S^1$ and $\G_m$, which makes everything bigraded. Thus, we can have different notions of connectivity depending of which spheres we use.
+
+\begin{defi}
+  Let $\SH^{\eff}(S)$ be the smallest stable subcategory (closed under direct sums) of $\SH(S)$ containing all $\Sigma^\infty_{\P^1} X_+$ for $X \in \Sm_S$ and closed under colimits. This is the category of \emph{effective} spectra.
+\end{defi}
+
+The inclusion $\G_m^n \wedge \SH^{\eff}(S) \hookrightarrow \SH(S)$ admits a right adjoint $f_n$. This defines the \emph{slice filtration}
+\[
+  \cdots \to f_{n + 1} E \to f_n E \to f_{n - 1} E \to \cdots.
+\]
+
+\begin{defi}
+  The $n$-slice of $E$, denoted $s_n E$, is defined by the cofiber sequence
+  \[
+    f_{n + 1} E \to f_n E \to s_n E.
+  \]
+\end{defi}
+
+On the other hand, we can only allow for non-negative powers of $S^i$ but include negative powers of $\G_m$. This in fact defines a $t$-structure on $\SH(S)$.
+
+\begin{defi}
+  Let $\SH(S)_{\geq 0}$ be the subcategory of $\SH(S)$ generated by $\Sigma^\infty_{\P^1} X_+ \wedge \G_m^{-q}$ under extensions and colimits.
+\end{defi}
+
+\begin{thm}
+  This forms part of a $t$-structure on $\SH(S)$, called the \emph{homotopy $t$-structure}.
+\end{thm}
+
+In the case of a perfect field, but not in general, we can characterize the homotopy $t$-structure by the homotopy sheaves.
+\begin{thm}
+  If $S = \Spec k$ and $k$ is a perfect field, then
+  \[
+    \begin{aligned}
+      \SH(S)_{\geq 0} &= \{ E \in \SH(S) \mid \pi_{p, q}(E) = 0\text{ whenever }p - q < 0\}\\
+      \SH(S)_{\leq 0} &= \{ E \in \SH(S) \mid \pi_{p, q}(E) = 0\text{ whenever }p - q> 0\}
+    \end{aligned}
+  \]
+\end{thm}
+
+Finally, we can intersect these two.
+\begin{defi}
+  We define
+  \[
+    \SH^{\veff}(S) = \SH^{\eff}(S) \cap \SH(S)_{\geq 0}.
+  \]
+  Equivalently, it is the full subcategory of $\SH(S)$ that generated by $\Sigma^\infty_{\P^1} X_+$ and under colimits. This is the category of \emph{very effective spectra}.
+\end{defi}
+
+Since the smash product preserves colimits and $X_+ \wedge Y_+ = (X \times )_+$, we see that
+\begin{prop}
+  $\SH(S)^{\veff}$ is closed under the smash product.
+\end{prop}
+
+\begin{eg}
+  $MGL$ is very effective. To show this, we have to show that for $\gamma_n \to BGL_n$ the universal vector bundle, the Thom spectrum $\Sigma^{-2n, -n} \Sigma^\infty_{\P^1}\Th(\gamma_n)$ is in very effective. This is true for rank $n$ vector bundles in general, since it is true for trivial vector bundles, and vector bundles are locally trivial.
+\end{eg}
+
+\end{document}
