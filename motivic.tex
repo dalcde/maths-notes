@@ -2,7 +2,7 @@
 
 \usepackage{amsmath, amssymb, amsthm}
 \usepackage{tikz-cd}
-\usepackage{todonotes}
+\usepackage{plastex}
 
 \title{Motivic Homotopy Theory}
 \author{Dexter Chua}
@@ -59,12 +59,14 @@ Since we impose the finitely presented condition, this is an essentially small (
 The starting point of motivic homotopy theory is the $\infty$-category $\Pre(\Sm_S)$ of presheaves on $\Sm_S$. This is a symmetric monoidal category under the Cartesian product. Eventually, we will need the pointed version $\Pre(\Sm_S)_*$, which can be defined either as the category of pointed objects in $\Pre(\Sm_S)$, or the category of presheaves with values in pointed spaces. This is symmetric monoidal $\infty$-category under the (pointwise) smash product.
 
 In the first two chapters, we will construct the unstable motivic category, which fits in the bottom-right corner of the following diagram:
-\[
-  \begin{tikzcd}
-    \Pre(\Sm_S) \ar[r, "L_{\Nis}"] \ar[d, "\widetilde{L_{\A^1}}"] & L_{\Nis} \Pre(\Sm_S) \equiv \Spc_S \ar[d, "L_{\A^1}"]\\
-    L_{\A^1} \Pre(\Sm_S) \ar[r, "\widetilde{L_{\Nis}}"] & L_{A^1 \wedge \Nis} \Pre(\Sm_S) \equiv \Spc_S^{\A^1} \equiv \H(S)
-  \end{tikzcd}
-\]
+\begin{useimager}
+  \[
+    \begin{tikzcd}
+      \Pre(\Sm_S) \ar[r, "L_{\Nis}"] \ar[d, "\widetilde{L_{\A^1}}"] & L_{\Nis} \Pre(\Sm_S) \equiv \Spc_S \ar[d, "L_{\A^1}"]\\
+      L_{\A^1} \Pre(\Sm_S) \ar[r, "\widetilde{L_{\Nis}}"] & L_{A^1 \wedge \Nis} \Pre(\Sm_S) \equiv \Spc_S^{\A^1} \equiv \H(S)
+    \end{tikzcd}
+  \]
+\end{useimager}
 The first chapter will discuss the horizontal arrows (i.e. Nisnevich localization), and the second will discuss the vertical ones (i.e. $\A^1$-localization).
 
 Afterwards, we will start ``doing homotopy theory''. In chapter \ref{chapter:homotopy-sheaves}, we will discuss the motivic version of homotopy groups, and in chapter \ref{chapter:thom}, we will discuss Thom spaces.
@@ -92,12 +94,14 @@ Nisnevich localization is relatively standard. This is obtained by defining the 
 
 \begin{eg}
   Let $k$ be a field of characteristic not $2$, $S = \Spec k$ and $a \in k^\times$. Consider the covering
-  \[
-    \begin{tikzcd}[column sep=small]
-      & \A^1 \setminus \{0\} \ar[d, "x^2"]\\
-      \A^1 \setminus \{a\} \ar[r, hook] & \A^1
-    \end{tikzcd}.
-  \]
+  \begin{useimager}
+    \[
+      \begin{tikzcd}[column sep=small]
+        & \A^1 \setminus \{0\} \ar[d, "x^2"]\\
+        \A^1 \setminus \{a\} \ar[r, hook] & \A^1
+      \end{tikzcd}.
+    \]
+  \end{useimager}
 
   This forms a Nisnevich cover with the filtration $\emptyset \subseteq \{a\} \subseteq \A^1$ iff $\sqrt{a} \in k$.
 \end{eg}
@@ -106,12 +110,14 @@ It turns out to check that something is a Nisnevich sheaf, it suffices to check 
 
 \begin{defi}
   An elementary distinguished square is a pullback diagram
-  \[
-    \begin{tikzcd}
-      U \times_X V \ar[r] \ar[d] & V \ar[d, "p"]\\
-      U \ar[r, "i"] & X
-    \end{tikzcd}
-  \]
+  \begin{useimager}
+    \[
+      \begin{tikzcd}
+        U \times_X V \ar[r] \ar[d] & V \ar[d, "p"]\\
+        U \ar[r, "i"] & X
+      \end{tikzcd}
+    \]
+  \end{useimager}
   of $S$-schemes in $\Sm_S$ such that $i$ is a Zariski open immersion, $p$ is \'etale, and $p^{-1}(X \setminus U) \to X \setminus U$ is an isomorphism of schemes, where $X \setminus U$ is equipped with the reduced induced scheme structure.
 \end{defi}
 $\{U, V\}$ forms a Nisnevich cover of $X$ with filtration $\emptyset \subseteq X \setminus U \subseteq X$.
@@ -126,31 +132,37 @@ $\{U, V\}$ forms a Nisnevich cover of $X$ with filtration $\emptyset \subseteq X
 
 \begin{lemma}
   Then $F \in \Pre(\Sm_S)$ is Nisnevich local iff $F(\emptyset) \simeq *$ and for every elementary distinguished square
-  \[
-    \begin{tikzcd}
-      U \times_X V \ar[r] \ar[d] & V \ar[d, "p"]\\
-      U \ar[r, "i"] & X
-    \end{tikzcd}
-  \]
+  \begin{useimager}
+    \[
+      \begin{tikzcd}
+        U \times_X V \ar[r] \ar[d] & V \ar[d, "p"]\\
+        U \ar[r, "i"] & X
+      \end{tikzcd}
+    \]
+  \end{useimager}
   the induced diagram
-  \[
-    \begin{tikzcd}
-      F(X) \ar[r] \ar[d] & F(V) \ar[d]\\
-      F(U) \ar[r] & F(U \times_X V)
-    \end{tikzcd}
-  \]
+  \begin{useimager}
+    \[
+      \begin{tikzcd}
+        F(X) \ar[r] \ar[d] & F(V) \ar[d]\\
+        F(U) \ar[r] & F(U \times_X V)
+      \end{tikzcd}
+    \]
+  \end{useimager}
   is a pullback diagram.
 \end{lemma}
 Note that the ``only if'' direction is immediate from definition, and doesn't require the assumption on $S$.
 
 \begin{cor}
   If 
-  \[
-    \begin{tikzcd}
-      U \times_X V \ar[r] \ar[d] & V \ar[d, "p"]\\
-      U \ar[r, "i"] & X
-    \end{tikzcd}
-  \]
+  \begin{useimager}
+    \[
+      \begin{tikzcd}
+        U \times_X V \ar[r] \ar[d] & V \ar[d, "p"]\\
+        U \ar[r, "i"] & X
+      \end{tikzcd}
+    \]
+  \end{useimager}
   is an elementary distinguished square, then, when considered a square $\Spc_S$, this is a pushout diagram.
 
   In particular, this holds when $\{U, V\}$ is a Zariski cover.
@@ -161,12 +173,14 @@ Note that the ``only if'' direction is immediate from definition, and doesn't re
   A presheaf $F \in \Pre(\Sm_S)$ is $\A^1$-local if the natural map $F(X \times \A^1) \to F(X \times \{0\})$ is an equivalence for all $X$. We write $L_{\A^1}\Pre(\Sm_S)$ for the full subcategory of $\A^1$-local presheaves, and $L_{\A^1 \wedge \Nis}\Pre(\Sm_S) = \Spc_S^{\A^1}$ for the presheaves that are \emph{both} Nisnevich local and $\A^1$-local.
 \end{defi}
 Therefore we get a square of accessible localizations
-\[
-  \begin{tikzcd}
-    \Pre(\Sm_S) \ar[r, "L_{\Nis}"] \ar[d, "\widetilde{L_{\A^1}}"] & L_{\Nis} \Pre(\Sm_S) \equiv \Spc_S \ar[d, "L_{\A^1}"]\\
-    L_{\A^1} \Pre(\Sm_S) \ar[r, "\widetilde{L_{\Nis}}"] & L_{A^1 \wedge \Nis} \Pre(\Sm_S) \equiv \Spc_S^{\A^1} \equiv \H(S)
-  \end{tikzcd}
-\]
+\begin{useimager}
+  \[
+    \begin{tikzcd}
+      \Pre(\Sm_S) \ar[r, "L_{\Nis}"] \ar[d, "\widetilde{L_{\A^1}}"] & L_{\Nis} \Pre(\Sm_S) \equiv \Spc_S \ar[d, "L_{\A^1}"]\\
+      L_{\A^1} \Pre(\Sm_S) \ar[r, "\widetilde{L_{\Nis}}"] & L_{A^1 \wedge \Nis} \Pre(\Sm_S) \equiv \Spc_S^{\A^1} \equiv \H(S)
+    \end{tikzcd}
+  \]
+\end{useimager}
 We also write the composite $\Pre(\Sm_S) \to \Spc_S^{\A^1}$ as $L_{\Mot}$.
 
 \begin{remark}
@@ -213,12 +227,14 @@ It is then straightforward to check that
   We claim that $\P^1 \cong \Sigma \G_m = S^1 \wedge \G_m \in \Spc_S^{\A^1}$. Here we are working with pointed objects so that suspensions make sense.
 
   Indeed, we have a Zariski open cover of $\P^1$ given by
-  \[
-    \begin{tikzcd}
-      \A^1 \setminus \{0\} \ar[r] \ar[d] & \A^1 \ar[d, "x^{-1}"]\\
-      \A^1 \ar[r, "x"] & \P^1
-    \end{tikzcd}
-  \]
+  \begin{useimager}
+    \[
+      \begin{tikzcd}
+        \A^1 \setminus \{0\} \ar[r] \ar[d] & \A^1 \ar[d, "x^{-1}"]\\
+        \A^1 \ar[r, "x"] & \P^1
+      \end{tikzcd}
+    \]
+  \end{useimager}
   Since this is in particular an elementary distinguished square, it is also a pushout in $(\Spc_S)_*$. Now apply $L_{\A^1}$ to this diagram, which preserves pushouts since it is a left adjoint. Since $L_{\A^1} \A^1 \simeq *$ the claim follows.
 
   If we ``replace'' only one of the $\A^1$'s with $*$, we see that this also says
@@ -330,12 +346,14 @@ is injective for any $U \in \Sm_S$. We cannot exactly say this because $\Spec k(
   Indeed, the fiber over $\{0\}$ is $\P(\nu_Z \oplus \mathcal{O}_Z) \setminus \P(\nu_Z)$, which is canonically isomorphic to $\nu_Z$. (This construction is known as ``deformation to the normal cone'')
 
   The second step shows that in $\H(S)$, we have a homotopy pushout squares
-  \[
-    \begin{tikzcd}
-      \dfrac{\nu_Z}{\nu_Z \setminus Z} \ar[d] & Z \ar[r] \ar[l] \ar[d] & \dfrac{X}{X \setminus Z} \ar[d]\\
-      \dfrac{D_ZX}{D_ZX \setminus Z \times \A^1} & Z \times \A^1 \ar[l] \ar[r] & \dfrac{D_ZX}{D_Z X\setminus Z \times \A^1}
-    \end{tikzcd}
-  \]
+  \begin{useimager}
+    \[
+      \begin{tikzcd}
+        \dfrac{\nu_Z}{\nu_Z \setminus Z} \ar[d] & Z \ar[r] \ar[l] \ar[d] & \dfrac{X}{X \setminus Z} \ar[d]\\
+        \dfrac{D_ZX}{D_ZX \setminus Z \times \A^1} & Z \times \A^1 \ar[l] \ar[r] & \dfrac{D_ZX}{D_Z X\setminus Z \times \A^1}
+      \end{tikzcd}
+    \]
+  \end{useimager}
   To prove this, one uses Nisnevich descent to reduce to the affine case.
 \end{proof}
 
@@ -346,24 +364,28 @@ The stable motivic homotopy category is obtained by inverting $\P^1$ in $\H(S)_*
 \]
 
 More generally, suppose we have a presentably symmetric monoidal $\infty$-category $\mathcal{C}$ (i.e.\ $\mathcal{C} \in \CAlg(\PrL)$) and $X \in \mathcal{C}$. We can then define
-\[
-  \Stab_X(\mathcal{C}) = \colim \left(\begin{tikzcd}[column sep=large]
-      \mathcal{C} \ar[r, "-\otimes X"] &
-      \mathcal{C} \ar[r, "-\otimes X"] &
-      \mathcal{C} \ar[r, "-\otimes X"] &
-      \cdots
-  \end{tikzcd}\right),
-\]
+\begin{useimager}
+  \[
+    \Stab_X(\mathcal{C}) = \colim \left(\begin{tikzcd}[column sep=large]
+        \mathcal{C} \ar[r, "-\otimes X"] &
+        \mathcal{C} \ar[r, "-\otimes X"] &
+        \mathcal{C} \ar[r, "-\otimes X"] &
+        \cdots
+    \end{tikzcd}\right),
+  \]
+\end{useimager}
 or equivalently
-\[
-  \Stab_X(\mathcal{C}) = \lim \left(\begin{tikzcd}[column sep=large]
-      \mathcal{C} &
-      \mathcal{C} \ar[l, "(-)^X"'] &
-      \mathcal{C} \ar[l, "(-)^X"'] &
-      \cdots \ar[l, "(-)^X"']
-    \end{tikzcd}
-  \right),
-\]
+\begin{useimager}
+  \[
+    \Stab_X(\mathcal{C}) = \lim \left(\begin{tikzcd}[column sep=large]
+        \mathcal{C} &
+        \mathcal{C} \ar[l, "(-)^X"'] &
+        \mathcal{C} \ar[l, "(-)^X"'] &
+        \cdots \ar[l, "(-)^X"']
+      \end{tikzcd}
+    \right),
+  \]
+\end{useimager}
 where these (co)limits are taken in the category of large categories (or equivalently $\PrL$/$\PrR$).
 
 \begin{thm}[Robalo]
@@ -378,11 +400,13 @@ It is easy to check that $\P^1$ is indeed symmetric by elementary row and column
 \end{defi}
 
 As in the topological world, we have an adjunction
-\[
-  \begin{tikzcd}
-    \H(S)_* \ar[r, yshift = 2, "\Sigma^\infty_{\P^1}"] & \SH(S) \ar[l, yshift=-2, "\Omega^\infty_{\P^1}"]
-  \end{tikzcd}
-\]
+\begin{useimager}
+  \[
+    \begin{tikzcd}
+      \H(S)_* \ar[r, yshift = 2, "\Sigma^\infty_{\P^1}"] & \SH(S) \ar[l, yshift=-2, "\Omega^\infty_{\P^1}"]
+    \end{tikzcd}
+  \]
+\end{useimager}
 
 Note that $\Sigma^\infty_{\P^1}$ is by definition symmetric monoidal, and the fact that the tensor product preserves colimits in both variables tells us how to compute the tensor product in $\SH(S)$.
 
