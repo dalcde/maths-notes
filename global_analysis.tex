@@ -208,12 +208,10 @@ This lets us view the $H^s$ as nested subspaces of $L^2$. In fact, we get someth
 \end{thm}
 \begin{proof}
   Let $|\alpha| = \ell < k$. For $x \in U$ and $u \in C^\infty_c(U)$, we have
-  \begin{useimager}
-    \begin{multline*}
-      |\D_\alpha u(x)| \propto \left| \int e^{ix\xi} \xi_\alpha \hat{u}(\xi) \;\d \xi\right| \leq \int |\xi_\alpha| |\hat{u}(\xi)| \;\d \xi \leq \int |\xi|^\ell |\hat{u}(\xi)|\;\d \xi \\
-      \leq \left(\int |\xi|^2 (1 + |\xi|^2)^{-s}\;\d \xi\right)^{1/2}\left(\int |\hat{u}(\xi)|^2 (1 + |\xi|^2)^s\;\d \xi\right)^{1/2}.
-    \end{multline*}
-  \end{useimager}
+  \begin{multline*}
+    |\D_\alpha u(x)| \propto \left| \int e^{ix\xi} \xi_\alpha \hat{u}(\xi) \;\d \xi\right| \leq \int |\xi_\alpha| |\hat{u}(\xi)| \;\d \xi \leq \int |\xi|^\ell |\hat{u}(\xi)|\;\d \xi \\
+    \leq \left(\int |\xi|^2 (1 + |\xi|^2)^{-s}\;\d \xi\right)^{1/2}\left(\int |\hat{u}(\xi)|^2 (1 + |\xi|^2)^s\;\d \xi\right)^{1/2}.
+  \end{multline*}
   The second term is exactly $\|u\|_s$, and the first term is a constant, which by elementary calculus, is finite iff $s > \ell + \frac{n}{2}$.
 \end{proof}
 
@@ -671,12 +669,10 @@ We fill in the details of the proof of local elliptic regularity. We fix $L$ a d
     \|u\|_{s + k} \leq A (\|u\|_s + \|Lu\|_{s - k})
   \]
   for any $u$ supported in the $V_i$'s. Now pick a partition of unity $\{\mu_i\}$ subordinate to $\{V_i\}$. Then
-  \begin{useimager}
-    \begin{multline*}
-      \|u\|_{s + k} \leq \sum \|\mu_i u\|_{s + k} \leq \sum C(\|\mu_i u\|_s + \|L \mu_i u\|_s)\\
-      \leq \sum C(\|\mu_i u\|_s + \|\mu_i Lu\|_s + \|[L, \mu_i] u\|_s).
-    \end{multline*}
-  \end{useimager}
+  \begin{multline*}
+    \|u\|_{s + k} \leq \sum \|\mu_i u\|_{s + k} \leq \sum C(\|\mu_i u\|_s + \|L \mu_i u\|_s)\\
+    \leq \sum C(\|\mu_i u\|_s + \|\mu_i Lu\|_s + \|[L, \mu_i] u\|_s).
+  \end{multline*}
   We can bound the first two by a constant multiple of $\|u\|_s$ and $\|Lu\|_s$. To bound the last term, we use that $[L, \mu_i]$ is a differential operator of order $k - 1$, and hence
   \[
     \|[L, \mu_i] u\|_s \leq C \|u\|_{s + k - 1} \leq \varepsilon \|u\|_{s + k} + C(\varepsilon) \|u\|_s.\qedhere

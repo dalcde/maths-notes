@@ -327,16 +327,10 @@ for all $F$. The condition that the convolution is $C^2$ is a technical point th
   The precise shape of the right-hand side does not matter. It is just what happens to be convenient. The point is that the exponent of $t$ is $N - \frac{d}{2}$, which is eventually positive. Then we simply have to take $K = K_N$ for large enough $N$ (note that this $N$ is different from the exponent $N$ in (ii) by $\frac{d}{2}$). Actually, we will only succeed in finding $u_N$ in a neighbourhood of the diagonal, since we work in geodesic polars. But we can simply take $K = K_N \varphi(x, y)$, where $\varphi$ is a bump function supported near the diagonal. ((iii) is left as an exercise)
 
   To find the $u_i$, we assume $K_N$ is of the given form, and compute
-  \ifplastex
-    \[
-      \left(\frac{\partial}{\partial t} - \Delta_x\right) K_{N, t}(x, y) = \frac{e^{-r^2/4t}}{(4\pi t)^{d/2}} \sum_{i = 0}^N \left[\left( \frac{i}{t} + \frac{r}{4gt} \frac{\d g}{\d r}\right) t^i u_i(x, y) + t^{i - 1} \nabla_{r \frac{\partial}{\partial r}} u_i + t^i \Delta_x u_i(x, y)\right].
-    \]
-  \else
-    \begin{multline*}
-      \left(\frac{\partial}{\partial t} - \Delta_x\right) K_{N, t}(x, y) =\\
-      \frac{e^{-r^2/4t}}{(4\pi t)^{d/2}} \sum_{i = 0}^N \left[\left( \frac{i}{t} + \frac{r}{4gt} \frac{\d g}{\d r}\right) t^i u_i(x, y) + t^{i - 1} \nabla_{r \frac{\partial}{\partial r}} u_i + t^i \Delta_x u_i(x, y)\right].
-    \end{multline*}
-  \fi
+  \begin{multline*}
+    \left(\frac{\partial}{\partial t} - \Delta_x\right) K_{N, t}(x, y) =\\
+    \frac{e^{-r^2/4t}}{(4\pi t)^{d/2}} \sum_{i = 0}^N \left[\left( \frac{i}{t} + \frac{r}{4gt} \frac{\d g}{\d r}\right) t^i u_i(x, y) + t^{i - 1} \nabla_{r \frac{\partial}{\partial r}} u_i + t^i \Delta_x u_i(x, y)\right].
+  \end{multline*}
 
   To obtain the desired result, we need the coefficient of $\frac{e^{-r^2/4t}}{(4\pi t)^{d/2}} t^{i - 1}$ to vanish for $i \leq N$. So we need to inductively solve
   \[
@@ -900,16 +894,10 @@ For the boundary condition when $\lambda \geq 0$ we can simply write down the fu
 This is easily seen to vanish when $u = 0$ or $v = 0$.
 
 When $\lambda < 0$, we need to do something more complicated. People good at solving differential equations will find the kernel to be
-\ifplastex
-  \[
-    K_{\lambda, t}(u, v) = \frac{e^{-\lambda^2 t}}{\sqrt{4\pi t}} \left(\exp \left(-\frac{(u - v)^2}{4t}\right) + \exp\left(-\frac{(u + v)^2}{4t}\right)\right) - |\lambda| e^{|\lambda|(u + v)} \erfc \left(\frac{u + v}{2\sqrt{t}} + |\lambda| \sqrt{t}\right),
-  \]
-\else
-  \begin{multline*}
-    K_{\lambda, t}(u, v) = \frac{e^{-\lambda^2 t}}{\sqrt{4\pi t}} \left(\exp \left(-\frac{(u - v)^2}{4t}\right) + \exp\left(-\frac{(u + v)^2}{4t}\right)\right) \\
-    - |\lambda| e^{|\lambda|(u + v)} \erfc \left(\frac{u + v}{2\sqrt{t}} + |\lambda| \sqrt{t}\right),
-  \end{multline*}
-\fi
+\begin{multline*}
+  K_{\lambda, t}(u, v) = \frac{e^{-\lambda^2 t}}{\sqrt{4\pi t}} \left(\exp \left(-\frac{(u - v)^2}{4t}\right) + \exp\left(-\frac{(u + v)^2}{4t}\right)\right) \\
+  - |\lambda| e^{|\lambda|(u + v)} \erfc \left(\frac{u + v}{2\sqrt{t}} + |\lambda| \sqrt{t}\right),
+\end{multline*}
 where $\erfc$ is the complementary error function
 \[
   \erfc (x) = \frac{2}{\sqrt{\pi}} \int_x^\infty e^{- \xi^2}\;\d \xi.
