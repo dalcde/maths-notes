@@ -1,0 +1,416 @@
+\documentclass{shortart}
+
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{tikz-cd}
+\usepackage{plastex}
+
+\title{Complex oriented cohomology theories}
+\author{Dexter Chua}
+
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{lemma}[thm]{Lemma}
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem{cor}[thm]{Corollary}
+
+\theoremstyle{definition}
+\newtheorem{remark}[thm]{Remark}
+\newtheorem{defi}[thm]{Definition}
+\newtheorem{eg}[thm]{Example}
+
+\DeclareMathOperator\Spec{Spec}
+\DeclareMathOperator\Spf{Spf}
+\DeclareMathOperator*\colim{colim}
+\newcommand\Th{\mathrm{Th}}
+\newcommand\R{\mathbb{R}}
+\newcommand\Q{\mathbb{Q}}
+\newcommand\G{\mathbb{G}}
+\newcommand\Z{\mathbb{Z}}
+\newcommand\A{\mathbb{A}}
+\newcommand\CP{\mathbb{CP}}
+\begin{document}
+
+\section*{Conventions}
+\begin{itemize}
+  \item The term ``ring spectrum'' refers to \emph{homotopy} ring spectrum.
+  \item If $X$ is a \emph{based} space, we will denote $\Sigma^\infty X$ by $X$ again. Thus, $E_*(X)$ is always reduced homology.
+  \item If $X$ is an \emph{unbased} space, we will denote $\Sigma^\infty_+ X$ by $X_+$. Thus, $E_*(X_+)$ is unreduced homology.
+\end{itemize}
+
+\section{Thom spaces}
+Recall from your Algebraic Topology education that if $\xi: V \to X$ is an oriented vector bundle of rank $d$, then we have isomorphisms
+\[
+  \begin{aligned}
+    H_*(X_+) \cong H_{* + d}(V, V \setminus X),\\
+    H^*(X_+) \cong H^{* + d}(V, V \setminus X).
+  \end{aligned}
+\]
+called the \emph{Thom isomorphism}. Later, as we grew up, we learnt that relative homology is just the homology of the cofiber in disguise. As such, we define
+
+\begin{defi}
+  Let $\xi: V \to X$ be a vector bundle. The \emph{Thom space} of $\xi$, written $\Th'(\xi)$, is the homotopy pushout\footnote{We shall later introduce the \emph{Thom spectrum} which will be written $\Th(\xi)$}
+  \begin{useimager}
+    \[
+      \begin{tikzcd}
+        V \setminus X \ar[r] \ar[d] & V \ar[d]\\
+        * \ar[r] & \Th'(\xi)
+      \end{tikzcd}.
+    \]
+  \end{useimager}
+  This makes $\Th'(\xi)$ a \emph{based} space.
+
+  More concretely, pick a metric on $\xi$ arbitrarily. We can then define the sphere and disk bundles
+  \[
+    \begin{aligned}
+      S(V) &= \{v \in V: \|v\| = 1\},\\
+      D(V) &= \{v \in V: \|v\| \leq 1\}.
+    \end{aligned}
+  \]
+  Then
+  \[
+    \Th'(\xi) = D(V)/S(V).
+  \]
+\end{defi}
+
+\begin{eg}
+  If $\xi$ is trivial of rank $d$, then $\Th'(\xi) = \Sigma^d X_+$.
+\end{eg}
+Thus, we should think of the Thom space as a twisted suspension of $X$, where the twisting is specified by a vector bundle.
+
+The construction of Thom spaces has two important properties, both of which are straightforward to verify:
+\begin{enumerate}
+  \item It is functorial along pullbacks --- if $f: X \to Y$ is a map and $\xi: V \to Y$ is a vector bundle, then there is a natural map
+    \[
+      \Th(f): \Th(f^* \xi) \to \Th(\xi).
+    \]
+  \item It is monoidal --- if $\xi: V \to X$ and $\zeta: W \to Y$ are vector bundles and $\xi \boxplus \zeta: V \boxplus X \to X \times Y$ is the external direct sum. Then
+  \[
+    \Th'(\xi \boxplus \zeta) \cong \Th'(\xi) \wedge \Th'(\zeta).
+  \]
+\end{enumerate}
+
+\begin{cor}
+  $\Th'(\xi \oplus \R) = \Sigma \Th'(\xi)$.
+\end{cor}
+
+\begin{proof}
+  $\xi \oplus \R = \xi \boxplus (\mathrm{triv}: \R \to *)$ and $\Th'(\mathrm{triv}) = S^1$.
+\end{proof}
+
+This leads to the following natural definition:
+\begin{defi}
+  If $\xi: V \to X$ is a rank $d$ vector bundle, then the \emph{Thom spectrum} of $\xi$ is
+  \[
+    \Th(\xi) = \Sigma^{-d} \Sigma^\infty \Th'(\xi).
+  \]
+\end{defi}
+This definition is designed so that $\Th(\xi \oplus \R) = \Th(\xi)$, and hence the Thom spectrum can be defined for virtual vector bundles as well. While we'll mostly state things for vector bundles, everything we say applies equally to virtual vector bundles. The monoidality property still holds for the Thom spectrum:
+\[
+  \Th(\xi \boxplus \zeta) \cong \Th(\xi) \wedge \Th(\zeta).
+\]
+
+With the Thom spectrum, we can rephrase the Thom isomorphism as saying
+\begin{thm}[Thom]
+  If $\xi: V \to X$ is an oriented vector bundle, then we have a natural isomorphism of $H\Z$-modules
+  \[
+    H\Z \wedge \Th(\xi) \simeq H\Z \wedge X_+.\fakeqed
+  \]
+\end{thm}
+If we think of Thom spectra as twisted suspensions, this says tensoring with $H\Z$ untwists it.
+
+The classical statement of the Thom isomorphism theorem is a bit more specific. It says the isomorphism is given by capping or cupping with a Thom class $u \in H^*(\Th(\xi))$. Usually, the cup product is induced by pulling back along the diagonal. However, the cup product we want here takes the form
+\[
+  \smile: H^*(\Th(\xi)) \otimes H^*(X) \to H^*(\Th(\xi)).
+\]
+so that $u \smile\,\cdot$ gives an isomorphism. This cup product is given by the Thom diagonal.
+
+\begin{defi}
+  Let $\xi: V \to X$ be a vector bundle. The Thom diagonal is a map 
+  \[
+    \Delta: \Th(\xi) \to \Th(\xi) \wedge X_+
+  \]
+  obtained by applying $\Th$ to the map of vector bundles
+  \begin{useimager}
+    \[
+      \begin{tikzcd}
+        \xi \ar[d] \ar[r] & \xi \boxplus 0 \ar[d]\\
+        X \ar[r, "\Delta"] & X \times X
+      \end{tikzcd}
+    \]
+  \end{useimager}
+  To see that the pullback of $\xi \boxplus 0$ along $\Delta$ is indeed $\xi$, note that by definition, $\xi \boxplus 0$ is the pullback of $\xi$ along the projection onto the first factor.
+
+  Equivalently, if we view $\Th'(\xi)$ as $D(V) / S(V)$, the space version of the map sends $v$ to $(v, \pi(v))$ where $\pi: D(V) \to X$ is the projection.
+\end{defi}
+
+The final, correct form of the Thom isomorphism theorem then says
+\begin{thm}
+  Let $\xi: V \to X$ be an oriented vector bundle. Then there is a cohomology class $u: \Th(\xi) \to H\Z$ such that the induced map
+  \begin{useimager}
+    \[
+      \begin{tikzcd}
+        H\Z \wedge \Th(\xi) \ar[r, "H\Z \wedge \Delta"] & H\Z \wedge \Th(\xi) \wedge X_+ \ar[r, "H\Z \wedge u \wedge X_+"] & H\Z \wedge H\Z \wedge X_+ \ar[r, "\mu \wedge X_+"] & H\Z \wedge X_+
+      \end{tikzcd}
+    \]
+  \end{useimager}
+  is an isomorphism of $H\Z$-modules.
+\end{thm}
+
+\section{\texorpdfstring{$MU(n)$ and $MU$}{MU(n) and MU}}
+\begin{defi}
+  We define $MU(n)$ to be the Thom \emph{space} of the tautological vector bundle of $BU(n)$.
+
+  We define $MU$ to be the Thom \emph{spectrum} of the tautological virtual vector bundle of $BU$. Equivalently,
+  \[
+    MU = \colim_n \Sigma^{-2n} \Sigma^\infty MU(n).\fakeqed
+  \]
+  The direct sum map $BU \times BU \to BU$ induces a map $MU \wedge MU \to MU$, which turns $MU$ into a ring spectrum (and in fact an $\mathbb{E}_\infty$-ring spectrum).
+\end{defi}
+The crucial insight of Thom was that this spectrum is closely related to cobordism theory.
+\begin{thm}[Pontryagin--Thom]
+  Let $X$ be a space. Then $MU_*(X_+)$ admits the following description:
+  \begin{enumerate}
+    \item A class in $MU_d(X_+)$ is represented by a $d$-dimensional stably almost complex manifold $M$ and a map $f: M \to X$. Addition is given by disjoint union.
+    \item Two classes $f_1, f_2$ are equivalent if there is a cobordism $g: N \to X$ between them.
+  \end{enumerate}
+\end{thm}
+
+\begin{proof}[Proof idea]
+  Given a class in $MU_d(X_+)$, I explain how to get such a map $f: M \to X$.  By the Whitney embedding theorem.
+
+  A map $S^d \to MU \wedge X_+$ factors through a map $S^d \to \Sigma^{-2n} MU(n) \wedge X_+$ for some $n$, and is thus given a map of \emph{spaces} $\phi: S^{d + 2n} \to MU(n) \wedge X_+$, increasing $n$ if necessary (since $\Sigma^{2k} MU(n) \hookrightarrow MU(n + k)$). Recall that
+  \[
+    MU(n) \wedge X_+ = MU(n) \times X / \{*\} \times X,
+  \]
+  where the point on the right is point at infinity. $MU(n)$ also contains the ``zero section'' isomorphic to $BU(n)$, and the normal bundle of the zero section is the tautological bundle of $BU(n)$. Generically, we can choose $\phi$ to intersect transversely in a way that $\phi^{-1}(BU(n) \times X)$ is a codimension $2n$ submanifold of $S^{d + 2n}$, and the normal bundle, being pulled back from $BU(n)$, has an almost complex structure. This gives a stably almost complex manifold of dimension $d$ with a map to $X$. A homotopy of $\phi$ gives a cobordism between such maps.
+\end{proof}
+
+So in particular, $MU_* = \pi_* MU$ is the complex cobordism group. Remarkably, these groups are entirely computable.
+\begin{prop}
+  \[
+    \begin{aligned}
+      H_*(MU) &= \Z[b_1, b_2, b_3, \ldots]\\
+      \pi_*(MU) &= \Z[m_1, m_2, m_3, \ldots]
+    \end{aligned}
+  \]
+  where $|m_i| = |b_i| = 2i$. The Hurewicz map $\pi_*(MU) \to H_*(MU)$ is injective but \emph{not} surjective.
+\end{prop}
+
+\begin{proof}[Proof sketch]
+  Since the tautological vector bundle of $BU$ is oriented, the first part follows from the Thom isomorphism theorem and the standard calculation of the homology of $BU$. The homotopy groups follow from a more involved Adams spectral sequence calculation.
+\end{proof}
+
+\section{Orientations}
+
+\begin{defi}
+  Let $E$ be a ring spectrum, and $\xi: V \to X$ a vector bundle. Then $V$ is $E$-oriented if there is a ``Thom class'' $u: \Th(\xi) \to E$ such that the induced map of $E$-modules
+  \begin{useimager}
+    \[
+      \begin{tikzcd}
+        E \wedge \Th(\xi) \ar[r, "E \wedge \Delta"] & E \wedge \Th(\xi) \wedge X_+ \ar[r, "E \wedge u \wedge X_+"] & E \wedge E \wedge X_+ \ar[r, "\mu \wedge X_+"] & E \wedge X_+
+      \end{tikzcd}
+    \]
+  \end{useimager}
+  is an isomorphism.
+
+  This induces isomorphisms
+  \[
+    E_*(X_+) \cong E^*(\Th(\xi)),\quad E^*(X_+) \cong E^*(\Th(\xi))
+  \]
+  induced by cupping and capping with $u$ (using the Thom diagonal $\Delta$).
+\end{defi}
+
+\begin{lemma}
+  Let $f: E \to F$ be a map of ring spectra. Then an $E$-orientation of $\xi$ gives rise to an $F$-orientation of $\xi$ by composition.
+\end{lemma}
+
+\begin{proof}[Proof sketch]
+  The key input here is that an $E$-module map $\varphi: E \wedge A \to E \wedge B$ functorially induces an $F$-module map $F \wedge A \to F \wedge B$ via the composite
+  \begin{useimager}
+    \[
+      \begin{tikzcd}
+        F \wedge A  \ar[r, "F \wedge \iota \wedge A"] & F \wedge E \wedge A \ar[r, "F \wedge \varphi"] & F \wedge E \wedge B \ar[r, "F \wedge f \wedge B"] & F \wedge F \wedge B \ar[r, "\mu_F \wedge B"] & F \wedge B.
+      \end{tikzcd}
+    \]
+  \end{useimager}
+  Crucially, this construction does not make use of any coherence; if we had some sort of coherence, we could simply apply $F \wedge_E (-)$. One checks that the Thom isomorphism for $F$ is induced from that for $E$ via this procedure. Functoriality then ensures the resulting map is also an equivalence.
+\end{proof}
+
+\begin{defi}
+  A cohomology theory $E$ is complex oriented if there is a choice of a Thom class $u_\xi$ for every complex vector bundle $\xi: V \to X$ that
+  \begin{enumerate}
+    \item is functorial under pullbacks, i.e.\ $f^* u_\xi = u_{f^* \xi}$; and
+    \item sends direct sums to products, i.e.\ $u_{\xi \boxplus \zeta} = u_\xi\smile u_\zeta$.
+  \end{enumerate}
+\end{defi}
+
+\begin{eg}
+  $MU$ is complex oriented. Indeed, if $\xi: V \to X$ is a complex vector bundle, it is classified by a map $f: X \to BU$, and $\xi$ is the pullback of the universal bundle. Applying $\Th$ gives a map
+  \[
+    u_\xi = \Th(f): \Th(\xi) \to MU.
+  \]
+  We claim this is a Thom class. We have to show that the composite
+  \begin{useimager}
+    \[
+      \begin{tikzcd}
+        MU \wedge \Th(\xi) \ar[r, "MU \wedge \Delta"] & MU \wedge \Th(\xi) \wedge X_+ \ar[r, "MU \wedge u \wedge X_+"] & MU \wedge MU \wedge X_+ \ar[r, "\mu \wedge X_+"] & MU \wedge X_+
+      \end{tikzcd}
+    \]
+  \end{useimager}
+  is an isomorphism. This map is obtained by applying $\Th$ to
+  \begin{useimager}
+    \[
+      \begin{tikzcd}
+        \gamma \oplus \xi \ar[d] \ar[r] & \gamma \oplus \xi \oplus 0 \ar[d] \ar[r] & \gamma \oplus \gamma \oplus 0 \ar[d] \ar[r] & \gamma \oplus 0 \ar[d]\\
+        BU \times X \ar[r, "BU \times \Delta"] & BU \times X \times X \ar[r, "BU \times f \times X"] & BU \times BU \times X \ar[r, "\oplus \times X"] & BU \times X
+      \end{tikzcd}
+    \]
+  \end{useimager}
+  Here $\gamma$ is the tautological bundle, and when we write $a \oplus b \oplus c$, we really mean $\pi_1^* a \oplus \pi_2^* b \oplus \pi_3^* c$.
+
+  We can describe the bottom map as sending $(v, x)$ to $(v + f(x), x)$. This has an inverse given by $(v, x) \mapsto (v - f(x), x)$, so is an isomorphism. Hence the induced map on Thom spaces is also an isomorphism.
+
+  The requirement that $u_{\xi \boxplus \zeta} = u_\xi \smile u_\zeta$ comes from the fact that the multiplication map $MU \times MU \to MU$ is induced by $\oplus: BU \times BU \to BU$.
+\end{eg}
+
+\begin{lemma}
+  Let $E$ be a ring spectrum. Then there is a bijection between
+  \begin{enumerate}
+    \item ring maps $MU \to E$; and
+    \item complex orientations of $E$.
+  \end{enumerate}
+\end{lemma}
+
+\begin{proof}
+  Since $MU$ is complex oriented, a ring map $MU \to E$ gives a complex orientation of $E$. Conversely, if $E$ is complex oriented, then since $MU$ is the Thom spectrum of a complex vector bundle, we get a Thom class $u: MU \to E$. This is a ring map since the product $MU \wedge MU \to MU$ is induced by the direct sum, and the requirement that the Thom class sends direct sums to products is exactly the statement that $MU \to E$ is a ring map. 
+\end{proof}
+
+\begin{lemma}
+  Let $E$ be complex oriented. Then there is a canonical isomorphism $E^*(\CP^n_+) \cong E^*[u]/u^{n + 1}$ and $E^*(\CP^\infty_+) \cong E^*[\![u]\!]$. Note that the choice of $u$ depends on the complex orientation of $E$.
+\end{lemma}
+
+\begin{proof}
+  We first construct the class $u$. For $n > 0$, we know that $\CP^n$ is the Thom space of the tautological bundle over $\CP^{n - 1}$. So there is a preferred class $u \in E^2(\CP^n)$. For $n = 1$, the Thom isomorphism theorem tells us this generates $E^*(\CP^1) \cong E^{* - 2}(S^0)$. This proves the lemma for $n = 1$. Note that inductively applying the theorem proves that $E^*(\CP^n_+) \cong E^*[u]/u^{n + 1}$ as groups, but we want the multiplicative structure as well.
+
+  For $n > 1$, consider the Atiyah--Hirzebruch spectral sequence for $E^*(\CP^n)$. We claim that $u$ is represented by a generator of $H^2(\CP^n; E^0) \cong E^0$. Indeed, if it weren't, then its image when pulled back along $\CP^1 \hookrightarrow \CP^n$ would also not be a generator, which contradicts our previous observation.
+
+  Now the $E^2$ page of the Atiyah--Hirzebruch spectral sequence for $E^*(\CP^n_+)$ is generated as a ring by $u$ and $E^*$, both of which are permanent. So the Atiyah--Hirzebruch spectral sequence degenerates and gives the desired isomorphism.
+
+  The $n = \infty$ case follows from taking the limit.
+\end{proof}
+
+\begin{thm}
+  There is a bijection between
+  \begin{enumerate}
+    \item complex orientations of $E$; and
+    \item classes $u \in E^2(\CP^\infty)$ that restrict to an $E^*$-module generator of $E^2(\CP^1) \cong E^0$.
+  \end{enumerate}
+\end{thm}
+
+\begin{proof}[Proof sketch]
+  Our previous computation showed that a complex orientation of $E$ induces such a class. The other direction is more roundabout. As in our previous argument, the class $u$ forces the Atiyah--Hirzebruch spectral sequence for $E^*(\CP^\infty_+)$ to degenerate at $E_2$. By the Kronecker pairing, the AHSS for $E_*(\CP^\infty_+)$ also has to degenerate at $E_2$.
+
+  Now since $H_*(MU)$ is generated as a ring by the image of $H_*(\Sigma^{-2} MU(1)) = H_*(\Sigma^{-2}\CP^\infty)$, we know the AHSS for $E_*(MU)$ also has to degenerate at $E_2$, and so does that for $E^*(MU)$. This gives us a preferred element in $E^0(MU)$ which is equivalently a map $MU \to E$ as desired. Playing the same game with $E^*(MU \wedge MU)$ shows that this map is a homotopy ring map.
+\end{proof}
+
+\begin{cor}
+  A even homotopy ring spectrum is always complex orientable.
+\end{cor}
+
+\begin{proof}
+  The Atiyah--Hirzebruch spectral sequence for $\CP^\infty$ degenerates at $E_2$ for degree reasons.
+\end{proof}
+
+\begin{eg}
+  Complex $K$-theory is complex orientable.
+\end{eg}
+
+\section{Formal group laws}
+For the remainder of the talk, I wish to use a bit more algebraic geometry language. We assume $E$ is a commutative complex oriented ring spectrum. If $X$ is a CW complex, then $E^{2*}X_+$ is a ring. We restrict to the evenly graded parts so that it is actually commutative. If one is concerned, one can take into account all degrees and forgo the algebro-geometric language, but doing so gains us nothing (this works out because the spaces we care about only have even cells).
+
+To be honest mathematicians, we should consider $E^{2*} X_+$ as a topological ring (or a pro-ring), with the topology given by
+\[
+  E^{2*} X_+ = \lim_{A \subseteq X \text{ finite}} E^{2*} A_+
+\]
+For example, 
+\[
+  E^{2*} \CP^\infty_+ = \lim_n E^{2*} \CP^n = E^{2*}[\![u]\!],
+\]
+where the power series ring has the usual topology.
+
+Since we are doing algebraic geometry, we are supposed to apply the functor $\Spec$ to rings. Actually, since we have topological rings, we should apply $\Spf$ instead, which remembers the topology, and end up with a \emph{formal scheme}. If you don't know about $\Spf$, you can pretend it is $\Spec$ instead. The upshot is that the functor
+\[
+  X \mapsto X_E \equiv \Spf E^{2*} X_+
+\]
+is a \emph{covariant} functor in $X$. Moreover, if we restrict to spaces for which $E^*X_+$ is a free $E^*$-module, such as $\CP^n$ and complex oriented cohomology theories, this functor is symmetric monoidal by K\"unneth's theorem.
+
+For $\CP^\infty$, we have
+\[
+  \CP^\infty_E = \Spf E^{2*}[\![u]\!].
+\]
+This as an infinitesimal neighbourhood of $0 \in \A^1$ over $\Spec E^{2*}$, which we denote $\hat{\A}^1$. Our first conclusion is thus
+\begin{lemma}
+  A complex orientation of $E$ gives an isomorphism
+  \[
+    \CP^\infty_E = \hat{\A}^1.
+  \]
+  The fact that $E$ is complex orienta\emph{ble} tells us $\CP^\infty_E$ is abstractly isomorphic to $\hat{\A}^1$, and a complex orientation is a choice of isomorphism.
+\end{lemma}
+
+Now recall that $X \mapsto X_E$ is symmetric monoidal. Moreover, $\CP^\infty$ has the structure of an abelian group (in the homotopy category), with the map $\otimes: \CP^\infty \times \CP^\infty \to \CP^\infty$ classifying the tensor product of line bundles. This turns $\CP^\infty_E$ into a (formal) group scheme.
+
+\begin{defi}
+  A formal group is a commutative formal group scheme whose underlying scheme is (locally) isomorphic $\hat{\A}^1$.
+
+  A formal group law is a commutative group scheme where the underlying scheme is \emph{equipped with} an isomorphism with $\hat{\A}^1$.
+
+  By convention, an isomorphism of formal group laws is an isomorphism of the underlying formal groups (that is, it is not required to act as the identity on $\hat{\A}^1$, or else they are extremely boring).
+\end{defi}
+Thus, if $E$ is complex orienta\emph{ble}, then $\CP^\infty_E$ is a formal group. If it is complex orient\emph{ed}, then $\CP^\infty_E$ is given the structure of a formal group \emph{law}. Different choices of complex orientations give different but isomorphic formal group laws.
+
+Let us unwrap what it means to be a formal group law. Let $R$ be a ring. A formal group law is a map
+\[
+  \Spf R[\![x]\!] \times \Spf R[\![x]\!] \to \Spf R[\![x]\!]
+\]
+satisfying certain properties. Undoing the $\Spf$ gives us a continuous map of $R$-algebras
+\[
+  R[\![x]\!] \to R[\![x, y]\!].
+\]
+This is uniquely determined by the value of $x$. Call this $x +_F y$, which is a power series in $x$ and $y$. The property of being a commutative group is equivalent to the conditions
+\[
+  \begin{aligned}
+    x +_F y &= y +_F x\\
+    x +_F 0 &= 0\\
+    (x +_F y) +_F z &= x +_F (y +_F z).
+  \end{aligned}
+\]
+An isomorphism of formal group laws is given by an automorphism of $R[\![x]\!]$ that sends one formal group law to the other. Again an automorphism $R[\![x]\!] \to R[\![x]\!]$ is uniquely specified by the image of $x$, say $f(x)$, and an isomorphism between $+_F$ and $+_G$ is an invertible $f$ such that
+\[
+  f(x +_F y) = f(x) +_G f(y).
+\]
+A formal group is then a formal group law up to isomorphism.
+
+Note that if $f: R \to S$ is a map of rings, then a formal group law over $R$ induces a formal group law over $S$ by applying $f$ to the coefficients of the power series. Since we are thinking in terms of schemes, we call this ``pulling back'' the formal group law from $\Spec R$ to $\Spec S$.
+
+\begin{thm}[Lazard]
+  There is a universal formal group law. That is, there is a ring $L$ with a formal group law $\hat{\G}_L$ on $L$ such that for any other formal group law $\hat{\G}$ on a ring $R$, there is a unique map $f: L \to R$ such that $\hat{\G} = f^* \hat{\G}_L$. Moreover, $L \cong \Z[\ell_1, \ell_2, \ell_3, \ldots]$.
+\end{thm}
+The key content of the theorem is the final line. The moduli space of formal group laws is an affine space!
+
+Recall that $MU$ is the universal complex oriented cohomology theory, and a complex oriented cohomology theory has a canonical formal group law.
+\begin{thm}[Quillen]
+  $\CP^\infty_{MU}$ is the universal formal group law.
+\end{thm}
+
+In general, the formal group of a complex orientable cohomology theory captures a lot of important information about the theory. It also allows us to perform some nice computations:
+
+\begin{eg}
+  If $E$ is complex oriented and $F$ is any ring spectrum, then $E \wedge F$ is also complex oriented, and the formal group law on $E \wedge F$ is pulled back from that of $E$.
+
+  Thus, if both $E$ and $F$ are complex oriented, then we get two complex orientations of $E \wedge F$, hence two formal group laws. However, since the formal group of a complex orientable cohomology theory is well-defined, these two formal group laws must be isomorphic.
+
+  For example, take $E = H\Z$ and $F = KU$. The respective formal group laws are $\hat{\G}_a$ and $\hat{\G}_m$. We then know that $\pi_*(H\Z \wedge KU)$ is a ring on which $\hat{\G}_a$ and $\hat{\G}_m$ are isomorphic. Standard theory of formal group laws tells us this is possible only if the ring is rational (since one has height $\infty$ and the other has height $1$). So $H_*KU = \pi_*(H\Z \wedge KU)$ is rational.
+
+  Now consider the rationalization map $KU \to KU_\Q$. Since $H_* KU$ is already rational, this map is an isomorphism on integral homology. However, $\pi_* KU$ is definitely not rational, so the map is \emph{not} an isomorphism on homotopy groups. Thus the cofiber of this map has trivial integral homology, but is non-contractible.
+\end{eg}
+
+\end{document}
