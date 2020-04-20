@@ -30,12 +30,11 @@
 
 \newcommand\bra\langle
 \newcommand\ket\rangle
-\ifplastex\else
-  \let\index\relax % plastex does not understand \let .. \relax but isn't bothered by people redefining commands
-\fi
+
+\let\index\relax
+\DeclareMathOperator{\index}{idx}
 
 \DeclareMathOperator{\coker}{coker}
-\DeclareMathOperator{\index}{idx}
 \DeclareMathOperator{\im}{im}
 \DeclareMathOperator{\End}{End}
 \DeclareMathOperator{\essspec}{ess.spec}
