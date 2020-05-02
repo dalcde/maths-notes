@@ -1,0 +1,111 @@
+\begin{thebibliography}{10}
+
+\bibitem{browder-levine}
+W.~Browder and J.~Levine.
+\newblock Fibering manifolds over a circle.
+\newblock {\em Commentarii mathematici Helvetici}, 40:153--160, 1965/66.
+
+\bibitem{chapman-topological-invariance}
+T.~A. Chapman.
+\newblock Topological invariance of {Whitehead} torsion.
+\newblock {\em Am. J. Math}, 96(3):488--497, 1974.
+
+\bibitem{farrell-fiber}
+F.~T. Farrell.
+\newblock The obstruction to fibering a manifold over a circle.
+\newblock {\em Bull. Amer. Math. Soc.}, 73(5):737--740, 09 1967.
+
+\bibitem{steve-ferry}
+S.~Ferry.
+\newblock Geometric topology notes.
+\newblock \url{http://sites.math.rutgers.edu/~sferry/ps/geotop.pdf}.
+\newblock accessed 2018-04-03.
+
+\bibitem{manifold-non-stable}
+C.~R. Guilbault.
+\newblock Manifolds with non-stable fundamental groups at infinity.
+\newblock {\em Geom. Topol.}, 4:537--579, 2000.
+
+\bibitem{lee-smooth-manifolds}
+J.~M. Lee.
+\newblock {\em Introduction to smooth manifolds}, volume 218 of {\em Graduate
+  Texts in Mathematics}.
+\newblock Springer, New York, second edition, 2013.
+
+\bibitem{luck-surgery}
+W.~L\"uck.
+\newblock A basic introduction to surgery theory.
+\newblock \url{http://131.220.77.52/lueck/data/ictp.pdf}, 2002.
+\newblock accessed 2018-04-03.
+
+\bibitem{lurie-281}
+J.~Lurie.
+\newblock Algebraic {K}-theory and manifold topology.
+\newblock \url{http://www.math.harvard.edu/~lurie/281.html}, 2014.
+\newblock accessed 2018-04-03.
+
+\bibitem{mazur-s-cobordism}
+B.~Mazur.
+\newblock Relative neighborhoods and the theorems of {Smale}.
+\newblock {\em Ann. Math}, 77(2):232--249, 1963.
+
+\bibitem{milnor-h-cobordism}
+J.~Milnor.
+\newblock {\em Lectures on the {$h$}-cobordism theorem}.
+\newblock Notes by L. Siebenmann and J. Sondow. Princeton University Press,
+  Princeton, N.J., 1965.
+
+\bibitem{milnor-whitehead-torsion}
+J.~Milnor.
+\newblock Whitehead torsion.
+\newblock {\em Bull. Amer. Math. Soc.}, 72:358--426, 1966.
+
+\bibitem{ranicki}
+A.~Ranicki.
+\newblock The algebraic theory of finiteness obstruction.
+\newblock {\em Math. Scand.}, 57(1):105--126, 1985.
+
+\bibitem{modules-over-finite-groups}
+D.~S. Rim.
+\newblock Modules over finite groups.
+\newblock {\em Annals of Mathematics}, 69(3):700--712, 1959.
+
+\bibitem{siebenmann-thesis}
+L.~C. Siebenmann.
+\newblock {\em The obstruction to finding a boundary for an open manifold of
+  dimension greater than five}.
+\newblock PhD thesis, Princeton University, 1965.
+
+\bibitem{siebenmann-fiber}
+L.~C. Siebenmann.
+\newblock A total {W}hitehead torsion obstruction to fibering over the circle.
+\newblock {\em Comment. Math. Helv.}, 45:1--48, 1970.
+
+\bibitem{smale-h-cobordism}
+S.~Smale.
+\newblock On the structure of manifolds.
+\newblock {\em Am. J. Math}, 84(3):387--399, 1962.
+
+\bibitem{stallings-s-cobordism}
+J.~R. Stallings.
+\newblock {\em On Infinite Processes Leading to Differentiability in the
+  Complement of a Point}, pages 245--254.
+\newblock Princeton University Press, 1965.
+
+\bibitem{wall-finiteness}
+C.~T.~C. Wall.
+\newblock Finiteness conditions for {CW}-complexes.
+\newblock {\em Ann. Math}, 81(1):56--69, 1965.
+
+\bibitem{washington-cyclotomic-fields}
+L.~C. Washington.
+\newblock {\em Introduction to cyclotomic fields}, volume~83 of {\em Graduate
+  Texts in Mathematics}.
+\newblock Springer-Verlag, New York, second edition, 1997.
+
+\bibitem{whitehead-torsion-source}
+J.~H.~C. Whitehead.
+\newblock Simple homotopy types.
+\newblock {\em American Journal of Mathematics}, 72(1):1--57, 1950.
+
+\end{thebibliography}

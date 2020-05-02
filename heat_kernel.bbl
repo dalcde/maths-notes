@@ -1,0 +1,30 @@
+\begin{thebibliography}{ABP75}
+
+\bibitem[ABP73]{atiyah-bott-patodi}
+M.~Atiyah, R.~Bott, and V.~K. Patodi.
+\newblock On the heat equation and the index theorem.
+\newblock {\em Invent. Math.}, 19:279--330, 1973.
+
+\bibitem[ABP75]{atiyah-bott-patodi-errata}
+M.~Atiyah, R.~Bott, and V.~K. Patodi.
+\newblock Errata to: ``{O}n the heat equation and the index theorem''
+  ({I}nvent. {M}ath. {\bf 19} (1973), 279--330).
+\newblock {\em Invent. Math.}, 28:277--280, 1975.
+
+\bibitem[APS75]{atiyah-patodi-singer}
+M.~F. Atiyah, V.~K. Patodi, and I.~M. Singer.
+\newblock Spectral asymmetry and {R}iemannian geometry. {I}.
+\newblock {\em Math. Proc. Cambridge Philos. Soc.}, 77:43--69, 1975.
+
+\bibitem[Dod83]{dodziuk-maximum}
+Jozef Dodziuk.
+\newblock Maximum principle for parabolic inequalities and the heat flow on
+  open manifolds.
+\newblock {\em Indiana Univ. Math. J.}, 32(5):703--716, 1983.
+
+\bibitem[Pat71]{patodi-curvature}
+V.~K. Patodi.
+\newblock Curvature and the eigenforms of the {L}aplace operator.
+\newblock {\em J. Differential Geometry}, 5:233--249, 1971.
+
+\end{thebibliography}
