@@ -1,0 +1,720 @@
+\documentclass{shortart}
+
+\usepackage[hidelinks]{hyperref}
+\usepackage{microtype}
+
+\usepackage{amsmath, amssymb}
+\usepackage{tikz-cd}
+\usepackage{spectralsequences}
+\usepackage{cleveref}
+\usepackage{rotating}
+
+\DeclareMathOperator\Ext{Ext}
+
+\newcommand\Z{{\mathbb{Z}}}
+\newcommand\RP{{\mathbb{RP}}}
+
+\newcommand\tmf{{\mathrm{tmf}}}
+\newcommand\ko{{\mathrm{ko}}}
+
+\SseqErrorToWarning{range-overflow}
+
+\SseqNewFamily{virtualclass}
+
+\sseqset{
+  hzero/.sseq style = {},
+  hone/.sseq style = {},
+  htwo/.sseq style = {},
+  virtualclass style = { fill = none },
+}
+\NewSseqGroup\groupD {m} {
+  \begin{scope}[xshift = #1 * 8, yshift = #1 * 4]
+    \ifnum#1>-2
+      \class(16, 6) \class(17, 7) \structline[hone]
+    \fi
+
+    \ifnum#1>-3
+      \class(17, 8) \class(18, 9) \structline[hone] \class(19, 10) \structline[hone] \class(19, 9) \structline[hzero] \class(19, 8) \structline[hzero]
+    \fi
+
+    \ifnum#1>-2
+      \class(22 + 3 * 0, 9) \class(22 + 3 * 0, 8) \structline[hzero] \class(22 + 3 * 0, 7) \structline[hzero]
+      \class(23 + 3 * 0, 8) \class(23 + 3 * 0, 7) \structline[hzero] \class(23 + 3 * 0, 6) \structline[hzero]
+      \structline[hone](22 + 3 * 0, 7)(23 + 3 * 0, 8)
+
+      \class(22 + 3 * 1, 9) \class(22 + 3 * 1, 8) \structline[hzero] \class(22 + 3 * 1, 7) \structline[hzero]
+      \class(23 + 3 * 1, 8) \class(23 + 3 * 1, 7) \structline[hzero] \ifnum#1>-1 \class(23 + 3 * 1, 6) \structline[hzero] \fi
+      \structline[hone](22 + 3 * 1, 7)(23 + 3 * 1, 8)
+
+      \class(22 + 3 * 2, 9) \class(22 + 3 * 2, 8) \structline[hzero] \class(22 + 3 * 2, 7) \structline[hzero]
+      \class(23 + 3 * 2, 8) \ifnum#1>-1 \class(23 + 3 * 2, 7) \structline[hzero] \class(23 + 3 * 2, 6) \structline[hzero] \fi
+      \structline[hone](22 + 3 * 2, 7)(23 + 3 * 2, 8)
+    \fi
+
+    \ifnum#1=-2
+      \class(22, 9)
+    \fi
+
+    \ifnum#1>-1
+      \class(27, 5) \class(27, 6) \structline[hzero] \class(26, 5) \structline[hone]
+    \fi
+    \ifnum#1>0
+      \class(25,4) \structline[hone]
+    \fi
+
+    \ifnum#1>-1
+      \class(31, 7) \class(32, 8) \structline[hone] \class(32, 7) \structline[hzero] \class (32, 6) \structline[hzero]
+
+      \class[virtualclass](31, 8) \class[virtualclass](31, 9) \structline[hone]
+
+      \class(32, 6) \class(33, 7) \structline[hone] \class (34, 8) \structline[hone] \class (34, 7) \structline[hzero] \class[virtualclass](35, 8) \structline[hone]
+    \fi
+
+    \ifnum#1>-1
+      \class(30, 5)
+    \fi
+
+    \ifnum#1>-3
+    \structline[htwo](19, 8)(22, 9)
+    \fi
+    \ifnum#1>-2
+      \structline[htwo](22 + 0 * 3, 7)(25 + 0 * 3, 8)
+      \structline[htwo](22 + 0 * 3, 8)(25 + 0 * 3, 9)
+      \structline[htwo](23 + 0 * 3, 7)(26 + 0 * 3, 8)
+      \structline[htwo](23 + 0 * 3, 6)(26 + 0 * 3, 7)
+
+      \structline[htwo](22 + 1 * 3, 7)(25 + 1 * 3, 8)
+      \structline[htwo](22 + 1 * 3, 8)(25 + 1 * 3, 9)
+      \structline[htwo](23 + 1 * 3, 7)(26 + 1 * 3, 8)
+    \fi
+
+    \ifnum#1>-1
+      \structline[htwo](23 + 1 * 3, 6)(26 + 1 * 3, 7)
+
+      \structline[htwo](22 + 2 * 3, 7)(25 + 2 * 3, 8)
+      \structline[htwo](22 + 2 * 3, 8)(25 + 2 * 3, 9)
+      \structline[htwo](23 + 2 * 3, 7)(26 + 2 * 3, 8)
+      \structline[htwo](23 + 2 * 3, 6)(26 + 2 * 3, 7)
+      \structline[htwo](31, 7)(34, 8)
+    \fi
+  \end{scope}
+}
+\NewSseqGroup\groupE {} {
+  \class(4, 1) \class(7, 2) \structline[htwo]
+
+  \class(16, 3) \class (19, 4) \structline[htwo] \class(22, 5) \structline[htwo] \class (21, 4) \structline[hone]
+}
+\NewSseqGroup\cigroup {m} {
+  \SseqParseInt\maximum{4 * #1 - 1}
+  % Do it in reverse so that the ``hook'' starts from the bottom
+  \foreach \n in {\maximum,..., 0} {
+    \class(8 * #1 - 1, \n)
+    \ifnum\n=\maximum\else \structline[hzero]\fi
+  }
+  \class(8 * #1, 1) \structline[hone]
+  \class(8 * #1 + 1, 2) \structline[hone]
+
+  \SseqParseInt\maximum{4 * #1 - 2}
+  \ifnum\maximum>2 
+    \foreach \n in {3,..., \maximum} {
+      \class(8 * #1 + 3, \n)
+      \ifnum\n=3\else \structline[hzero]\fi
+    }
+  \fi
+
+  \SseqParseInt\maximum{4 * #1 - 3}
+  \ifnum\maximum>3
+    \foreach \n in {\maximum,..., 4} {
+      \class(8 * #1 + 7, \n)
+      \ifnum\n=\maximum\else \structline[hzero]\fi
+    }
+  \fi
+
+  \SseqParseInt\maximum{4 * #1 - 4}
+  \ifnum\maximum>6
+    \class(8 * #1 + 8, 5) \structline[hone]
+    \class(8 * #1 + 9, 6) \structline[hone]
+
+    \foreach \n in {7,..., \maximum} {
+      \class(8 * #1 + 11, \n)
+      \ifnum\n=7\else \structline[hzero]\fi
+    }
+  \fi
+}
+
+\NewSseqCommand\wtower {O{} u(u,u) m} {
+  \SseqParseInt\maxn{2 + (\xmax - #3) / 5}
+  \begin{scope}[#1]
+    \foreach \n in {0, ..., \maxn} {
+      \class[name = w\n#5](#3 + \n * 5, #4 + \n)
+    }
+  \end{scope}
+}
+\NewSseqCommand\wvtower {O{} u(u,u) m} {
+  \SseqParseInt\maxn{2 + (\xmax - #3) / 5}
+  \begin{scope}[#1]
+    \foreach \n in {0, ..., \maxn} {
+      \SseqParseInt\maxm{2 + (\xmax - #3 - \n * 5) / 2}
+
+      \ifnum\maxm>-1
+        \foreach \m in {0, ..., \maxm} {
+          \class[name= v{\m}w\n#5](#3 + \n * 5 + \m * 2, #4 + \n + \m)
+        }
+      \fi
+    }
+  \end{scope}
+}
+\NewSseqCommand\wdiff{m m m m m} {
+  \SseqParseInt\vsource{4 * \n + #2}
+  \SseqParseInt\vtarget{4 * \n + #4}
+  \DrawIfValidDifferential#1(v{\vsource}w#3g35)(v{\vtarget}w#5g35)
+}
+
+\begin{sseqdata}[name = tmf ass, Adams grading, scale=0.15, class labels = { left = 0cm }, x range={1}{96}, x tick step = 4, y tick step = 4, yrange = {0}{48}, classes = { fill, minimum size = 1.2 }, differentials = {-, blue}, grid=go, grid step = 4]
+  \sseqset{
+    htwo/.sseq style = {thin, gray},
+  }
+  \foreach \n in {-2,..., 10} {
+    \groupD{\n}
+  }
+  \groupE[brown]
+  \structline[htwo](1,0)(4,1)
+
+  \foreach \n in {-2,..., 4} {
+    \groupD(48,8){\n}
+  }
+  \groupE[brown](48,8)
+  \structline[htwo](49,8)(52,9)
+
+  \wtower[yellow](31, 6){g31}
+  \wvtower[orange](35, 6){g35}
+
+  \wtower[yellow](48 + 31, 8 + 6){v28g31}
+  \wvtower[red](48 + 35, 8 + 6){v28g35}
+
+%  \foreach \m in {1,...,5} {
+%    \cigroup[gray]{\m}
+%  }
+
+  \foreach \v in {0,..., 9} {
+    \foreach \n in {0, 1, 2} {
+      \d2(23 + \n * 3 + \v * 8, 6 + \v * 4)
+      \d2(23 + \n * 3 + \v * 8, 7 + \v * 4)
+    }
+    \d2(32 + \v * 8, 6 + \v * 4, 1)
+    \d2(32 + \v * 8, 7 + \v * 4)
+    \d3(30 + \v * 8, 5 + \v * 4)
+
+    \d3(25 + \v * 8, 7 + \v * 4)
+    \d3(26 + \v * 8, 8 + \v * 4)
+    \d4(31 + \v * 8, 7 + \v * 4)
+    \d4(32 + \v * 8, 8 + \v * 4)
+  }
+  \d2(15, 2)
+  \d2(15, 3)
+  \d2(18, 3)
+  \d3(17, 3)
+  \d3(18, 4)
+
+  \foreach \n in {0, ..., 5} {
+    \foreach \m in {0, ..., 10} {
+      \SseqParseInt\mt{\m + 1}
+      \SseqParseInt\nt{\n + 9}
+      \DrawIfValidDifferential2(v{\m}w\n v28g35)(v{\mt}w\nt g35)
+    }
+  }
+
+  % Later, this class get identified with a multiple of x_{35, 6} via a d_2 and we keep that other class instead.
+  \DrawIfValidDifferential4(68, 12)(v{6}w4g35)
+  \foreach \n in {0,...,8} {
+    \SseqParseInt\xoffset{8 * \n}
+    \SseqParseInt\yoffset{4 * \n}
+
+    \SseqParseInt\vfour{4 * \n}
+    \DrawIfValidDifferential2(v{\vfour}w0g35)
+
+    \SseqParseInt\vfour{4 * \n + 1}
+    \DrawIfValidDifferential4(v{\vfour}w0g35)
+    \DrawIfValidDifferential3(v{\vfour}w1g35)
+    \SseqParseInt\vfour{4 * \n + 2}
+    \DrawIfValidDifferential3(v{\vfour}w1g35)
+
+    \DrawIfValidDifferential2(14 + 48 + \xoffset, 3 + 8 + \yoffset)
+    \DrawIfValidDifferential2(17 + 48 + \xoffset, 3 + 8 + \yoffset)
+    \DrawIfValidDifferential2(20 + 48 + \xoffset, 3 + 8 + \yoffset)
+
+    \SseqParseInt\vfour{4 * \n + 2}
+    \DrawIfValidDifferential4(v{\vfour}w2g35, 2)
+    \SseqParseInt\vfour{4 * \n + 3}
+    \DrawIfValidDifferential4(v{\vfour}w2g35)
+
+    \wdiff4{0}{3}{7}{0}
+    \wdiff4{0}{4}{7}{1}
+
+    \DrawIfValidDifferential2(31 + 48 + \xoffset, 7 + 8 + \yoffset)
+    \DrawIfValidDifferential3(49 + \xoffset, 8 + \yoffset)
+    \DrawIfValidDifferential3(56 + \xoffset, 10 + \yoffset)
+    \DrawIfValidDifferential3(63 + \xoffset, 12 + \yoffset)
+    \SseqParseInt\vfour{4 * \n + 5}
+    \DrawIfValidDifferential3(66 + \xoffset, 12 + \yoffset)(v{\vfour}w4g35)
+    \DrawIfValidDifferential3(69 + \xoffset, 12 + \yoffset)
+
+    \wdiff4{3}{3}{10}{0}
+    \wdiff4{1}{5}{8}{2}
+    \wdiff4{2}{6}{9}{3}
+    \wdiff4{0}{8}{7}{5}
+    \wdiff4{3}{7}{10}{4}
+    \SseqParseInt\vfour{4 * \n + 7}
+    \DrawIfValidDifferential3(80 + \xoffset, 16 + \yoffset)(v{\vfour}w6g35)
+
+    \SseqParseInt\vfour{4 * \n + 2}
+    \DrawIfValidDifferential2(27 + 48 + \xoffset, 5 + 8 + \yoffset)(v{\vfour}w7g35)
+    \SseqParseInt\vfour{4 * \n + 4}
+    \DrawIfValidDifferential3(26 + 48 + \xoffset, 5 + 8 + \yoffset)(v{\vfour}w6g35)
+
+    \DrawIfValidDifferential2(25 + 8 + 48 + \xoffset, 4 + 4 + 8 + \yoffset)
+    \DrawIfValidDifferential2(34 + 48 + \xoffset, 7 + 8 + \yoffset)
+
+    % This produces some errors when \n is large
+    \begin{quiet}
+      \DrawIfValidDifferential2(32 + 48 + \xoffset, 6 + 8 + \yoffset, 2, 2)
+      \DrawIfValidDifferential2(30 + 48 + \xoffset, 5 + 8 + \yoffset, 1, 2)
+    \end{quiet}
+  }
+  \foreach \v in {0,..., 4} {
+    \foreach \n in {0, 1, 3} {
+      \d2(48 + 23 + \n * 3 + \v * 8, 8 + 6 + \v * 4)
+      \d2(48 + 23 + \n * 3 + \v * 8, 8 + 7 + \v * 4)
+    }
+    % This produces some errors when \n is large
+    \begin{quiet}
+      \d2(48 + 23 + 2 * 3 + \v * 8, 8 + 6 + \v * 4)
+    \end{quiet}
+    \d2(48 + 23 + 2 * 3 + \v * 8, 8 + 7 + \v * 4)
+  }
+  \d2(48 + 15, 8 + 2)
+  \d2(48 + 15, 8 + 3)
+  \d2(48 + 18, 8 + 3)
+
+  % d_2's from the bottom of zigzags should all hit the sum
+  % d_3's from top right of second zigzag should hit the sum
+  % There should be a differential from x_{69, 12} to x_{68, 15} as well, so that the sum survives
+  % there should be a d_4 from x_{50, 9}
+  % d_4 from x_{75, 14} should be from both classes
+\end{sseqdata}
+
+\begin{sseqdata}[name = ddiff, Adams grading, classes=fill, scale=0.35, x tick step = 2, yrange = {4}{14}, xrange = {16}{44}, differentials = blue]
+  \sseqset{
+    htwo/.sseq style = {dotted},
+  }
+  \groupD{0}
+  \groupD{1}
+  \groupD{2}
+  \foreach \v in {0, 1, 2} {
+    \foreach \n in {0, 1, 2} {
+      \d2(23 + \n * 3 + \v * 8, 6 + \v * 4)
+      \d2(23 + \n * 3 + \v * 8, 7 + \v * 4)
+    }
+    \d2(32 + \v * 8, 6 + \v * 4, 1)
+    \d2(32 + \v * 8, 7 + \v * 4)
+    \d3(30 + \v * 8, 5 + \v * 4)
+  }
+  \d3(25, 7)
+  \d3(26, 8)
+  \d4(31, 7)
+  \d4(32, 8)
+
+  \d3(33, 11)
+  \d3(34, 12)
+
+  \d4(39, 11)
+
+  \d4(40, 12)
+\end{sseqdata}
+
+\DeclareSseqCommand\hookone{u(u,u)} {
+  \class(#2 + 1, #3)
+  \savestack
+  \class(\lastx + 1, \lasty + 1)\structline[hone]
+  \class(\lastx + 1, \lasty + 1)\structline[hone]
+  \class(\lastx, \lasty - 1)\structline[hzero]
+  \class(\lastx, \lasty - 1)\structline[hzero]
+  \restorestack
+}
+
+\DeclareSseqCommand\hooktwo{u(u,u)} {
+  \class(#2 + 1, #3)
+  \savestack
+  \class(\lastx + 1, \lasty + 1)\structline[hone]
+  \class(\lastx + 1, \lasty + 1)\structline[hone]
+  \class(\lastx, \lasty - 1)\structline[hzero]
+  \restorestack
+}
+
+\DeclareSseqCommand\hookthree{u(u,u)} {
+  \class(#2 + 1, #3 - 1)
+  \savestack
+  \class(\lastx + 1, \lasty + 2)
+  \class(\lastx + 1, \lasty + 1)\structline[hone]
+  \class(\lastx, \lasty - 1)\structline[hzero]
+  \class(\lastx, \lasty - 1)\structline[hzero]
+  \restorestack
+}
+
+\DeclareSseqCommand\hookfour{u(u,u)} {
+  \class(#2 + 1, #3 - 1)
+  \savestack
+  \class(\lastx + 1, \lasty + 1)\structline[hone]
+  \class(\lastx + 1, \lasty + 2)
+  \class[virtualclass](\lastx, \lasty - 2)
+  \restorestack
+}
+
+
+\begin{sseqdata}[name = tmf ass later, Adams grading, scale=0.15, class labels = { left = 0cm }, x range  ={92}{188}, x tick step = 4, y tick step = 4, yrange = {12}{60}, classes = { fill,   minimum size = 1.2 }, differentials = {-, blue}, grid=go, grid step = 4]
+  \begin{scope}[gray]
+    \hookone(96, 48)
+    \DoUntilOutOfBounds {
+      \hookone(\lastx + 7, \lasty + 4)
+    }
+    \hooktwo(96, 40)
+    \DoUntilOutOfBounds {
+      \hooktwo(\lastx + 7, \lasty + 4)
+    }
+    \hookthree(96, 32)
+    \DoUntilOutOfBounds {
+      \hookthree(\lastx + 7, \lasty + 5)
+    }
+    \hookfour(96, 24)
+    \DoUntilOutOfBounds {
+      \hookfour(\lastx + 7, \lasty + 5)
+    }
+  \end{scope}
+
+  \hookone(96, 16)
+  \DoUntilOutOfBounds {
+    \hookone(\lastx + 7, \lasty + 4)
+  }
+  \hooktwo(96 + 32, 16 + 8)
+  \DoUntilOutOfBounds {
+    \hooktwo(\lastx + 7, \lasty + 4)
+  }
+
+  \hookthree(96+56, 16+12)
+  \DoUntilOutOfBounds {
+    \hookthree(\lastx + 7, \lasty + 5)
+  }
+
+  \hookfour(96 + 80, 16 + 16)
+  \DoUntilOutOfBounds {
+    \hookfour(\lastx + 7, \lasty + 5)
+  }
+  \wtower[orange, opacity=0.8](95, 18){first}
+  \wtower[yellow, opacity=0.8](96, 19){second}
+  \wtower[yellow, opacity=0.8](94, 17){third}
+
+  \begin{scope}[xshift=96, yshift=16]
+    \class(6, 1)
+    \structline[htwo](3, 0)(6, 1)
+
+    \class(8, 2) \class(9, 3) \structline[hone]
+    \class(22, 7) \class(23, 8) \structline[hone]
+
+    \class(15, 4) \class(14, 3) \structline[hone]
+    \class(17, 4) \structline[htwo]
+    \class(20, 5) \structline[htwo]
+    \class(20, 4) \structline[hzero]
+    \class(20, 3) \structline[hzero]
+    \class(21, 4) \structline[hone]
+
+    \class(26, 5) \class(27, 6) \structline[hone] \class(27, 5) \structline[hzero]
+    \class(28, 7)
+
+    \class(32, 6) \class (33, 7) \structline[hone]
+    \class(34, 7) \class[virtualclass](35, 8) \structline[hone]
+
+    \class(40, 10) \class(42, 11)
+
+    \class(51, 10) \class(51, 9) \structline[hzero] \class(51, 8) \structline[hzero] \class(54, 9) \structline[htwo]
+
+    \class(65, 12) \class(68, 13) \structline[htwo]
+
+    \groupE[brown](0, 0)
+    \structline[htwo](1, 0)(4, 1)
+    \groupE[brown](48, 8)
+
+    \wtower[yellow](31, 6){newsecond}
+    \wtower[yellow](79, 14){newthird}
+
+    \foreach \n in {0, 1, 2, 3} {
+      \class[orange](39 + 7 * \n, 8 + 2 * \n)
+    }
+    \class[orange](41, 9)
+    \class[orange](47, 9)
+    \class[orange](47, 12)
+    \wtower[orange](40, 7){newfirst}
+    \class[orange](52, 10)
+    \class[orange](54, 11)
+    \class[orange](57, 11)
+    \class[orange](59, 12)
+    \class[orange](66, 14)
+    \class[orange](71, 15)
+    \class[orange](72, 14)
+  \end{scope}
+  \class[orange](150, 30)
+
+  \foreach \n in {0,1,2} {
+    \SseqParseInt\m{\n + 16}
+    \d3(w\n newthird)(w\m third)
+  }
+  \foreach \n in {0,...,11} {
+    \SseqParseInt\m{\n + 8}
+    \d3(w\n newfirst)(w\m first)
+  }
+  \foreach \n in {0,...,13} {
+    \SseqParseInt\m{\n + 6}
+    \d3(w\n newsecond)(w\m second)
+  }
+
+  \d3(97, 16)
+  \d3(112, 19)
+  \d3(116, 19)
+  \d3(117, 20, 2)
+  \d3(122, 21)
+
+  \d3(160, 27)
+  \d3(165, 28)
+
+  \d3(136, 23)
+  \d3(141, 24)
+  \d3(146, 25)
+
+  \structline[hone](124, 23, 2)(125, 24)
+\end{sseqdata}
+
+\title{Adams spectral sequence of \texorpdfstring{$\tmf \wedge \RP^\infty$}{}}
+\author{Dexter Chua}
+
+\begin{document}
+
+The goal of this note is to outline the computation of the Adams spectral sequence of $\tmf \wedge \RP^\infty$. Essentially all differentials follow from the Leibniz rule, and products can be computed with a computer. The only work to be done is to organize the computation in order to conclude that we have indeed computed all differentials.
+
+To do so, we need a complete calculation of the Adams $E_2$ page, which was done by Davis and Mahowald \cite{davis-mahowald-ext-a2} (in their notation, $\Sigma^\infty \RP^\infty = P_1$). As usual, we have
+\[
+  \Ext^{s, t}_{A}(k, H_*(\tmf \wedge \Sigma^\infty \RP^\infty)) = \Ext^{s, t}_{A(2)} (k, H_*(\Sigma^\infty \RP^\infty)).
+\]
+
+This group is free over $v_2^8$, where $|v_2^8| = (48, 8)$. Thus, to understand this group, it suffices to describe the generators under $v_2^8$. In the Davis--Mahowald description, these generators fall into 4 groups, and we colour-coded these in our chart in \Cref{figure:ASS-E2-nod}. We shall go through the different groups in the coming sections, giving a formal description and describe the differentials that pertain to these groups. The differentials up to degree $96$ are depicted in \Cref{figure:ASS-E2,figure:ASS-E3,figure:ASS-E4,figure:ASS-Einfinity}. The range $96$--$192$ is fairly similar and is depicted in \Cref{figure:ASS-later-diff}. Finally, $v_2^{32}$ is permanent and so all differentials are $v_2^{32}$-periodic.
+
+\begin{sidewaysfigure}
+  \begin{sseqpage}[name = tmf ass, page = 1, no virtualclass, x range={1}{60}, y range={0}{32}, scale=1.7]
+    \foreach \m in {1,...,7} {
+      \cigroup[gray]{\m}
+    }
+    \cigroup[gray](48, 8){1}
+
+    \structline[hone](34,7)(35,8,2)
+    \structline[hone](42,11)(43,12,2)
+    \structline[hone](50,15)(51,16,2)
+    \structline[hone](58,19)(59,20,2)
+  \end{sseqpage}
+  \caption{$\Ext_{A(2)}(k, H_*(P_1))$}\label{figure:ASS-E2-nod}
+\end{sidewaysfigure}
+
+\subsection*{Conventions}
+We set $k = \mathbb{F}_2$, and write $x_{t - s, s}$ for a generator in the corresponding bidegree.
+
+\section{\texorpdfstring{$\ko$}{ko} type classes}
+We first deal with the gray classes that look like quotients of $\ko$s. To understand these classes, we use the cofiber sequence
+\[
+  \tmf^{hC_2} \to \tmf^{t C_2} \to \Sigma \tmf_{hC_2}
+\]
+which induces a short exact sequence on homology, if we think of $\tmf^{hC_2}$ and $\tmf^{t C_2}$ as pro-spectra in the usual way. Moreover, by \cite[Lemma 1.3]{lin-ext}, we know that
+\[
+  \Ext^{s, t}_c(k, H_*(\tmf^{t C_2})) \cong \bigoplus_{k \in \Z} \Ext_{A(1)}^{s, t}(k, k[8k]).
+\]
+So the $\Ext$ groups of $\tmf^{tC_2}$ look like a bunch of $\ko$'s, and for degree reasons, its Adams spectral sequence must degenerate.
+
+We claim that the gray classes are in the image of $\Ext^{s, t}_c(k, H_*\tmf^{tC_2})$, hence must be permanent. It suffices to prove that the generators under $h_0$ and $v_1^4$ are in the image, i.e.\ the classes in bidegree $(8k - 1, 0)$. To do so, we note that they cannot be in the image of
+\[
+  \Ext^{s, t}_c(k, H_*(\tmf^{h C_2})) \to \Ext^{s, t}_c(k, H_*(\tmf^{t C_2})).
+\]
+Indeed, the left-hand side is
+\[
+  \varprojlim \Ext^{s, t}_{A(2)} (k, H_*(D \Sigma^\infty_+\RP^n)).
+\]
+The top dimensional cell in $D \Sigma^\infty_+ \RP^n$ is always in degree $0$. So the bigraded group $\Ext^{s, t}_A(k, H_*(\tmf^{\Sigma^\infty_+ \RP^\infty}))$ has a bottom vanishing line equal to that of $\Ext^{s, t}_{A(2)}(k, k)$. In particular, the corresponding generators at $(8k - 1, 0)$ are all below this line, so are mapped injectively into $\Ext_{A(2)}(k, H_*(P_1))$.
+
+We now give a formal description of these classes. For any $i \in \Z$, we let C($i$) be the chart of $\Sigma^{8i - 1}\ko$ truncated to below the line $y = -\frac{x}{4} + 6i - 1$. Then the gray classes are given by $\bigoplus_{i \geq 1} \text{C($i$)}$ plus all its $v_2^8$-multiples. We depict C($3$) in \Cref{figure:c3} for reference.
+\begin{figure}[h]
+  \centering
+  \begin{sseqpage}[scale=0.5, classes = fill, grid = go, grid step = 4]
+    \cigroup{3}
+  \end{sseqpage}
+  \caption{Depiction of C($3$)}\label{figure:c3}
+\end{figure}
+
+
+\section{\texorpdfstring{$v_2$}{v2}-periodic classes}
+We next look at the five brown classes. There is not much interesting to say about them. They have no periodicity apart from $v_2^8$. For degree reasons, only $x_{16, 3}$ can potentially hit something, but the target is $v_1$ periodic while this is not. Note however that $v_2^8$ multiples of these need not be permanent, and indeed they will not be.
+
+\section{\texorpdfstring{$w$}{w}-periodic classes}
+Next, we look at the orange and yellow classes. The yellow classes is a free $k[w]$-module on a single generator $x_{31, 6}$, where $|w| = (5, 1)$. There is no actual element $w$ that you can multiply with; rather, it is given by the Massey product $\langle h_1, h_2, -\rangle$.
+
+However, some multiples of $w$ are realized by elements in $\pi_*\tmf$, namely
+\[
+  \begin{aligned}
+    \beta &= w^3\\
+    g &= w^4\\
+    \gamma &= w^5
+  \end{aligned}
+\]
+So $w^k$ exists for $k \geq 3$ and is permanent for sufficiently large $k$. These yellow classes are in fact all permanent.
+
+It is useful to note that $x_{31, 6}$ is in fact itself $w$ divisible, with $w^6 x_{1, 0} = x_{31, 6}$. Note that $w^4 x_{1, 0} = g x_{1, 0}$ is the sum of the two basis elements in bidegree $(21, 4)$. The two basis elements can be uniquely identified as follows --- the brown class is the unique non-zero class that is $v_1^4$ torsion, while the black class is the unique non-zero class that is $h_1$ divisible.
+
+These classes stay along for quite a while. The differentials that eventually kill them come from the differential
+\[
+  d_3(v_2^{16}) = w^{19}
+\]
+in the Adams spectral sequence for $\tmf$.
+
+The orange classes form a free $k[w, v_1]$-module on a single generator $x_{35, 6}$. Again $v_1^4$ exists and is given by, well, $v_1^4$. It is also convenient to note that
+\[
+  \begin{aligned}
+    d_0 &= w^2 v_1^2\\
+    e_0 &= w^3 v_1\\
+    \alpha &= w^2 v_1
+  \end{aligned}
+\]
+These have a fairly complicated differential pattern, but these all follow from the differentials in the Adams spectral sequence for $\tmf$ and the Leibniz rule. It is prudent to note that the Adams spectral sequence for $\tmf$ has
+\[
+  d_2(v_2^8) = g \alpha \beta = v_1 w^9,
+\]
+so $w^{9 + k} v_1^{1 + j} x_{35, 6} = 0$ for all $j, k \geq 0$ on the $E_3$ page, and we are left with a sequence $w^{9 + k} x_{35, 6}$ of dots separated by $(5, 1)$. In fact the sequence starts at $x_{20, 3}$ with $w^2 x_{20, 3} = x_{30, 5}$ and $w^3 x_{20, 3} = x_{35, 6}$. These again eventually get killed by $d_3$'s in a manner exactly analogous to the $x_{31, 6}$'s.
+
+\section{\texorpdfstring{$v_1$}{v1}-periodic classes}
+We finally get to the black classes, which are $v_1^4$-periodic. A ``unit'' of this $v_1$ periodicity looks like this:
+\begin{center}
+  \begin{sseqpage}[Adams grading, classes=fill, scale=0.5, class labels = { left = 0cm }]
+    \sseqset{
+      htwo/.sseq style = {dotted},
+    }
+    \groupD(-8, -4){1}
+    \classoptions["1"](16, 6)
+    \classoptions["2"](17, 8)
+    \classoptions["2"](19, 8)
+    \classoptions["2"](22, 9)
+    \classoptions["1"](22, 7)
+    \classoptions["1"](23, 6)
+    \classoptions["1"](25, 7)
+    \classoptions["1"](26, 7)
+    \classoptions["1"](28, 7)
+    \classoptions["-1"](25, 4)
+    \classoptions["0"](26, 5)
+  \end{sseqpage}
+\end{center}
+The numbers on the class denote how many times it is $v_1^4$ divisible, relative to the coordinates in the diagram. For example, $x_{17, 8}$ can be divided by $v_1^4$ twice to give $x_{1, 0}$, while $x_{25, 4}$ doesn't even exist; only $v_1^4 x_{25, 4}$ does.
+
+The divisibilities of unlabelled classes are determined by $h_0$ and $h_1$ products (if $x$ divides, then so do $h_0 x$ and $h_1 x$). If a class is completely unlabelled, then its label should be interpreted to be $0$.
+
+Finally, the hollow classes are not actually in the diagram, but come from the C's.  Their role is merely to indicate multiplications.
+
+The differentials in $D$ follow from the differentials for $\tmf$ via the Leibniz rule again. They look as follows:
+\begin{center}
+  \printpage[name = ddiff, page = 2]
+\end{center}
+\begin{center}
+  \printpage[name = ddiff, page = 3]
+\end{center}
+\begin{center}
+  \printpage[name = ddiff, page = 4]
+\end{center}
+\begin{center}
+  \printpage[name = ddiff, page = 5]
+\end{center}
+
+The two ``hooks'' with lower left corner at $(17, 8)$ and $(25, 4)$ are $v_1^4$ periodic. The classes left (including the hollow ones) are killed by elements in $k[v_1, w] \cdot x_{35, 6}$.
+
+\begin{sidewaysfigure}
+  \begin{sseqpage}[name = tmf ass, page = 2, no differentials]
+    \foreach \n in {-1, 0, 1, 2, 3} {
+      \draw [differential style] (71 + 8 * \n, 14 + 4 * \n, 1) -- (70 + 8 * \n, 16 + 4 * \n, 2);
+    }
+    \foreach \n in {0, 1, 2} {
+      \draw [differential style] (74 + 8 * \n, 14 + 4 * \n, 1) -- (73 + 8 * \n, 16 + 4 * \n, 2);
+      \draw [differential style] (77 + 8 * \n, 14 + 4 * \n, 1) -- (76 + 8 * \n, 16 + 4 * \n, 2);
+      \draw [differential style] (80 + 8 * \n, 14 + 4 * \n, 1) -- (79 + 8 * \n, 16 + 4 * \n, 2);
+    }
+  \end{sseqpage}
+  \caption{$E_2$ page for Adams spectral sequence of $\tmf \wedge \Sigma^\infty \RP^\infty$ without differentials}\label{figure:ASS-E2-nod-full}
+\end{sidewaysfigure}
+\begin{sidewaysfigure}
+  \begin{sseqpage}[name = tmf ass, page = 2]
+    \foreach \n in {-1, 0, 1, 2, 3} {
+      \draw [differential style] (71 + 8 * \n, 14 + 4 * \n, 1) -- (70 + 8 * \n, 16 + 4 * \n, 2);
+    }
+    \foreach \n in {0, 1, 2} {
+      \draw [differential style] (74 + 8 * \n, 14 + 4 * \n, 1) -- (73 + 8 * \n, 16 + 4 * \n, 2);
+      \draw [differential style] (77 + 8 * \n, 14 + 4 * \n, 1) -- (76 + 8 * \n, 16 + 4 * \n, 2);
+      \draw [differential style] (80 + 8 * \n, 14 + 4 * \n, 1) -- (79 + 8 * \n, 16 + 4 * \n, 2);
+    }
+  \end{sseqpage}
+  \caption{$E_2$ page for Adams spectral sequence of $\tmf \wedge \Sigma^\infty \RP^\infty$}\label{figure:ASS-E2}
+\end{sidewaysfigure}
+\begin{sidewaysfigure}
+  \begin{sseqpage}[name = tmf ass, page = 3]
+    \foreach \n in {0, 1, 2, 3} {
+      \draw [differential style] (66 + 8 * \n, 12 + 4 * \n) -- (65 + 8 * \n, 15 + 4 * \n, 1);
+    }
+  \end{sseqpage}
+  \caption{$E_3$ page for Adams spectral sequence of $\tmf \wedge \Sigma^\infty \RP^\infty$}\label{figure:ASS-E3}
+\end{sidewaysfigure}
+\begin{sidewaysfigure}
+  \begin{sseqpage}[name = tmf ass, page = 4]
+    \foreach \n in {0, 1, 2} {
+      \draw [differential style] (75 + 8 * \n, 14 + 4 * \n, 1) -- (74 + 8 * \n, 18 + 4 * \n);
+    }
+    \foreach \n in {0, 1, 2, 3, 4, 5} {
+      \draw [differential style] (50 + 8 * \n, 9 + 4 * \n, 1) -- (49 + 8 * \n, 13 + 4 * \n);
+    }
+  \end{sseqpage}
+  \caption{$E_4$ page for Adams spectral sequence of $\tmf \wedge \Sigma^\infty \RP^\infty$}\label{figure:ASS-E4}
+\end{sidewaysfigure}
+\begin{sidewaysfigure}
+  \printpage[name = tmf ass, page = 5]
+  \caption{$E_\infty$ page for Adams spectral sequence of $\tmf \wedge \Sigma^\infty \RP^\infty$}\label{figure:ASS-Einfinity}
+\end{sidewaysfigure}
+
+\section{Stems 97--192}
+The situation in stems 97--192 is very similar to the first 96 stems. In the Adams spectral sequence for $\tmf$, we have
+\[
+  d_3(v_2^{16}) = w^{19}.
+\]
+So in particular, all $d_2$'s in this range are the same as in the first 96. Moreover, by the Leibniz rule, for any $x$, we have
+\[
+  d_3(x v_2^{16}) = d_3(x) v_2^{16} + w^{19} x.
+\]
+For most of the terms, the $w$ multiples have already been killed by $d_2$'s, so the $d_3$'s get preserved. The extra $d_3$'s we get come from $w$ multiples of $v_2^{16} x_{1, 0}$, $v_2^{24} x_{1,0}$ and $v_2^{16} x_{20, 3}$.
+
+The $d_4$'s are also preserved by $v_2^{16}$, except for the $d_4$ on $w^4 x_{35, 6}$, which supports a $d_3$ instead.  This follows from the fact that our $d_4$'s are $v_1^4$ periodic and $v_1^4 v_2^{16}$ is permanent.
+
+We depict the interesting $d_3$'s in \Cref{figure:ASS-later-diff}, omitting the classes that get killed by differentials propagated from the first 96 stems. This is included because one has to do a bit of book keeping to keep track of which of the $w^{19 + k}$ multiples actually get killed for small $k$.
+
+\begin{sidewaysfigure}
+  \begin{sseqpage}[name = tmf ass later, page = 3]
+    \draw[differential style](117, 20, 1) -- (116, 23);
+  \end{sseqpage}
+  \caption{Differentials in 96--192}\label{figure:ASS-later-diff}
+\end{sidewaysfigure}
+
+\begin{sidewaysfigure}
+  \begin{sseqpage}[name = tmf ass later, page = 4]
+    \structline[hone](117, 20)(118, 21)
+  \end{sseqpage}
+  \caption{Permanent classes in 96--192}\label{figure:ASS-later-end}
+\end{sidewaysfigure}
+
+\bibliographystyle{plain}
+\bibliography{tmf-rp-ass}
+\end{document}
