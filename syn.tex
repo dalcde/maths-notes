@@ -1,5 +1,6 @@
 \documentclass{shortart}
 
+\usepackage{plastex}
 \usepackage{amsmath, amssymb, amsthm}
 \usepackage{tikz-cd}
 \usepackage[T1]{fontenc}
@@ -39,19 +40,21 @@ The goal of these notes is to provide motivation for the construction of synthet
 The main idea is that the category of synthetic spectra is the derived category of spectra with respect to $E$-homology. To understand this perspective, we begin with the classical notion of the derived category of an abelian category.
 
 Let $\mathcal{A}$ be an abelian category. One motivation for the derived category is that quotienting often loses information, and we want to somehow remember that information. For example, the cokernel of the map $0\colon \Z \to \Z$ is just $\Z$ itself, and the source has been completely forgotten. In the derived category, we want to ``remember'' this, and the cofiber of this map is the chain complex
-\[
-  \begin{tikzcd}
-    \Z \ar[d, "0"] \\
-    \Z.
-  \end{tikzcd}
-\]
+\begin{useimager}
+  \[
+    \begin{tikzcd}
+      \Z \ar[d, "0"] \\
+      \Z.
+    \end{tikzcd}
+  \]
+\end{useimager}
 We can think of this as freely adding cokernels, so that in the derived category, the cokernel does not lose information.
 
 However, freely adding \emph{all} cokernels is not quite what we want. For example, the cokernel of $2 \colon \Z \to \Z$ should still be $\Z/2$, because this quotient does not lose any information. That is, we want short exact sequences to remain exact (fiber sequences) in the derived category.\footnote{Projectives and/or injectives enter quite late in this story. In a category with enough projectives, everything can be resolved by projectives, so we can restrict our attention to projectives only. Since short exact sequences of projectives always split, we can omit the second step, and end up with the familiar presentation of the derived category.}
 
 Thus, the construction of the derived category breaks into two steps --- freely add some colimits, and then force certain sequences to remain exact. The construction of synthetic spectra will follow similar footsteps, but with various modifications so that the resulting category has good categorical properties.
 
-\section{Freely adjoining colimits}
+\section{Freely adjoining colimits}\label{section:adjoin-colimits}
 We start with the problem of freely adjoining colimits. The simplest case is to freely adjoin \emph{all} small colimits, which gives
 
 \begin{thm}{{\cite[Theorem 5.1.5.6]{htt}}}
@@ -130,7 +133,7 @@ The is that finite colimits are ``complementary'' to filtered colimits, while co
   where the second colimit is taken inside $\Ind(\C)$. But $y \colon \C \to \Ind(\C)$ preserves finite colimits, so the right-hand side is simply given by $y\left(\colim P_\alpha\right)$.
 \end{proof}
 
-\section{The category of synthetic spectra}
+\section{The category of synthetic spectra}\label{section:synthetic-spectra}
 Following our previous outline, to construct the category of synthetic spectra, we start with $P_\Sigma(\Sp^\omega)$, and then for every fiber sequence $A \to B \to C$ such that the second map is $E_*$ surjective, we force the image in $P_\Sigma(\Sp^\omega)$ to be a fiber sequence.
 
 In practice, there are some modifications we want to perform. Firstly, we want the category of synthetic spectra to be stable. This can be fixed by simply stabilizing $P_\Sigma(\Sp^\omega)$, and we have the following result:
@@ -234,7 +237,7 @@ Since the tensor product preserves sums and $E_*$-epimorphisms, we find that
   $\Syn_E$ is a symmetric monoidal category, and $\nu\colon \Sp_E^{fp} \to \Syn_E$ is symmetric monoidal. In particular, $\S \equiv \nu S$ is the unit.
 \end{thm}
 
-\section{The map \texorpdfstring{$\tau$}{tau}}
+\section{The map \texorpdfstring{$\tau$}{tau}}\label{section:tau}
 We define a bigrading on $\Syn_E$ by setting
 \[
   (\Sigma^{a, b} X)(P) = \Sigma^{-b} X(\Sigma^{-a - b} P).
@@ -260,19 +263,23 @@ We begin by constructing $\tau$, which is in fact a natural transformation
   \tau \colon \Sigma^{0, -1} X \to X.
 \]
 Fix $X \in P_\Sigma^\Sp(\Sp_E^{fp})$, and let $P \in \Sp_E^{fp}$. In $\Sp_E^{fp}$, we have a pushout diagram
+\begin{useimager}
 \[
   \begin{tikzcd}
     P \ar[r] \ar[d] & * \ar[d] \\
     * \ar[r] & \Sigma P.
   \end{tikzcd}
 \]
+\end{useimager}
 Applying $X$ to this diagram, we get
-\[
-  \begin{tikzcd}
-    X(P) & * \ar[l] \\
-    * \ar[u] & X(\Sigma P). \ar[u] \ar[l]
-  \end{tikzcd}
-\]
+\begin{useimager}
+  \[
+    \begin{tikzcd}
+      X(P) & * \ar[l] \\
+      * \ar[u] & X(\Sigma P). \ar[u] \ar[l]
+    \end{tikzcd}
+  \]
+\end{useimager}
 There is nothing that requires this to be a pushout diagram, but we get a comparison map
 \[
   \Sigma X(\Sigma P) \to X(P).
